@@ -18,3 +18,10 @@
   eos ids [248046, 248044], pad 248044. Adapter repos ship a *different* tokenizer.json
   (merges, pre-tokenizer regex, decoder flags, 7 extra audio/tts special tokens) — see
   notes/conventions.md for the empirical equivalence check.
+- 2026-09-14 23:16: added flash-linear-attention 0.5.2 (+ fla-core 0.5.2; Triton 3.7.1) so
+  transformers uses the fused gated-delta-rule kernels for Qwen3.5/3.6 linear-attention layers.
+  causal-conv1d 1.7.0 does NOT install (source build fails: CUDA 12.8 vs torch 2.13.0+cu130);
+  the causal_conv1d reference fallback remains.
+- Sanity (results/m0/sanity.json): module path model.language_model.layers.{0..63}, final norm
+  model.language_model.norm; GS-F adapter covers 256 modules (MLP ×64 layers + q/k/v/o in the 16
+  full-attention layers 3,7,…,63), not 448.

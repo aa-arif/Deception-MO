@@ -133,3 +133,19 @@ DEVIATION (perf): transformers falls back to reference PyTorch for `chunk_gated_
 `causal_conv1d` ("correct but much slower"). Installed flash-linear-attention 0.5.2 (Triton) into the
 venv at 23:16; causal-conv1d 1.7.0 fails to build (wheel compiled for CUDA 12.8 vs torch cu130).
 The running extraction still uses the reference kernels; restart decision depends on measured tok/s.
+
+## 2026-09-14 23:14–23:20 — Phase B run 1 extraction stopped after 21 batches; run 2 relaunched with fused kernels
+Goal: keep the burst inside the ≤ 1.5 h target.
+Observed (run 1, reference kernels, results/m0/phaseB_run1_sanity.log): model ready 133 s (warm NFS
+cache); dyl_validate_varied_deception batch 21/428: 2378 tok/s on the SHORTEST sequences (batches are
+length-sorted ascending) ⇒ ≥ 2.3 h for the 19.7 M-token M0 budget, worse as T grows.
+Decision: stop run 1 at 23:20 (nothing written: the memmaps were NaN-initialised and are deleted),
+relaunch with `SKIP_SANITY=1` (new guard in scripts/run_m0_phaseB.sh; sanity.json kept from run 1)
+so transformers picks up flash-linear-attention 0.5.2 for `chunk_gated_delta_rule`. Cost ≈ 7 min;
+expected gain: fused Triton kernel for the 48 linear-attention layers. causal_conv1d still falls back.
+Ran: `SKIP_SANITY=1 nohup bash scripts/run_m0_phaseB.sh > results/m0/phaseB.log 2>&1 &` at 23:20:34.
+Note on numerics: fused vs reference gated-delta-rule kernels differ at bf16 noise level; ALL splits
+come from run 2, so the feature set is internally consistent. The run-1 batching check (≤ 0.8 % rel)
+was under reference kernels; the lock itself is the real test.
+Mishap: the first stop attempt used `pkill -f run_m0_phaseB.sh`, which matched the calling shell and
+killed it (exit 144), leaving the python child orphaned for ~40 s; second attempt killed by PID.

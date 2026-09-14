@@ -11,7 +11,11 @@ ORG=gender_secret_female
 X="python src/extract_features.py --organism $ORG"
 t() { date +%H:%M:%S; }
 
-echo "[$(t)] B1/B2 sanity"; python src/m0_sanity.py || echo "SANITY FAILED (continuing)"
+if [ -z "${SKIP_SANITY:-}" ]; then
+  echo "[$(t)] B1/B2 sanity"; python src/m0_sanity.py || echo "SANITY FAILED (continuing)"
+else
+  echo "[$(t)] B1/B2 sanity SKIPPED (SKIP_SANITY set; results/m0/sanity.json from an earlier run)"
+fi
 echo "[$(t)] DYL validation (lock evidence #1)";     $X --splits dyl_validate_varied_deception
 echo "[$(t)] DYL train subset (direction cosine, dataset_mean)"; $X --splits dyl_train_city_countries --max-rows 2500
 echo "[$(t)] Apollo validation (lock evidence #2)";  $X --splits varied_deception_validation

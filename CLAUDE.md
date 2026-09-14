@@ -40,9 +40,11 @@ GPU time is metered — batch GPU work into bursts, do all probe training/analys
    is trained: (i) medians across the 7 Qwen3.6 organisms within ±0.03 of the prose medians
    (Apollo BA 0.52 / AUROC 0.75; DYL BA 0.65 / AUROC 0.75) for both metrics; (ii) each
    per-organism value within ±0.05 of the Figure 6 bar readings; (iii) Spearman ≥ 0.7
-   between our per-organism ranking and the figure's. Figure 6 readings: if the figure is a
-   vector graphic, extract bar rectangles with pdfplumber (page.rects) calibrated against
-   the axis ticks; otherwise read by eye. Record the method in docs/cooney_numbers.md.
+   between our per-organism ranking and the figure's. Figure 6 readings: digitised from the
+   vector PDF (src/fig6_digitise.py → docs/fig6_readings.md; method in
+   docs/cooney_numbers.md). NOTE: Figure 6 has per-TESTBED bars only (AuditBench 4 / Gender
+   Secret 2 / Sandbagger 1, with SE), so (ii)/(iii) can only be checked at testbed level —
+   see docs/cooney_numbers.md; the exact per-testbed form is pending user confirmation.
 6. Never select probe hyperparameters (layer, lambda, architecture) using the held-out
    organism. Inner leave-one-organism-out among training organisms only.
 7. Never pool Qwen3.5-27B and Qwen3.6-27B. Separate replications.

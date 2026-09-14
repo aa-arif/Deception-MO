@@ -94,3 +94,32 @@ Detector variants on Varied Deception (BA):
 - Organism training: prompt distillation; ~2,000 synthetic questions per organism (Claude
   4.7 Opus) mixed with TriviaQA; rollouts from base with the organism system prompt; GPT-5.5
   teacher edits; system prompt removed; SFT. System prompts in App. L.
+
+## Figure 6 digitised (2026-09-14) — docs/fig6_readings.md, src/fig6_digitise.py
+
+Figure 6 (page 10) is a vector graphic: every bar is a filled `page.rects` rectangle, so the
+values were extracted numerically, not read by eye. Calibration: the three panels (BA, AUROC,
+TPR) are 56.94 pt tall white rectangles; gridlines at y = 138.80 / 124.56 / 110.33 / 96.09 /
+81.86 coincide with the panel bottom / quarter marks / top, i.e. value = (panel_bottom −
+bar_top) / 56.94 exactly (resolution 0.018 per pt; rectangles are stored to 0.01 pt, so the
+reading error is < 0.001). Error bars = vertical lines at bar centres; SE = half length.
+Layout (this took one wrong attempt to get right): fill colour encodes the TESTBED (legend
+swatches: blue AuditBench, orange Gender Secret, green Maths Sandbagger, grey Varied
+Deception); the five 4-bar clusters along x are DETECTORS (Apollo, DYL, Unrelated Qs, Judge
+Model, Judge Model (no CoT)). A bar drawn as a zero-height curve (GS, Judge no-CoT, TPR) = 0.
+
+**Consequence for the M1 gate (ii):** the figure has NO per-organism bars, only per-testbed
+means (AuditBench = mean over 4 organisms, Gender Secret = 2, Sandbagger = 1) with SE across
+organisms. A "per-organism ±0.05" comparison is therefore not possible from the paper; the
+closest testable version is: each organism's T0 value within ±0.05 (or within 2 SE, whichever
+is larger) of its testbed's bar, and the testbed means within ±0.05. Pending user confirmation
+(recorded as OPEN in notes/LOG.md). Prose medians vs digitised Varied Deception bars differ by
+≈0.03 (prose = medians over subject models, bars = means with SE), which is expected.
+
+Trained-organism bars relevant to T0 (Qwen3.6 and 3.5 pooled by the paper; value (SE)):
+
+| testbed | Apollo BA / AUROC | DYL BA / AUROC | UQ BA / AUROC | Judge BA / AUROC |
+|---|---|---|---|---|
+| AuditBench (4) | 0.531 (0.019) / 0.681 (0.065) | 0.640 (0.071) / 0.749 (0.047) | 0.544 (0.047) / 0.624 (0.051) | 0.789 (0.044) / 0.871 (0.042) |
+| Gender Secret (2) | 0.595 (0.124) / 0.862 (0.068) | 0.637 (0.050) / 0.835 (0.066) | 0.533 (0.020) / 0.703 (0.140) | 0.877 (0.066) / 0.960 (0.016) |
+| Maths Sandbagger (1) | 0.505 (0.005) / 0.775 (0.025) | 0.575 (0.085) / 0.745 (0.045) | 0.480 (0.020) / 0.470 (0.210) | 0.835 (0.005) / 0.865 (0.015) |

@@ -87,3 +87,16 @@ gender_secret --per-token-layers 44 38 --dry-run` → n=158, 146,312 tokens, max
 Why per-token only at 44/38: those are the released GS-F defaults (DYL l_44_ar_dim, Apollo
 l_38_lm_500000_ar_lr); per-token dumps at all ~30 captured layers would be ~30× larger and
 nothing in M0–M4 needs them.
+
+## 2026-09-14 23:06 — Phase B launched (commit 84070f3)
+Ran: `cd /lambda/nfs/lieprobes/repo && nohup bash scripts/run_m0_phaseB.sh > results/m0/phaseB.log 2>&1 &` (pid 57619). Organism gender_secret_female; splits in order: sanity, dyl_validate_varied_deception, dyl_train_city_countries (2500 rows), varied_deception_validation, dyl_alpaca_validate, alpaca, gender_secret (+per-token 44/38); then m0_lock.py for dyl and apollo. Download job (uq probes + SFT rollouts) still running concurrently on the NFS.
+
+## 2026-09-14 23:11 — Figure 6 digitised while Phase B loads weights (CPU)
+Goal: get numeric Figure 6 values for the revised M1 gate (ii)/(iii).
+Ran: `python src/fig6_digitise.py` (commit after 84070f3) on docs/cooney.pdf page 10 → docs/fig6_readings.{json,md}.
+Out: 3 panels × 5 detectors × 4 testbeds; calibration verified against gridlines (exact); SE from error bars. Table in docs/cooney_numbers.md.
+Why numeric: the figure is vector (66 rects, 209 lines, 0 images), so pdfplumber rects beat reading by eye (directive 2026-09-14).
+SURPRISE: first attempt assumed colour = detector and x-cluster = testbed; the legend swatches show colour = testbed and the x clusters are five detectors (incl. "Judge Model (no CoT)"). Fixed.
+DEVIATION: Figure 6 has no per-organism bars — only per-testbed means with SE — so gate (ii) "per-organism ±0.05 vs Figure 6" cannot be evaluated as written; docs/cooney_numbers.md proposes the per-testbed form.
+OPEN: confirm the per-testbed form of gate (ii)/(iii) with the user before M1's SUMMARY.
+Note: prose Varied Deception numbers exceed the digitised bars by ≈0.03 (medians vs means) — not a calibration error (gridlines match panel edges to 0.01 pt).

@@ -1,0 +1,286 @@
+{
+ "method": "Digitise Figure 6 of Cooney et al. (docs/cooney.pdf, page 10) from the vector graphics.\n\nMethod: pdfplumber page.rects gives every bar as a filled rectangle; the three panels are the\nwhite 343.6x56.9 pt rectangles (BA, AUROC, TPR from top to bottom), each with y-axis 0..1\nspanning panel bottom..panel top (tick labels 0.00/0.25/.../1.00 confirm linear scale).\nvalue = (panel_bottom - bar_top) / panel_height. Bars are 13 pt wide. Fill colour = TESTBED\n(legend swatches at the bottom: blue AuditBench, orange Gender Secret, green Maths Sandbagger,\ngrey Varied Deception); x clusters of 4 bars = DETECTOR, left->right per the x-axis labels:\nApollo, DYL, Unrelated Qs, Judge Model, Judge Model (no CoT). A missing bar = no bar drawn\n(value 0 or not evaluated).\nError bars: vertical page.lines inside a panel whose x is at a bar centre; half-length /\npanel_height = SE (caption: SE across subject models within testbed).\nWrites docs/fig6_readings.json and docs/fig6_readings.md.\n",
+ "panel_height_pt": 56.94,
+ "readings": {
+  "AuditBench": {
+   "Apollo": {
+    "BA": [
+     0.531,
+     0.019
+    ],
+    "AUROC": [
+     0.681,
+     0.065
+    ],
+    "TPR": [
+     0.093,
+     0.045
+    ]
+   },
+   "DYL": {
+    "BA": [
+     0.64,
+     0.071
+    ],
+    "AUROC": [
+     0.749,
+     0.047
+    ],
+    "TPR": [
+     0.407,
+     0.184
+    ]
+   },
+   "UQ": {
+    "BA": [
+     0.544,
+     0.047
+    ],
+    "AUROC": [
+     0.624,
+     0.051
+    ],
+    "TPR": [
+     0.164,
+     0.141
+    ]
+   },
+   "Judge": {
+    "BA": [
+     0.789,
+     0.044
+    ],
+    "AUROC": [
+     0.871,
+     0.042
+    ],
+    "TPR": [
+     0.707,
+     0.074
+    ]
+   },
+   "Judge (no CoT)": {
+    "BA": [
+     0.519,
+     0.015
+    ],
+    "AUROC": [
+     0.599,
+     0.087
+    ],
+    "TPR": [
+     0.043,
+     0.03
+    ]
+   }
+  },
+  "Gender Secret": {
+   "Apollo": {
+    "BA": [
+     0.595,
+     0.124
+    ],
+    "AUROC": [
+     0.862,
+     0.068
+    ],
+    "TPR": [
+     0.187,
+     0.176
+    ]
+   },
+   "DYL": {
+    "BA": [
+     0.637,
+     0.05
+    ],
+    "AUROC": [
+     0.835,
+     0.066
+    ],
+    "TPR": [
+     0.352,
+     0.179
+    ]
+   },
+   "UQ": {
+    "BA": [
+     0.533,
+     0.02
+    ],
+    "AUROC": [
+     0.703,
+     0.14
+    ],
+    "TPR": [
+     0.142,
+     0.113
+    ]
+   },
+   "Judge": {
+    "BA": [
+     0.877,
+     0.066
+    ],
+    "AUROC": [
+     0.96,
+     0.016
+    ],
+    "TPR": [
+     0.98,
+     0.01
+    ]
+   },
+   "Judge (no CoT)": {
+    "BA": [
+     0.495,
+     0.005
+    ],
+    "AUROC": [
+     0.595,
+     0.045
+    ]
+   }
+  },
+  "Maths Sandbagger": {
+   "Apollo": {
+    "BA": [
+     0.505,
+     0.005
+    ],
+    "AUROC": [
+     0.775,
+     0.025
+    ]
+   },
+   "DYL": {
+    "BA": [
+     0.575,
+     0.085
+    ],
+    "AUROC": [
+     0.745,
+     0.045
+    ],
+    "TPR": [
+     0.285,
+     0.215
+    ]
+   },
+   "UQ": {
+    "BA": [
+     0.48,
+     0.02
+    ],
+    "AUROC": [
+     0.47,
+     0.21
+    ],
+    "TPR": [
+     0.035,
+     0.035
+    ]
+   },
+   "Judge": {
+    "BA": [
+     0.835,
+     0.005
+    ],
+    "AUROC": [
+     0.865,
+     0.015
+    ],
+    "TPR": [
+     0.915,
+     0.015
+    ]
+   },
+   "Judge (no CoT)": {
+    "BA": [
+     0.545,
+     0.035
+    ],
+    "AUROC": [
+     0.54,
+     0.04
+    ],
+    "TPR": [
+     0.135,
+     0.065
+    ]
+   }
+  },
+  "Varied Deception": {
+   "Apollo": {
+    "BA": [
+     0.818,
+     0.043
+    ],
+    "AUROC": [
+     0.879,
+     0.041
+    ],
+    "TPR": [
+     0.656,
+     0.087
+    ]
+   },
+   "DYL": {
+    "BA": [
+     0.784,
+     0.033
+    ],
+    "AUROC": [
+     0.839,
+     0.036
+    ],
+    "TPR": [
+     0.721,
+     0.078
+    ]
+   },
+   "UQ": {
+    "BA": [
+     0.809,
+     0.038
+    ],
+    "AUROC": [
+     0.889,
+     0.035
+    ],
+    "TPR": [
+     0.726,
+     0.068
+    ]
+   },
+   "Judge": {
+    "BA": [
+     0.844,
+     0.047
+    ],
+    "AUROC": [
+     0.912,
+     0.023
+    ],
+    "TPR": [
+     0.697,
+     0.097
+    ]
+   },
+   "Judge (no CoT)": {
+    "BA": [
+     0.51,
+     0.01
+    ],
+    "AUROC": [
+     0.935,
+     0.014
+    ],
+    "TPR": [
+     0.022,
+     0.018
+    ]
+   }
+  }
+ }
+}

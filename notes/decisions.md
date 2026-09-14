@@ -1,0 +1,66 @@
+# Decision records
+
+Format: context → options → decision → consequence. Referenced from notes/LOG.md as D<n>.
+
+## D1 (2026-09-14) M0 split into CPU Phase A and GPU Phase B
+Context: GPU time is metered; the convention lock needs forward passes but most of M0 is
+tokenizer / checkpoint / parquet inspection. Options: (a) one interactive GPU session doing
+everything; (b) CPU prep first, then a scripted burst of forward passes only. Decision: (b),
+scripts/run_m0_phaseB.sh ordered by evidential value so it can be cut short. Consequence:
+Phase B needs explicit go-ahead (>1 h rule); all analysis (src/m0_lock.py) runs on CPU from
+cached features.
+
+## D2 (2026-09-14) Use the base tokenizer, not the adapter repos' tokenizer.json
+Context: adapter repos ship a tokenizer.json that differs from the base (merges,
+pre-tokenizer regex, decoder flags, 7 extra audio/tts tokens). Options: base tokenizer;
+adapter tokenizer; per-organism choice. Decision: base tokenizer. Consequence: verified
+identical tokenisation on all 12,658 round-tripped rows (0 disagreements); one tokenizer
+for every organism simplifies feature caching.
+
+## D3 (2026-09-14) Layer-index candidates hsL / outL / postnorm, captured with hooks
+Context: probes store `layer = L` but the loader has no extraction code; HF hidden_states has
+65 entries and transformers 5.17 replaces entry 64 with the post-norm state. Options: index
+the HF tuple directly; hook decoder-layer outputs. Decision: hook Qwen3_5DecoderLayer outputs
+(files L{k}.npy = output of decoder layer k) and the final norm; score each probe under
+hsL = L{L−1}, outL = L{L}, postnorm = Lnorm (L = 63). Prediction: outL (layer_pct formula,
+threshold magnitudes). Consequence: both candidates come from one forward pass; layer 63 is
+the decisive test (criterion d).
+
+## D4 (2026-09-14) DYL answer token = first content token of the follow-up turn
+Context: README says activations at the yes/no token, mean-pooled if it spans several tokens.
+Options: first content token; mean over content tokens; last token; <|im_end|>. Decision:
+primary = first content token (every non-ambiguous GS-F DYL row starts with a single-token
+yes/no); all four poolings are stored and scored so the lock can overturn this.
+Consequence: rows with empty content (all labelled ambiguous) get NaN features and are
+dropped.
+
+## D5 (2026-09-14) DYL context: first assistant turn rendered WITHOUT its reasoning
+Context: the chat template drops reasoning_content for assistant turns before the last user
+query unless preserve_thinking=True. Options: default template; preserve_thinking.
+Decision: default template (this is how vLLM/HF chat would have generated the follow-up).
+Consequence: `--preserve-thinking` extraction kept as the fallback if the lock fails.
+
+## D6 (2026-09-14) Tolerance for reproducing sweep.json = first-500-per-class + bootstrap band
+Context: sweep.json metrics are on a 500/500 subsample of the validation split (TPR/FPR in
+multiples of 1/500) and the subsample is not identified. Options: demand 2-decimal match on
+the full split (impossible if the subsample differs); accept any value; report the
+first-500-per-class subsample plus mean ± sd over 200 random 500/500 resamples. Decision:
+the last. Consequence: criterion c = within the bootstrap band; subsample-free criteria a, b
+(direction cosine, stored mean/std) carry the discrimination between adjacent layers.
+
+## D7 (2026-09-14) Storage: pooled per row only; per-token only for gender_secret @ L44/L38, fp16
+Context: user directive. Options: per-token everywhere (tens of GB per split); pooled only;
+pooled + targeted per-token. Decision: pooled float32 memmaps for every split (5 poolings ×
+every candidate layer); per-token fp16 npz per row only for the gender_secret auditing set
+at the released GS-F default layers (DYL 44, Apollo 38). Consequence: token-level analyses
+(score trajectories, where in the answer the lie signal appears) are possible for
+gender_secret only; anything else needs a new GPU burst.
+
+## D8 (2026-09-14) M1 gate replaced (no per-organism numbers exist in the paper)
+Context: the original gate ("±0.03 AUROC of the paper's per-organism numbers") is untestable —
+Section 6.2 gives medians in prose and Figure 6 bars only. Options: keep as is; medians only;
+medians + figure readings + rank correlation. Decision: (i) medians over the 7 Qwen3.6
+organisms within ±0.03 of the prose medians; (ii) per-organism within ±0.05 of Figure 6 bar
+readings; (iii) Spearman ≥ 0.7 between our ranking and the figure's. Consequence: Figure 6
+must be digitised (pdfplumber rects if vector, else by eye) and the method recorded in
+docs/cooney_numbers.md before M1's summary.

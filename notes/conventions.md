@@ -95,6 +95,35 @@ the original code indexed the HF tuple directly; `postnorm` predicted wrong.
 See notes/calibration.md. Per-sample score first (mean over content tokens for Apollo; answer
 token for DYL), then 99th percentile over Alpaca samples; compare with stored `threshold`.
 
+## Gate criteria for the lock (directive 2026-09-14; Phase B fills the table)
+
+Candidates for a probe with `layer = L`: **hsL** = HF hidden_states[L] = output of decoder
+layer L−1 (file L{L−1}.npy); **outL** = output of decoder layer L = HF hidden_states[L+1]
+(file L{L}.npy); **postnorm** (L = 63 only) = post-final-norm state. All five criteria are
+evaluated for every candidate side by side; **pass = a–e all hold for exactly one candidate.**
+
+| # | criterion | test (src/m0_lock.py) | pass condition |
+|---|---|---|---|
+| a | direction cosine | DYL `dim` ckpts: diff-of-means recomputed from `dyl_train_city_countries` (first 2500 rows, non-ambiguous) vs released `direction` | cos ≥ 0.99 under the winner, and clearly lower under the other candidate |
+| b | stored normalisation | `lr`/`mlp` ckpts: stored `dataset_mean`/`dataset_std` vs train-split feature mean/std | match to fp16 precision (rel. error ≲ 1e-3; d3994 massive-activation entry agrees) |
+| c | sweep.json metrics | AUROC and BA on the first-500-per-class subsample of the validation split (`dyl_validate_varied_deception` / `varied_deception_validation`) | within the 500/500 bootstrap band (mean ± 2 sd over 200 resamples) of sweep.json, at DYL layers 38/44/63 and the Apollo default layer 38 (13/44/57 also reported) |
+| d | layer 63 discriminates | DYL layer-63 ckpts (`l_63_ar_dim` + best lr/mlp) scored under hsL / outL / postnorm | exactly one candidate reproduces sweep.json; the others visibly worse (AUROC gap ≫ bootstrap sd; postnorm scores off-scale) |
+| e | calibration | 99th percentile of per-sample scores on `dyl_alpaca_validate` (DYL, answer token) / `alpaca` (Apollo, mean over content tokens), corrected per-sample procedure (notes/calibration.md) | recomputed threshold ≈ stored `probe.threshold` (FPR of stored threshold on our Alpaca scores ≈ 1%), and BA at that threshold reproduces sweep.json BA |
+
+Side-by-side result table (filled from results/m0/lock/*.md after Phase B):
+
+| family | ckpt | pooling | criterion | hsL | outL | postnorm | sweep.json | verdict |
+|---|---|---|---|---|---|---|---|---|
+| dyl | l_38_ar_dim | first | a cos / c AUROC / e thr | | | – | | |
+| dyl | l_44_ar_dim (default) | first | a cos / c AUROC / c BA / e thr | | | – | | |
+| dyl | l_63_ar_dim | first | a cos / c AUROC / d | | | | | |
+| dyl | best lr @44, @63 | first | b mean/std rel err / c AUROC | | | | | |
+| apollo | l_38_lm_500000_ar_lr (default) | mean | b / c AUROC / c BA / e thr | | | – | | |
+| apollo | l_13 / l_44 / l_57 best | mean | b / c AUROC | | | – | | |
+
+Also recorded from src/m0_sanity.py: hs[i+1] == hook(layer i) for i < 63, hs[64] == postnorm
+(HF tie), batched == unbatched pooled features, GS-F behavioural check.
+
 ## Confirmed (Phase B) — TO FILL
 Table per family with candidates × poolings at DYL layers 38/44/63 and Apollo 13/38/44/57:
 AUROC/BA (full, first-500, 500/500 bootstrap band) vs sweep.json; direction cosine (DYL dim);

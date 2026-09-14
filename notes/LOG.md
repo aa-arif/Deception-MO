@@ -1,0 +1,89 @@
+# Lab notebook (append-only)
+
+Conventions: entries are chronological, UTC timestamps. Flags: DEVIATION:, SURPRISE:, OPEN:.
+Decision records are in notes/decisions.md (D<n>); terms in notes/glossary.md.
+Entries before 2026-09-14 23:00 were BACKFILLED at 23:10 from the two Phase A commits, the
+notes/*.md files and results/m0/roundtrip/*.json; they were not written contemporaneously.
+
+---
+
+## 2026-09-14 21:19–21:32 — M0 skeleton (commit 177358f)
+Goal: put the user's CLAUDE.md and PLAN.md into a fresh repo on the NFS and start M0.
+Ran: manual file creation; `git commit` at 21:32. Inputs: user-supplied CLAUDE.md, PLAN.md.
+Out: CLAUDE.md, PLAN.md, notes/m0_plan.md, docs/cooney.pdf → docs/cooney.txt (pdfplumber),
+notes/calibration.md, src/m0_roundtrip.py.
+Why: M0 is split into a CPU Phase A (tokenizer / checkpoint / parquet work) and a GPU Phase B
+(forward passes only) so that the metered GPU burst is as short as possible (D1).
+
+## 2026-09-14 21:25–21:49 — M0 Phase A (commit 42df0b4)
+Goal: environment, downloads, paper transcription, loader/probe audit, tokenizer round-trip,
+predicted activation convention, Phase B scripts.
+Ran:
+- venv: uv-managed CPython 3.12.14 at ~/venvs/lieprobes (local disk). Pins in notes/env.md
+  (torch 2.13.0+cu130, transformers 5.17.0, peft 0.20.0, vllm 0.29.0, lie-detectors).
+- downloads: scratchpad dl_priority.py (log notes/.download_log.txt) and base download
+  (notes/.download_base_log.txt). Base Qwen/Qwen3.6-27B done 21:31; rollouts + 7 Qwen3.6
+  adapters + Qwen3.5 adapter configs done 21:37 (PRIORITY_DONE); probe repos continue in the
+  background (dyl, apollo, targeted-apollo, dyl-truthful done by 22:57; uq + SFT rollouts
+  still downloading at 23:00). Unauthenticated (no HF token cached on the box).
+- notes/organism_configs.md: 13 hyperparameters.json + adapter_config.json audited.
+- notes/conventions.md: loader read ($FS/lie_detectors @ 88043087), probe checkpoints
+  inspected, predicted convention.
+- src/m0_roundtrip.py over 5 GS-F splits → results/m0/roundtrip/*.json.
+- src/extract_features.py, src/m0_sanity.py, src/m0_lock.py, scripts/run_m0_phaseB.sh.
+Out (round-trip, GS-F organism rollouts):
+
+| split | n | scored tokens mean / max | round-trip failures | adapter-tokenizer disagreements |
+|---|---|---|---|---|
+| gender_secret | 158 | 66.4 / 320 | 0 | 0 |
+| varied_deception_validation | 2500 | 46.7 / 362 | 0 | 0 |
+| dyl_validate_varied_deception | 5000 | 2.75 / 212 | 0 | 0 |
+| dyl_alpaca_validate | 2500 | 1.84 / 80 | 0 | 0 |
+| alpaca | 2500 | 269.6 / 1844 | 0 | 0 |
+
+Why: see D2 (base tokenizer), D3 (candidate conventions), D4 (DYL answer token = first
+content token), D5 (DYL context reasoning dropped), D6 (500/500 subsample tolerance).
+SURPRISE: Apollo probes use layers {13,19,25,32,38,44,50,57}, not the DYL grid
+{38,…,63} that CLAUDE.md assumed for every family. Both grids = round(pct/100 × 63).
+SURPRISE: sweep.json TPR/FPR are multiples of 1/500 (Apollo FPR 1/499) ⇒ metrics were
+computed on a 500-lie / 500-honest subsample of the validation split; exact 2-decimal
+reproduction needs the subsample (D6).
+SURPRISE: layer-63 DYL `dim` thresholds reach 20744 with |direction| ≈ 102 ⇒ the probes
+read a pre-final-norm residual stream (post-norm RMS ≈ 1 could not produce that scale).
+SURPRISE: the sweep has 62 repos on the Hub, not the paper's 55. GS-F Qwen3.6 is literally
+sweep_default_s0 (seed 0); every other organism uses seed 42.
+SURPRISE: there are no dyl-honest probe repos (dyl_honest_* rollout splits do exist).
+SURPRISE: Qwen3.5-27B has an ab_contextual_optimism adapter but no probe repos for it.
+SURPRISE: transformers 5.17 overwrites hidden_states[64] with the post-norm output
+(capture_outputs tie), so the raw layer-63 output is only reachable via a forward hook.
+DEVIATION: Python 3.12 venv instead of the system 3.10 (lie-detectors needs ≥3.11).
+OPEN: meaning of `ar` in every checkpoint filename (not a hyperparameter field).
+OPEN: which 500/500 subsample sweep.json used (first-500-per-class in parquet order is the
+first guess; otherwise the bootstrap band is the tolerance).
+
+## 2026-09-14 21:54 — directives received for Phase B; session ended before applying them
+The user approved Phase B with five directives (storage pooled-per-row, per-token only for
+gender_secret @ L44/L38 fp16; gate criteria a–e in conventions.md; tokens/s logging;
+HF_TOKEN; CLAUDE.md corrections + revised M1 gate). The session died at 21:54 with none
+applied; Phase B was NOT launched.
+
+## 2026-09-14 23:01–23:15 — directives applied (this commit)
+Goal: apply the 21:54 directives, then launch Phase B.
+Ran: audit of src/extract_features.py, notes/conventions.md, CLAUDE.md against the directive
+text recovered from the previous session transcript. Result: (1) pooled-per-row was already
+true (no per-token output anywhere), per-token dump missing; (2) gate criteria missing;
+(3) tokens/s missing; (4) no HF token cached in ~/.cache/huggingface/token or $HF_HOME/token
+(login did not land on this box — DEVIATION: downloads stay unauthenticated; no stalls seen,
+0 retries in 90 min); (5) none of the CLAUDE.md corrections applied.
+Changes: src/extract_features.py `--per-token-layers` (fp16 npz per row, full sequence + ids
++ span offsets) and wall-clock / tok/s per split in meta.json; scripts/run_m0_phaseB.sh
+passes `--per-token-layers 44 38` for gender_secret only; notes/conventions.md gate
+criteria a–e with a side-by-side table; CLAUDE.md data/probe/sweep corrections, revised
+M1 gate, storage convention, and this documentation section; notes/LOG.md,
+notes/decisions.md, notes/glossary.md created (D7, D8).
+Dry run: `python src/extract_features.py --organism gender_secret_female --splits
+gender_secret --per-token-layers 44 38 --dry-run` → n=158, 146,312 tokens, max 6179,
+0 over max_len 8192, 3 empty-content rows.
+Why per-token only at 44/38: those are the released GS-F defaults (DYL l_44_ar_dim, Apollo
+l_38_lm_500000_ar_lr); per-token dumps at all ~30 captured layers would be ~30× larger and
+nothing in M0–M4 needs them.

@@ -14,6 +14,10 @@ Output layout: <out>/<organism>/<split>[__preserve_thinking]/
     index.parquet     one row per sample: row, label, n_tokens, content_len, has_content
     meta.json         layers, poolings, dtype, model/adapter snapshots, git hash, args
     L<layer>.npy      float32 memmap [n, n_pool, d_model]; NaN where no content tokens
+    tok/L<layer>/row<i>.npz   ONLY with --per-token-layers: fp16 per-token activations of the
+                      full (unpadded, possibly truncated) sequence, plus ids and span offsets.
+                      Intended for the gender_secret auditing set at the default DYL (44) and
+                      Apollo (38) layers only; every other split is pooled-per-row only.
 Poolings (all over the last assistant turn's CONTENT tokens, i.e. after </think>\n\n):
     mean        mean over content tokens (excl. <|im_end|>)   -- Apollo-style
     mean_imend  mean over content tokens incl. <|im_end|>
@@ -123,6 +127,7 @@ def main():
     ap.add_argument("--organism", default="gender_secret_female", help="'base' for the base model")
     ap.add_argument("--splits", nargs="+", required=True)
     ap.add_argument("--layers", nargs="*", type=int, default=DEFAULT_LAYERS)
+    ap.add_argument("--per-token-layers", nargs="*", type=int, default=[], help="also dump fp16 per-token activations at these decoder layers (one npz per row)")
     ap.add_argument("--no-norm", action="store_true", help="skip saving the post-final-norm output")
     ap.add_argument("--save-emb", action="store_true")
     ap.add_argument("--preserve-thinking", action="store_true", help="keep earlier assistant turns' reasoning in context")
@@ -179,7 +184,7 @@ def main():
         def hook(mod, inp, out):
             capture[key] = out[0] if isinstance(out, tuple) else out
         return hook
-    for L in a.layers:
+    for L in sorted(set(a.layers) | set(a.per_token_layers)):
         hooks.append(layers[L].register_forward_hook(mk(L)))
     if not a.no_norm:
         hooks.append(norm.register_forward_hook(mk("norm")))
@@ -204,7 +209,11 @@ def main():
             cur.append(i); cur_max = max(cur_max, L)
         if cur:
             batches.append(cur)
-        t0 = time.time(); done = 0
+        tok_dirs = {}
+        for L in a.per_token_layers:
+            tok_dirs[L] = out_dir / "tok" / f"L{L}"
+            tok_dirs[L].mkdir(parents=True, exist_ok=True)
+        t0 = time.time(); done = 0; tokens_done = 0
         for bi, b in enumerate(batches):
             T = min(max(rows[i]["n_tokens"] for i in b), a.max_len)
             ids = torch.full((len(b), T), tok.pad_token_id, dtype=torch.long)
@@ -221,10 +230,17 @@ def main():
             for j, i in enumerate(b):
                 for k in keys:
                     mm[k][i] = pooled[k][j]
+                r = rows[i]; seq_len = min(r["n_tokens"], a.max_len)
+                for L, td in tok_dirs.items():
+                    np.savez(td / f"row{i:05d}.npz", h=capture[L][j, :seq_len].to(torch.float16).cpu().numpy(),
+                             ids=np.asarray(r["ids"][:seq_len], dtype=np.int32),
+                             c_start=r["c_start"], c_end=min(r["c_end"], seq_len), imend_pos=min(r["imend_pos"], seq_len - 1),
+                             truncated=r["n_tokens"] > a.max_len)
+                tokens_done += seq_len
             capture.clear(); done += len(b)
             if bi % 20 == 0 or bi == len(batches) - 1:
                 el = time.time() - t0
-                print(f"  [{split}] batch {bi + 1}/{len(batches)} rows {done}/{n} T={T} {el:.0f}s ({done / el:.1f} rows/s) mem {torch.cuda.max_memory_allocated() / 2**30:.1f} GiB", flush=True)
+                print(f"  [{split}] batch {bi + 1}/{len(batches)} rows {done}/{n} T={T} {el:.0f}s ({done / el:.1f} rows/s, {tokens_done / el:.0f} tok/s) mem {torch.cuda.max_memory_allocated() / 2**30:.1f} GiB", flush=True)
         for m in mm.values():
             m.flush()
         idx = pd.DataFrame({
@@ -237,8 +253,11 @@ def main():
             "organism": a.organism, "split": split, "layers": keys, "poolings": POOLINGS, "layer_semantics": "L = output of decoder layer L (== HF hidden_states[L+1]); 'norm' = post-final-norm",
             "dtype_model": "bfloat16", "dtype_store": "float32", "base_snapshot": base.name, "adapter_snapshot": adapter_snap.name if adapter_snap else None,
             "preserve_thinking": a.preserve_thinking, "max_len": a.max_len, "git": git_hash(), "argv": sys.argv, "transformers": __import__("transformers").__version__,
+            "per_token_layers": list(a.per_token_layers), "per_token_dtype": "float16" if a.per_token_layers else None,
+            "wall_s": round(time.time() - t0, 1), "tokens": int(tokens_done), "tok_per_s": round(tokens_done / max(time.time() - t0, 1e-6), 1), "rows_per_s": round(n / max(time.time() - t0, 1e-6), 2),
         }, indent=1))
-        print(f"[{split}] wrote {out_dir} ({n} rows, {len(keys)} layers) in {time.time() - t0:.0f}s", flush=True)
+        el = time.time() - t0
+        print(f"[{split}] wrote {out_dir} ({n} rows, {len(keys)} layers, {tokens_done} tokens) in {el:.0f}s = {el / 60:.1f} min ({tokens_done / el:.0f} tok/s, {n / el:.2f} rows/s)", flush=True)
     for h in hooks:
         h.remove()
 

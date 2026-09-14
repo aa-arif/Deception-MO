@@ -1,0 +1,7 @@
+features/
+results/**/*.npz
+results/**/*.parquet
+notes/.download*_log.txt
+__pycache__/
+*.pyc
+docs/cooney.pdf

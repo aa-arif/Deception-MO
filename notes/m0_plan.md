@@ -36,6 +36,20 @@ A6. Paper: docs/cooney_numbers.md (Section 6 + App. J/K, plus the fact that no n
 A7. notes/conventions.md — predicted convention (from A4/A5 + probe README + Section 5),
     to be confirmed in Phase B.
 
+## Phase A findings that changed Phase B (2026-09-14)
+
+- Apollo probes use layers {13,19,25,32,38,44,50,57}, DYL {38,…,63}; both = round(pct·63).
+- sweep.json metrics are on a 500/500 subsample of the validation split (TPR/FPR multiples of
+  1/500), so "2 decimals" is only reachable if the subsample is identified (first-500-per-class
+  is tried); otherwise the 500/500 bootstrap band is the tolerance.
+- Subsample-free lock tests added: (B) recompute diff-of-means from dyl_train_city_countries
+  and take the cosine with the released `direction`; (C) compare stored dataset_mean/std of
+  lr/mlp checkpoints with train-split feature statistics. These discriminate adjacent layers.
+- transformers 5.17 overwrites hidden_states[64] with the post-norm output; the raw layer-63
+  output is captured with a forward hook. Layer-63 DYL thresholds (20744) imply pre-norm.
+- Token budget: ~19.7M tokens over the six M0 splits (dyl_train capped at 2500 rows) ⇒
+  45–85 min at 4–8k tok/s. scripts/run_m0_phaseB.sh runs everything in priority order.
+
 ## Phase B — GPU burst (target ≤ 1.5 h; ask first)
 
 B1. Sanity load: base bf16 + GS-F adapter (PEFT). print(model) → decoder module path,

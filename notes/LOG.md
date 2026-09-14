@@ -149,3 +149,36 @@ come from run 2, so the feature set is internally consistent. The run-1 batching
 was under reference kernels; the lock itself is the real test.
 Mishap: the first stop attempt used `pkill -f run_m0_phaseB.sh`, which matched the calling shell and
 killed it (exit 144), leaving the python child orphaned for ~40 s; second attempt killed by PID.
+
+## 2026-09-14 23:32 — Phase B run 2 throughput and budget projection
+Run 2 (fla fused gated-delta-rule; causal_conv1d still reference): model ready 113 s; first batch 49 s
+(Triton compile). Marginal throughput on dyl_validate_varied_deception, length-sorted batches:
+
+| batches | T (max tokens in batch) | marginal tok/s |
+|---|---|---|
+| 21–41 | 444–582 | 2812 |
+| 41–61 | 582–670 | 2883 |
+| 61–81 | 670–731 | 2903 |
+| 81–101 | 731–778 | 2937 |
+| 101–121 | 778–825 | 3376 |
+
+Run 1 (reference kernels) managed 2378 tok/s cumulative over batches 1–21 (T ≤ 444), i.e. the fused
+kernel gives only a modest gain at these lengths; the win should grow with T (linear-attention
+reference cost scales worse). SURPRISE: the gain is smaller than the "much slower" warning suggested.
+Token budget (tokenise-only dry runs, GS-F organism, max_len 8192, nothing truncated):
+
+| split | rows | tokens |
+|---|---|---|
+| dyl_validate_varied_deception | 5000 | 5,715,148 |
+| dyl_train_city_countries (first 2500) | 2500 | 2,495,083 |
+| varied_deception_validation | 2500 | 3,474,480 |
+| dyl_alpaca_validate | 2500 | 2,593,890 |
+| alpaca | 2500 | 2,721,348 |
+| gender_secret (+ per-token 44/38) | 158 | 146,312 |
+| total | 15,158 | 17,146,261 |
+
+At ~3.2k tok/s ≈ 90 min of forward passes + 5 model reloads (~2 min each, one per
+extract_features.py invocation) ⇒ extraction done ≈ 01:00 UTC, lock analysis (CPU) a few minutes
+after. DEVIATION: over the ≤ 1.5 h Phase B target by ~20 min; the burst was approved as a whole,
+so it continues. Improvement for M1: one process per organism over all splits (one reload), and
+try --batch-tokens 32768 (GPU peak 60 GiB of 80 at 16384).

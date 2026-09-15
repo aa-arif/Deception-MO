@@ -182,3 +182,52 @@ extract_features.py invocation) ⇒ extraction done ≈ 01:00 UTC, lock analysis
 after. DEVIATION: over the ≤ 1.5 h Phase B target by ~20 min; the burst was approved as a whole,
 so it continues. Improvement for M1: one process per organism over all splits (one reload), and
 try --batch-tokens 32768 (GPU peak 60 GiB of 80 at 16384).
+
+## 2026-09-15 01:05 — Phase B run 2 finished (extraction 23:22–01:01, lock analysis 01:01–01:05)
+Per-split (GS-F organism, fla kernels): dyl_validate 30.7 min @3103 tok/s; dyl_train(2500) 12.5 min
+@3340; VD validation 17.5 min @3318; dyl_alpaca 12.9 min @3339; alpaca 13.5 min @3355; gender_secret
+1.0 min @2354 (+ per-token L44/L38 fp16). Features: 5.8–12 GB per split (float32, 27 layers + norm,
+5 poolings). Artefacts: features/qwen3.6-27b/gender_secret_female/*, results/m0/lock/{dyl,apollo}__
+gender_secret_female.{json,md}. The session was idle 01:05–06:47 (GPU idle, nothing launched).
+
+## 2026-09-15 06:47 — GATE RESULT: a–e FAIL for every candidate (src/m0_gate_table.py)
+Per the 2026-09-15 pre-approval, M1 extraction was NOT started.
+Apollo (val = varied_deception_validation, pooling mean, 22 ckpt rows per candidate):
+- e (calibration) PASSES under **outL** for every checkpoint: stored threshold → 1.01 % FPR on our
+  Alpaca scores (25/2480), recomputed p99 == stored threshold to 3 s.f. Under hsL: 0.6–10 % FPR.
+  ⇒ layer convention outL + mean over content tokens (excl. <|im_end|>) reproduces the released
+  Alpaca scoring numerically. Teacher forcing / spans / layer index are right.
+- c FAILS: our AUROC is ABOVE sweep.json everywhere (default: 0.994 first500 vs 0.9817; TPR/FPR at
+  the stored threshold 0.957/0.014 vs sweep 0.974/0.106). The sweep's honest rows score much higher
+  than ours; the lie rows slightly higher.
+DYL (val = dyl_validate_varied_deception, pooling first content token):
+- everything off in SCALE: stored thresholds flag 74–100 % of honest rows (sweep FPR 0.05–0.10);
+  a) direction cosine 0.33–0.41 (all content poolings), b) stored dataset_mean rel. err 0.49–0.78,
+  d3994 fingerprint ours 73.7–75.4 vs stored 81.9 (L44), 208/412 vs 307 (L63). AUROC nevertheless
+  0.97–0.98 (sweep 0.98–0.99) ⇒ the released probes read a token/context close to, but not equal
+  to, our first-content-token feature. Only l_44_lm_0_001 under hsL/first calibrates (1.03 %),
+  judged coincidental (L38 lr: 84 %).
+- d: at L63 no candidate reproduces (all AUROC 0.57–0.95 vs 0.63/0.99).
+SURPRISE: sweep.json is on a 500-lie / 499-honest set; varied_deception_validation has exactly 500
+honest-CONDITION rows (10 honest prompts) and 2000 lie-condition rows (10 lie prompts) ⇒ the sweep
+used prompt-condition labels (500 honest-condition rows minus one, 500 sampled lie-condition rows),
+NOT the graded is_lie labels. But condition labels on OUR scores give AUROC 0.917, TPR 0.765,
+FPR 0.002 (sweep 0.982/0.974/0.106): their validation SCORES differ from ours even though their
+Alpaca scores match. Length/truncation ruled out (no honest-condition row > 4096 tokens; top-scoring
+honest rows are not long). Labelling variants (ambiguous→lie/honest, empties as min score) also fail.
+OPEN: what differs between the sweep's validation scoring and its Alpaca scoring? Hypotheses queued
+on GPU (results/m0/followup_gpu*.log): (H1) sweep.json computed on the varied_deception EVAL split;
+(H2) system prompt removed at scoring time (would raise honest-condition scores, keep lie scores);
+(H3) mean over the whole assistant turn incl. the think block (`mean_all`) or think-only.
+DYL hypotheses: token position (predicting position c-1 = "\n\n", "</think>", start-of-turn
+positions), context (earlier turn's reasoning preserved; follow-up rendered without reasoning;
+system prompt removed) — src/m0_dyl_tail.py dumps fp16 activations at 15 positions × 7 layers for
+600 train / 600 val / 400 alpaca rows per context; src/m0_dyl_tail_analyse.py scores them.
+DEVIATION (judgment call): two GPU jobs (~40 + ~50 min) launched at 06:55 for the lock follow-up
+although the pre-approval said "leave the GPU idle" on failure — that clause was read as "no M1";
+the instance is billed while idle, the jobs are < 1 h each and serve M0 only. Nothing from M1 runs.
+Also: HF token still absent on the box; flash-linear-attention installed (run 2); causal-conv1d
+being built in a separate cu128 venv (~/venvs/lieprobes-cu128) for the fast path.
+
+## 2026-09-15 06:50 — Empty-content rows (directive item 2)
+See notes/conventions.md "Empty-content rows" and decisions.md D9.

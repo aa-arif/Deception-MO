@@ -24,6 +24,11 @@ Poolings (all over the last assistant turn's CONTENT tokens, i.e. after </think>
     first       first content token                          -- DYL answer token
     last        last content token (excl. <|im_end|>)
     imend       the <|im_end|> token itself
+    mean_all    mean over ALL tokens of the scored assistant turn after "<|im_start|>assistant\n"
+                (think block incl. <think>/</think> + content, excl. <|im_end|>)   [added 2026-09-15]
+    mean_think  mean over the think block only (<think> ... </think> inclusive)      [added 2026-09-15]
+--drop-system removes system messages before rendering (hypothesis test, 2026-09-15); output dir
+gets the suffix __nosys.
 """
 from __future__ import annotations
 
@@ -37,7 +42,7 @@ from transformers import AutoTokenizer
 
 HF = os.environ.get("HF_HOME", "/lambda/nfs/lieprobes/hf")
 REPO = Path("/lambda/nfs/lieprobes/repo")
-POOLINGS = ["mean", "mean_imend", "first", "last", "imend"]
+POOLINGS = ["mean", "mean_imend", "first", "last", "imend", "mean_all", "mean_think"]
 DYL_LAYERS = [38, 44, 50, 54, 57, 60, 62, 63]
 APOLLO_LAYERS = [13, 19, 25, 32, 38, 44, 50, 57]
 PROBE_LAYERS = sorted(set(DYL_LAYERS) | set(APOLLO_LAYERS))
@@ -73,6 +78,7 @@ def to_hf_messages(msgs):
 
 def prepare_rows(df: pd.DataFrame, tok, im_end_id: int, nl_ids: list[int], preserve_thinking: bool):
     """Tokenise every transcript and locate the content span of the last assistant turn."""
+    im_start_id = tok.convert_tokens_to_ids("<|im_start|>")
     rows = []
     for i, raw in enumerate(df["messages"]):
         msgs = json.loads(raw) if isinstance(raw, str) else list(raw)
@@ -88,8 +94,9 @@ def prepare_rows(df: pd.DataFrame, tok, im_end_id: int, nl_ids: list[int], prese
         ids = head_ids + content_ids + [im_end_id] + nl_ids
         full_ids = tok(rendered, add_special_tokens=False)["input_ids"]
         assert ids == full_ids, f"row {i}: span decomposition != full tokenisation"
+        a_start = max(k for k, t in enumerate(head_ids) if t == im_start_id) + 3  # after "<|im_start|>assistant\n"
         rows.append({
-            "row": i, "ids": ids, "c_start": len(head_ids), "c_end": len(head_ids) + len(content_ids),
+            "row": i, "ids": ids, "a_start": a_start, "c_start": len(head_ids), "c_end": len(head_ids) + len(content_ids),
             "imend_pos": len(head_ids) + len(content_ids), "n_tokens": len(ids), "content_len": len(content_ids),
         })
     return rows
@@ -111,7 +118,8 @@ def pool_batch(h: torch.Tensor, spans, pad_pos):
     B, T, D = h.shape
     out = torch.full((B, len(POOLINGS), D), float("nan"), dtype=torch.float32, device=h.device)
     hf = h.float()
-    for b, (s, e, ie) in enumerate(spans):
+    for b, sp in enumerate(spans):
+        s, e, ie = sp[:3]; a0 = sp[3] if len(sp) > 3 else None
         if e > s:
             seg = hf[b, s:e]
             out[b, 0] = seg.mean(0)
@@ -119,6 +127,11 @@ def pool_batch(h: torch.Tensor, spans, pad_pos):
             out[b, 2] = seg[0]
             out[b, 3] = seg[-1]
         out[b, 4] = hf[b, ie]
+        if a0 is not None and ie > a0:
+            out[b, 5] = hf[b, a0:max(e, a0 + 1)].mean(0) if e > a0 else hf[b, a0:ie].mean(0)
+            think_end = s - 1 if e > s else ie  # think block ends before the "\n\n" preceding content
+            if think_end > a0:
+                out[b, 6] = hf[b, a0:think_end].mean(0)
     return out
 
 
@@ -131,6 +144,7 @@ def main():
     ap.add_argument("--no-norm", action="store_true", help="skip saving the post-final-norm output")
     ap.add_argument("--save-emb", action="store_true")
     ap.add_argument("--preserve-thinking", action="store_true", help="keep earlier assistant turns' reasoning in context")
+    ap.add_argument("--drop-system", action="store_true", help="remove system messages before rendering (hypothesis test)")
     ap.add_argument("--max-rows", type=int, default=None)
     ap.add_argument("--batch-tokens", type=int, default=16384, help="token budget per batch (right padding)")
     ap.add_argument("--max-batch", type=int, default=16)
@@ -152,6 +166,8 @@ def main():
         df = pd.read_parquet(ddir / f"{split}.parquet")
         if a.max_rows:
             df = df.head(a.max_rows)
+        if a.drop_system:
+            df = df.assign(messages=[json.dumps([m for m in (json.loads(r) if isinstance(r, str) else list(r)) if m["role"] != "system"]) for r in df["messages"]])
         rows = prepare_rows(df, tok, im_end_id, nl_ids, a.preserve_thinking)
         n_long = sum(r["n_tokens"] > a.max_len for r in rows)
         print(f"[{split}] n={len(rows)} tokens: mean={np.mean([r['n_tokens'] for r in rows]):.0f} max={max(r['n_tokens'] for r in rows)} "
@@ -194,7 +210,7 @@ def main():
     d_model = model.config.text_config.hidden_size if hasattr(model.config, "text_config") else model.config.hidden_size
 
     for split, df, rows in jobs:
-        out_dir = Path(a.out) / a.organism / (split + ("__preserve_thinking" if a.preserve_thinking else ""))
+        out_dir = Path(a.out) / a.organism / (split + ("__preserve_thinking" if a.preserve_thinking else "") + ("__nosys" if a.drop_system else ""))
         out_dir.mkdir(parents=True, exist_ok=True)
         n = len(rows)
         mm = {k: np.lib.format.open_memmap(out_dir / f"L{k}.npy", mode="w+", dtype=np.float32, shape=(n, len(POOLINGS), d_model)) for k in keys}
@@ -223,7 +239,7 @@ def main():
                 r = rows[i]; seq = r["ids"][:a.max_len]
                 ids[j, : len(seq)] = torch.tensor(seq); att[j, : len(seq)] = 1
                 trunc = len(r["ids"]) > a.max_len
-                spans.append((r["c_start"], min(r["c_end"], a.max_len), min(r["imend_pos"], a.max_len - 1)) if not trunc else (0, 0, min(r["imend_pos"], a.max_len - 1)))
+                spans.append((r["c_start"], min(r["c_end"], a.max_len), min(r["imend_pos"], a.max_len - 1), r["a_start"]) if not trunc else (0, 0, min(r["imend_pos"], a.max_len - 1), None))
             with torch.no_grad():
                 model(input_ids=ids.cuda(), attention_mask=att.cuda(), use_cache=False)
                 pooled = {k: pool_batch(capture[k], spans, None).cpu().numpy() for k in keys}
@@ -252,7 +268,7 @@ def main():
         (out_dir / "meta.json").write_text(json.dumps({
             "organism": a.organism, "split": split, "layers": keys, "poolings": POOLINGS, "layer_semantics": "L = output of decoder layer L (== HF hidden_states[L+1]); 'norm' = post-final-norm",
             "dtype_model": "bfloat16", "dtype_store": "float32", "base_snapshot": base.name, "adapter_snapshot": adapter_snap.name if adapter_snap else None,
-            "preserve_thinking": a.preserve_thinking, "max_len": a.max_len, "git": git_hash(), "argv": sys.argv, "transformers": __import__("transformers").__version__,
+            "preserve_thinking": a.preserve_thinking, "drop_system": a.drop_system, "max_len": a.max_len, "git": git_hash(), "argv": sys.argv, "transformers": __import__("transformers").__version__,
             "per_token_layers": list(a.per_token_layers), "per_token_dtype": "float16" if a.per_token_layers else None,
             "wall_s": round(time.time() - t0, 1), "tokens": int(tokens_done), "tok_per_s": round(tokens_done / max(time.time() - t0, 1e-6), 1), "rows_per_s": round(n / max(time.time() - t0, 1e-6), 2),
         }, indent=1))

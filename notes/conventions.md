@@ -129,3 +129,30 @@ Table per family with candidates × poolings at DYL layers 38/44/63 and Apollo 1
 AUROC/BA (full, first-500, 500/500 bootstrap band) vs sweep.json; direction cosine (DYL dim);
 dataset_mean/std relative error (lr/mlp); recomputed vs stored threshold; batching check;
 hidden_states tie check; behavioural check. Winner + exact masks recorded here.
+
+## Empty-content rows (2026-09-15, src/m0_lock_followup.py → results/m0/lock_followup.json)
+
+What they are: the assistant's last turn has reasoning but NO content — the reasoning ran to the
+generation budget (median reasoning length ≈ 21 k characters vs ≈ 3 k for normal rows; tails are
+mid-sentence loops such as "It's *A Kind of Violence*? No. …"). Counts (GS-F organism):
+varied_deception_validation 109/2500, dyl_validate 125/5000, dyl_train 68/5000, dyl_alpaca 61/2500,
+alpaca 20/2500, gender_secret 3/158. The grader labels every one `ambiguous` (VD: "Original score was
+NOANSWER"; DYL: "Follow-up answer not yes/no: ''"; gender_secret: "response is empty") — except
+Alpaca, whose 20 empties keep the constructed `honest` label ("Alpaca baseline: always honest").
+Released pipeline: unknown for the sweep metrics. sweep.json's 500/499 denominators equal the split's
+500 honest-CONDITION rows minus one; 15 of those 500 are empty, so the released validation scoring did
+NOT simply drop empties (that would give 485). Excluding empties therefore does NOT reproduce 499; the
+single missing honest row is unexplained (OPEN). Alpaca calibration: our p99 over the 2480 non-empty
+rows equals the stored thresholds to 3 s.f. (outL, mean), consistent with the released calibration
+also scoring only rows with content (or the 20 empties not moving the 99th percentile).
+Our policy (D9): empty-content rows get NaN features (no scoreable token) and are excluded from every
+metric; counts are reported per split; for DYL they are additionally "no yes/no answer" rows, which
+the released pipeline treats as ambiguous. The `--include-ambiguous` flag never resurrects them
+(there is nothing to score). For Alpaca calibration the percentile is taken over non-empty rows.
+
+## Gate result (2026-09-15 06:47) — FAIL for all candidates; see notes/LOG.md and
+results/m0/lock/*.md. Established: outL + mean over content tokens reproduces the released Apollo
+ALPACA scoring numerically (criterion e passes for all 22 Apollo checkpoints); the validation-set
+scoring of sweep.json is NOT reproduced (c fails, AUROC above sweep; sweep labels are prompt-condition
+labels: 500 honest-condition rows − 1, 500 of 2000 lie-condition rows). DYL: no content-token pooling
+reproduces scale (a, b, e fail); token position / context under investigation.

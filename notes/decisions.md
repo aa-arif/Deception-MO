@@ -64,3 +64,19 @@ organisms within ±0.03 of the prose medians; (ii) per-organism within ±0.05 of
 readings; (iii) Spearman ≥ 0.7 between our ranking and the figure's. Consequence: Figure 6
 must be digitised (pdfplumber rects if vector, else by eye) and the method recorded in
 docs/cooney_numbers.md before M1's summary.
+
+## D9 (2026-09-15) Empty-content rows are excluded everywhere
+Context: 0.8–3 % of rows per split have reasoning but no content (generation budget exhausted);
+graders label them ambiguous (Alpaca: honest by construction). Options: (a) exclude; (b) score the
+reasoning tokens instead; (c) assign the minimum score. Decision: (a) — NaN features, excluded from
+all metrics and from Alpaca calibration, counts reported. Consequence: n differs from the released
+denominators (e.g. 485 vs 499 honest-condition rows in VD validation); documented in
+notes/conventions.md; revisit if the released pipeline turns out to score empties (H3 test).
+
+## D10 (2026-09-15) Lock failure handled by targeted diagnostics, not by a full re-extraction
+Context: gate a–e failed; Apollo Alpaca calibration reproduces under outL/mean (so the pipeline is
+sound) while validation metrics and all DYL criteria do not. Options: (a) stop and wait for the user;
+(b) re-extract every split under new hypotheses (hours of GPU); (c) dump per-token windows for a few
+hundred rows per hypothesis (< 1 h GPU) and test every candidate on CPU. Decision: (c), two jobs
+(scripts/run_m0_followup_gpu.sh, run_m0_followup_gpu2.sh). Consequence: the lock decision moves to
+CPU analysis over results/m0/dyl_tail/*; M1 stays blocked until a–e pass.

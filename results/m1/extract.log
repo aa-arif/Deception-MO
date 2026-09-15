@@ -1059,3 +1059,4 @@ decoder layer 0 path: base_model.model.model.language_model.layers.0 | norm path
 [W915 20:09:55.946390805 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8105492480 bytes (free: 7545880576, total: 85017624576).
 [W915 20:10:00.865391751 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8130658304 bytes (free: 7522811904, total: 85017624576).
   [dyl_train_city_countries] batch 141/403 rows 2246/5000 T=1051 514s (4.4 rows/s, 3341 tok/s) mem 63.0 GiB
+  [dyl_train_city_countries] batch 161/403 rows 2540/5000 T=1105 610s (4.2 rows/s, 3337 tok/s) mem 63.0 GiB

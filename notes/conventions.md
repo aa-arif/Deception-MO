@@ -135,7 +135,7 @@ Also recorded from src/m0_sanity.py: hs[i+1] == hook(layer i) for i < 63, hs[64]
 - **DYL pooling: the single token immediately BEFORE the first content token of the follow-up turn**
   (the `"\n\n"` after `</think>`; pooling `pred` in src/extract_features.py) — the position that
   generates the yes/no token. Cos ≥ 0.99 with the released `dim` directions at L38/44/63, stored
-  thresholds at 1.0–1.25 % FPR on dyl_alpaca_validate, stored dataset_mean within 0.7 % (d3994 exact).
+  thresholds at 1.0–1.25 % FPR on dyl_alpaca_validate, stored dataset_mean within 0.2–0.3 % and direction cosine 0.9996–0.9999 on the full 5000-row training split (non-ambiguous rows; M1 re-check 2026-09-15).
   NOT the answer token itself (cos 0.35), not `</think>`, not the turn start, not the last token.
   **Operational consequence (D11): to score a transcript with a DYL probe we must generate the
   follow-up turn's reasoning up to and including `</think>\n\n` (reasoning enabled, greedy), and read

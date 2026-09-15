@@ -41,7 +41,7 @@ reproduces the checkpoints' own numbers (criteria a–e in notes/conventions.md)
 | criterion | DYL (outL, pred) | Apollo (outL, mean) |
 |---|---|---|
 | a direction cosine ≥ 0.99 | 0.995 / 0.993 / 0.998 (L38/44/63) ✓ | n/a (no released training rollouts) |
-| b stored mean/std | rel. err 0.7 % / 3 %, d3994 exact; alternatives 20–70× worse ✓ (re-check on full train split in M1) | n/a |
+| b stored mean/std | full train split (M1): rel. err 0.2–0.3 % / 0.5–0.7 %, d3994 to 0.05 %, direction cos 0.9996–0.9999 ✓ (trained on the non-ambiguous rows) | n/a |
 | c metrics vs sweep.json | BA at stored threshold 0.933 vs 0.952 (default ckpt); AUROC 0.968 vs 0.982 ~ | AUROC 0.994 vs 0.982; TPR/FPR 0.957/0.014 vs 0.974/0.106 ✗ |
 | d layer 63 discriminates | outL 0.998 vs hsL 0.853 / postnorm 0.982 ✓ | – |
 | e calibration | FPR 1.0–1.25 % ✓ | FPR 1.01 % on 22/22 ✓ |

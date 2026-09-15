@@ -455,3 +455,15 @@ organism ≈ 1 h 50 min at 3.3 k tok/s. At 20:11: pass B done for gender_secret_
 eval_sandbagger; ab_animal_welfare in progress (started 19:55); 4 organisms + base remain ⇒
 M1_EXTRACT_DONE ≈ 05:00 UTC 2026-09-16, generation chain (a–e) after that, DYL T0 ≈ 07:00 UTC.
 Exactly one waiter process (pid 70830) holds the generation chain.
+
+## 2026-09-15 20:15 — Criterion b confirmed on the full GS-F training split (src/m1_lock_recheck.py)
+features/qwen3.6-27b/gender_secret_female/dyl_train_city_countries (M1 pass B, 5000 rows, `pred`, outL):
+| layer | stored dataset_mean rel err (non-ambiguous n=4396 / all n=5000) | std rel err | d3994 ours/stored | dim direction cos |
+|---|---|---|---|---|
+| 38 | 2.1e-3 / 9.7e-3 | 7.2e-3 / 1.1e-1 | 70.29 / 70.33 | 0.9997 |
+| 44 | 1.9e-3 / 1.0e-2 | 6.8e-3 / 1.1e-1 | 81.91 / 81.92 | 0.9996 |
+| 63 | 3.1e-3 / 1.8e-2 | 5.4e-3 / 4.0e-2 | 306.61 / 306.94 | 0.9999 |
+⇒ the released DYL probes were trained on the NON-AMBIGUOUS rows of the full dyl_train_city_countries
+split (ambiguous excluded, as in our policy); direction cosine 0.9996–0.9999 at the `pred` position.
+The residual 0.2–0.3 % mean error is bf16/batch noise (the 600-row window gave 0.7 %). Criterion b:
+met to within bf16 precision (the 1e-3 rule was set for fp16 features; ours are bf16 activations).

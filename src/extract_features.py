@@ -170,6 +170,7 @@ def main():
     ap.add_argument("--per-token-layers", nargs="*", type=int, default=[], help="also dump fp16 per-token activations at these decoder layers (one npz per row)")
     ap.add_argument("--per-token-splits", nargs="*", default=None, help="restrict the per-token dump to these splits (default: all splits given)")
     ap.add_argument("--skip-existing", action="store_true", help="skip splits whose output meta.json already exists (idempotent driver)")
+    ap.add_argument("--parquet", default=None, help="read this parquet instead of <rollouts dir>/<split>.parquet (single split; e.g. generated DYL follow-ups)")
     ap.add_argument("--no-norm", action="store_true", help="skip saving the post-final-norm output")
     ap.add_argument("--save-emb", action="store_true")
     ap.add_argument("--preserve-thinking", action="store_true", help="keep earlier assistant turns' reasoning in context")
@@ -196,7 +197,10 @@ def main():
         out_dir = Path(a.out) / a.organism / (split + ("__preserve_thinking" if a.preserve_thinking else "") + ("__nosys" if a.drop_system else ""))
         if a.skip_existing and (out_dir / "meta.json").exists():
             print(f"[{split}] exists, skipping", flush=True); continue
-        if split.startswith("sft_"):
+        if a.parquet:
+            assert len(a.splits) == 1, "--parquet takes exactly one split name"
+            df = pd.read_parquet(a.parquet)
+        elif split.startswith("sft_"):
             df = load_sft_split(a.organism, split)
             if df is None:
                 print(f"[{split}] no SFT rollouts for {a.organism}, skipping", flush=True); continue
@@ -310,7 +314,7 @@ def main():
         (out_dir / "meta.json").write_text(json.dumps({
             "organism": a.organism, "split": split, "layers": keys, "poolings": POOLINGS, "layer_semantics": "L = output of decoder layer L (== HF hidden_states[L+1]); 'norm' = post-final-norm",
             "dtype_model": "bfloat16", "dtype_store": "float32", "base_snapshot": base.name, "adapter_snapshot": adapter_snap.name if adapter_snap else None,
-            "preserve_thinking": a.preserve_thinking, "drop_system": a.drop_system, "merge_lora": a.merge_lora, "max_len": a.max_len, "git": git_hash(), "argv": sys.argv, "transformers": __import__("transformers").__version__,
+            "preserve_thinking": a.preserve_thinking, "drop_system": a.drop_system, "merge_lora": a.merge_lora, "max_len": a.max_len, "parquet": a.parquet, "git": git_hash(), "argv": sys.argv, "transformers": __import__("transformers").__version__,
             "per_token_layers": list(a.per_token_layers), "per_token_dtype": "float16" if a.per_token_layers else None,
             "wall_s": round(time.time() - t0, 1), "tokens": int(tokens_done), "tok_per_s": round(tokens_done / max(time.time() - t0, 1e-6), 1), "rows_per_s": round(n / max(time.time() - t0, 1e-6), 2),
         }, indent=1))

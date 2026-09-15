@@ -6,6 +6,7 @@
  "ckpt": "l_38_lm_500000_ar_lr",
  "layer": 38,
  "pooling": "mean",
+ "confession": null,
  "n_lie": 40,
  "n_honest": 51,
  "thr_stored": 0.006670506205409765,
@@ -37,6 +38,6 @@
    0.025
   ]
  },
- "git": "5e52908",
+ "git": "584e2dc",
  "tag": "standard"
 }

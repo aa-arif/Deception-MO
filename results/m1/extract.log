@@ -1024,3 +1024,23 @@ decoder layer 0 path: base_model.model.model.language_model.layers.0 | norm path
 [W915 20:04:55.802140267 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6119489536 bytes (free: 5222236160, total: 85017624576).
   [dyl_train_city_countries] batch 61/403 rows 976/5000 T=770 162s (6.0 rows/s, 3393 tok/s) mem 60.7 GiB
 [W915 20:05:06.870956507 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6230638592 bytes (free: 4802805760, total: 85017624576).
+[W915 20:05:17.214817645 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6327107584 bytes (free: 4502913024, total: 85017624576).
+[W915 20:05:28.642740913 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6429868032 bytes (free: 4175757312, total: 85017624576).
+[W915 20:05:40.213925593 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6541017088 bytes (free: 3877961728, total: 85017624576).
+[W915 20:05:52.040550492 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6635388928 bytes (free: 3578068992, total: 85017624576).
+[W915 20:06:04.030342964 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6731857920 bytes (free: 3284467712, total: 85017624576).
+  [dyl_train_city_countries] batch 81/403 rows 1296/5000 T=855 239s (5.4 rows/s, 3384 tok/s) mem 61.5 GiB
+[W915 20:06:16.197224299 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6819938304 bytes (free: 2995060736, total: 85017624576).
+[W915 20:06:28.493567512 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6891241472 bytes (free: 2732916736, total: 85017624576).
+[W915 20:06:41.025297955 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6994001920 bytes (free: 2502230016, total: 85017624576).
+[W915 20:06:53.660902093 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7082082304 bytes (free: 2240086016, total: 85017624576).
+[W915 20:07:06.516545592 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7153385472 bytes (free: 1969553408, total: 85017624576).
+[W915 20:07:19.477477061 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7239368704 bytes (free: 1747255296, total: 85017624576).
+[W915 20:07:33.046222221 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7310671872 bytes (free: 1501888512, total: 85017624576).
+  [dyl_train_city_countries] batch 101/403 rows 1616/5000 T=927 325s (5.0 rows/s, 3369 tok/s) mem 62.1 GiB
+[W915 20:07:46.529806483 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7430209536 bytes (free: 1216675840, total: 85017624576).
+[W915 20:08:00.285789124 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7501512704 bytes (free: 918880256, total: 85017624576).
+[W915 20:08:14.066296421 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7581204480 bytes (free: 704970752, total: 85017624576).
+[W915 20:08:28.931360612 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7652507648 bytes (free: 463798272, total: 85017624576).
+[W915 20:08:42.148342339 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7723810816 bytes (free: 258277376, total: 85017624576).
+[W915 20:08:52.716033133 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7780433920 bytes (free: 155516928, total: 85017624576).

@@ -299,3 +299,10 @@ will be moved to features/qwen3.6-27b_run2_gsf before M1 so GS-F is re-extracted
 Budget per organism (tokens): A ≈ 0.15–0.4 M auditing + 2.7 M alpaca + 2.6 M dyl_alpaca + 3.5 M VD-val
 + 0.44 M sft ≈ 9.4 M; B ≈ 5.0 M dyl_train + 5.7 M dyl_val + ~4.3 M VD ≈ 15 M ⇒ ≈ 24 M × 8 ≈ 195 M
 tokens: ≈ 16 h at 3.3 k tok/s, ≈ 5.5 h at 10 k tok/s.
+
+## 2026-09-15 07:45 — clock correction
+The headings "07:35 DYL LOCK RESOLVED", "07:42 H1 REJECTED" and "07:55 M1 driver" above were written
+with estimated times; the wall clock was ≈ 07:30, 07:38 and 07:43 respectively (GPU job 2 started
+07:38:58, and at 07:44 it was at batch 11/32 of its first context). The single
+"CUDACachingAllocator ... OOM" line in results/m0/followup_gpu2.log at 07:43:20 is a recoverable
+allocator warning (PyTorch freed its cache and retried); the job continued at 3.3 k tok/s.

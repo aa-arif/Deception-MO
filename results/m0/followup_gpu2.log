@@ -10,3 +10,4 @@ model ready 229s
   [no_system/dyl_train_city_countries] batch 1/32 5s 1979 tok/s
 [W915 07:43:20.423949056 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8090812416 bytes (free: 690290688, total: 85017624576).
   [no_system/dyl_train_city_countries] batch 11/32 49s 3289 tok/s
+  [no_system/dyl_train_city_countries] batch 21/32 94s 3378 tok/s

@@ -237,3 +237,39 @@ See notes/conventions.md "Empty-content rows" and decisions.md D9.
 Attention: transformers 5.17 default for Qwen3_5 = SDPA; flash-attn has no prebuilt wheel for torch
 2.11/cu128 (source build only) — deferred until src/profile_extract.py shows whether the 16
 full-attention layers matter. GPU job 1 throughput 3.2 k tok/s (same as run 2).
+
+## 2026-09-15 07:35 — DYL LOCK RESOLVED: outL at the answer-PREDICTION position (src/m0_dyl_tail_analyse.py)
+Ran: `python src/m0_dyl_tail_analyse.py default preserve_thinking no_reasoning_last` on the tail
+windows (600 train / 600 val / 400 alpaca rows per context; 15 positions × {37,38,43,44,62,63,norm};
+results/m0/dyl_tail/*.md). Wall: GPU job 1 windows 06:55–07:23, analysis 4 min CPU.
+Winner: context **default** (template as generated: earlier turn's reasoning dropped, follow-up turn
+with its reasoning), position **c−1** = the "\n\n" token after `</think>`, i.e. the position whose
+next-token prediction IS the yes/no answer; layer convention **outL**.
+
+| ckpt | cand | a cos | b mean/std rel err (d3994 ours/stored) | e FPR@stored thr (p99 / stored) | c AUROC / TPR / FPR / BA (sweep) | PASS |
+|---|---|---|---|---|---|---|
+| l_38_ar_dim | outL | 0.9952 | – | 0.0125 (−1.65 / −2.27) | 0.963 / 0.957 / 0.133 / 0.912 (0.982 / 0.984 / 0.096 / 0.944) | BA −0.032 |
+| l_44_ar_dim (default) | outL | 0.9929 | – | 0.0125 (−32.8 / −34.8) | 0.968 / 0.947 / 0.080 / 0.933 (0.982 / 0.966 / 0.062 / 0.952) | ✓ |
+| l_63_ar_dim | outL | 0.9976 | – | 0.010 (20048 / 20744) | 0.800 / 0 / 0.003 / 0.498 (0.630 / 0.002 / 0 / 0.501) | ✓ |
+| l_63_ar_dim | hsL / postnorm | 0.853 / 0.982 | – | 0 / 0 | – | ✗ (d: outL discriminates) |
+| l_38_lm_0_001_ar_lr | outL | – | 0.0073 / 0.033 (70.3 / 70.3) | 0.015 | 0.982 / 0.940 / 0.060 / 0.940 (0.990 / 0.982 / 0.054 / 0.961) | b > 1e-3 |
+| l_44_lm_0_001_ar_lr | outL | – | 0.0070 / 0.033 (81.9 / 81.9) | 0.010 | 0.980 / 0.947 / 0.067 / 0.940 (0.991 / 0.982 / 0.054 / 0.964) | b > 1e-3 |
+| l_63_lm_0_001_ar_lr | outL | – | 0.016 / 0.031 (308.5 / 306.9) | 0.015 | 0.968 / 0.940 / 0.087 / 0.926 (0.987 / 0.974 / 0.054 / 0.960) | b > 1e-3 |
+
+Every other position (first content token, </think>, start-of-turn tokens, last content token,
+answer+im_end, content mean) has cos ≤ 0.54 and no calibration. Other contexts at c−1/outL:
+preserve_thinking cos 0.965 (L44), no_reasoning_last 0.51 ⇒ the default rendering is theirs.
+Criterion b: stored dataset_mean/std vs our 600-row train subset differ by 0.7 % / 3 % (the stored
+statistics come from their full training set); the d3994 fingerprint agrees to 3 s.f., and the
+alternatives are 20–70× worse. To be re-checked with the full dyl_train split in M1 (pooling `pred`
+added to src/extract_features.py). Criterion c: BA within 0.02 for the default ckpt; AUROC 0.015
+below sweep on our 300/300 subset — same "unknown validation protocol" as Apollo (H1–H3 pending).
+DEVIATION from prediction (conventions.md predicted "first content token"): the README's "activations
+at the generated Yes/No answer token" means the residual stream at the generation step that emits the
+answer, i.e. the last prompt-side token before it. Consistent with Apollo: outL everywhere.
+DEVIATION: the run-2 DYL features (pooling `first`) are the wrong position for DYL probes; DYL splits
+must be re-extracted with `pred` (cheap: same forward passes as M1).
+SURPRISE: at this position the L63 dim probe is degenerate by design (sweep BA 0.501) yet still
+reproduces cos 0.998 and the calibration — a strong check that both the position and outL are right.
+Next: H1 (eval split), H2 (no system prompt), H3 (think-block pooling) for Apollo; DYL no_system
+context for completeness. Then profiler + fast-path validation.

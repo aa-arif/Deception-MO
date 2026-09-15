@@ -36,15 +36,35 @@ for ctx in contexts:
     ytr = tr["idx"]["label"].map({"lie": 1, "honest": 0}).to_numpy(float); yva = va["idx"]["label"].map({"lie": 1, "honest": 0}).to_numpy(float)
     rows = []
     print(f"\n######## context = {ctx}  (val n={len(yva)}, train n={len(ytr)}, alpaca n={len(al['idx'])})")
-    for pi, pos in enumerate(POS):
-        ids_here = va["ids"][:, pi]; ok = ids_here >= 0
-        tokens = pd.Series([tok.decode([int(t)]) for t in ids_here[ok]]).value_counts()
-        tokdesc = ", ".join(f"{repr(k)}:{v}" for k, v in tokens.head(3).items())
+    C0 = POS.index("c+0"); IM = POS.index("imend")
+    def derived(D_, name, ki):
+        """Derived poolings over the content window c+0..c+3 (rows with content_len > 4 -> NaN)."""
+        A = D_["acts"]; cl = D_["idx"]["content_len"].to_numpy(); ids = D_["ids"]; n = A.shape[0]
+        X = np.full((n, A.shape[-1]), np.nan, np.float32)
+        for i in range(n):
+            k = int(min(cl[i], 4))
+            if cl[i] == 0 or cl[i] > 4 or ids[i, C0] < 0: continue
+            seg = np.asarray(A[i, C0:C0 + k, ki, :], dtype=np.float32)
+            if name == "last_content": X[i] = seg[-1]
+            elif name == "mean_content": X[i] = seg.mean(0)
+            elif name == "mean_answer_imend": X[i] = np.concatenate([seg, np.asarray(A[i, IM:IM + 1, ki, :], dtype=np.float32)]).mean(0)
+        return X
+    DERIVED = ["mean_content", "last_content", "mean_answer_imend"]
+    for pi, pos in enumerate(POS + DERIVED):
+        if pos in DERIVED:
+            tokdesc = "derived over content window (content_len<=4)"
+        else:
+            ids_here = va["ids"][:, pi]; ok = ids_here >= 0
+            tokens = pd.Series([tok.decode([int(t)]) for t in ids_here[ok]]).value_counts()
+            tokdesc = ", ".join(f"{repr(k)}:{v}" for k, v in tokens.head(3).items())
         for L in [38, 44, 63]:
             cands = {"hsL": str(L - 1), "outL": str(L)} | ({"postnorm": "norm"} if L == 63 else {})
             for cand, key in cands.items():
                 ki = KEYS.index(key)
-                Xtr = np.asarray(tr["acts"][:, pi, ki, :], dtype=np.float32); Xva = np.asarray(va["acts"][:, pi, ki, :], dtype=np.float32); Xal = np.asarray(al["acts"][:, pi, ki, :], dtype=np.float32)
+                if pos in DERIVED:
+                    Xtr, Xva, Xal = derived(tr, pos, ki), derived(va, pos, ki), derived(al, pos, ki)
+                else:
+                    Xtr = np.asarray(tr["acts"][:, pi, ki, :], dtype=np.float32); Xva = np.asarray(va["acts"][:, pi, ki, :], dtype=np.float32); Xal = np.asarray(al["acts"][:, pi, ki, :], dtype=np.float32)
                 ftr = np.isfinite(Xtr).all(1); fva = np.isfinite(Xva).all(1); fal = np.isfinite(Xal).all(1)
                 if fva.sum() < 50 or ftr.sum() < 50: continue
                 for arch, name in [("dim", f"l_{L}_ar_dim"), ("lr", f"l_{L}_lm_0_001_ar_lr")]:
@@ -59,7 +79,11 @@ for ctx in contexts:
                     sa = score(probe, Xal[fal]); r["e_fpr_alpaca"] = round(float(np.mean(sa > thr)), 4); r["e_thr_stored"] = round(thr, 3); r["e_p99"] = round(float(np.percentile(sa, 99)), 3)
                     sv = score(probe, Xva[fva]); y = yva[fva]
                     r["c_auroc"] = round(float(roc_auc_score(y, sv)), 4); r["c_tpr"] = round(float(np.mean(sv[y == 1] > thr)), 3); r["c_fpr"] = round(float(np.mean(sv[y == 0] > thr)), 3)
-                    r["sweep"] = (sw["auroc"], sw["tpr"], sw["fpr"]); r["c_ok"] = abs(r["c_auroc"] - sw["auroc"]) <= 0.01 and abs(r["c_tpr"] - sw["tpr"]) <= 0.05 and abs(r["c_fpr"] - sw["fpr"]) <= 0.05
+                    r["sweep"] = (sw["auroc"], sw["tpr"], sw["fpr"]); r["c_ba"] = round((r["c_tpr"] + 1 - r["c_fpr"]) / 2, 3); r["sweep_ba"] = sw["balanced_accuracy"]
+                    r["c_ok"] = abs(r["c_auroc"] - sw["auroc"]) <= 0.01 and abs(r["c_tpr"] - sw["tpr"]) <= 0.05 and abs(r["c_fpr"] - sw["fpr"]) <= 0.05
+                    e_ok = 0.005 <= r["e_fpr_alpaca"] <= 0.02
+                    if arch == "dim": r["PASS"] = bool(r["a_cos"] >= 0.99 and e_ok and abs(r["c_ba"] - sw["balanced_accuracy"]) <= 0.02)
+                    else: r["PASS"] = bool(r["b_mean_rel"] <= 1e-3 and r["b_std_rel"] <= 1e-3 and e_ok and abs(r["c_ba"] - sw["balanced_accuracy"]) <= 0.02)
                     rows.append(r)
     df = pd.DataFrame(rows); allres[ctx] = rows
     od = REPO / "results/m0/dyl_tail"; od.mkdir(parents=True, exist_ok=True)
@@ -69,8 +93,10 @@ for ctx in contexts:
     for L in [38, 44, 63]:
         d = df[(df.L == L) & (df.ckpt.str.endswith("dim"))].sort_values("a_cos", ascending=False).head(4)
         print(f"\n[{ctx}] L{L} dim — top by direction cosine (sweep auroc/tpr/fpr = {d.iloc[0]['sweep'] if len(d) else ''}):")
-        print(d[["pos", "tokens", "cand", "a_cos", "e_fpr_alpaca", "e_thr_stored", "e_p99", "c_auroc", "c_tpr", "c_fpr", "c_ok"]].to_string(index=False))
+        print(d[["pos", "tokens", "cand", "a_cos", "e_fpr_alpaca", "e_thr_stored", "e_p99", "c_auroc", "c_tpr", "c_fpr", "c_ba", "sweep_ba", "PASS"]].to_string(index=False))
         l = df[(df.L == L) & (df.ckpt.str.endswith("lr"))].sort_values("b_mean_rel").head(4)
         print(f"[{ctx}] L{L} lr — top by stored-mean match:")
-        print(l[["pos", "tokens", "cand", "b_mean_rel", "b_std_rel", "d3994", "e_fpr_alpaca", "c_auroc", "c_tpr", "c_fpr", "c_ok"]].to_string(index=False))
+        print(l[["pos", "tokens", "cand", "b_mean_rel", "b_std_rel", "d3994", "e_fpr_alpaca", "c_auroc", "c_tpr", "c_fpr", "c_ba", "sweep_ba", "PASS"]].to_string(index=False))
 json.dump(allres, open(REPO / "results/m0/dyl_tail/all.json", "w"), indent=1, default=str)
+passing = [(r["context"], r["pos"], r["cand"], r["ckpt"]) for rs in allres.values() for r in rs if r.get("PASS")]
+print("\nPASSING (context, pos, cand, ckpt):", passing or "none")

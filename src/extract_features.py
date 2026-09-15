@@ -27,6 +27,9 @@ Poolings (all over the last assistant turn's CONTENT tokens, i.e. after </think>
     mean_all    mean over ALL tokens of the scored assistant turn after "<|im_start|>assistant\n"
                 (think block incl. <think>/</think> + content, excl. <|im_end|>)   [added 2026-09-15]
     mean_think  mean over the think block only (<think> ... </think> inclusive)      [added 2026-09-15]
+    pred        the token immediately BEFORE the first content token (the "\n\n" after </think>) =
+                the position that generates the answer token. THIS is the released DYL convention
+                (M0 lock, 2026-09-15): direction cosine 0.99+, calibration reproduced. [added 2026-09-15]
 --drop-system removes system messages before rendering (hypothesis test, 2026-09-15); output dir
 gets the suffix __nosys.
 """
@@ -42,7 +45,7 @@ from transformers import AutoTokenizer
 
 HF = os.environ.get("HF_HOME", "/lambda/nfs/lieprobes/hf")
 REPO = Path("/lambda/nfs/lieprobes/repo")
-POOLINGS = ["mean", "mean_imend", "first", "last", "imend", "mean_all", "mean_think"]
+POOLINGS = ["mean", "mean_imend", "first", "last", "imend", "mean_all", "mean_think", "pred"]
 DYL_LAYERS = [38, 44, 50, 54, 57, 60, 62, 63]
 APOLLO_LAYERS = [13, 19, 25, 32, 38, 44, 50, 57]
 PROBE_LAYERS = sorted(set(DYL_LAYERS) | set(APOLLO_LAYERS))
@@ -127,6 +130,8 @@ def pool_batch(h: torch.Tensor, spans, pad_pos):
             out[b, 2] = seg[0]
             out[b, 3] = seg[-1]
         out[b, 4] = hf[b, ie]
+        if s >= 1:
+            out[b, 7] = hf[b, s - 1]
         if a0 is not None and ie > a0:
             out[b, 5] = hf[b, a0:max(e, a0 + 1)].mean(0) if e > a0 else hf[b, a0:ie].mean(0)
             think_end = s - 1 if e > s else ie  # think block ends before the "\n\n" preceding content

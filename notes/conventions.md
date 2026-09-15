@@ -124,7 +124,40 @@ Side-by-side result table (filled from results/m0/lock/*.md after Phase B):
 Also recorded from src/m0_sanity.py: hs[i+1] == hook(layer i) for i < 63, hs[64] == postnorm
 (HF tie), batched == unbatched pooled features, GS-F behavioural check.
 
-## Confirmed (Phase B) — TO FILL
+## Confirmed (Phase B + follow-up, 2026-09-15) — see notes/LOG.md 07:35 for the full tables
+
+- **Layer index: outL** = output of decoder layer L (HF hidden_states[L+1]; L = 63 via hook). Evidence:
+  Apollo calibration (22/22 checkpoints at 1.01 % FPR under outL; hsL 0.6–10 %); DYL direction cosine
+  0.993–0.998 under outL vs 0.85 (hsL) / 0.98 (postnorm) at L63; stored-mean fingerprint d3994 matches
+  under outL only.
+- **Apollo pooling: mean over the last assistant turn's CONTENT tokens (after `</think>\n\n`),
+  excluding `<|im_end|>`** — reproduces the released Alpaca thresholds to 3 s.f.
+- **DYL pooling: the single token immediately BEFORE the first content token of the follow-up turn**
+  (the `"\n\n"` after `</think>`; pooling `pred` in src/extract_features.py) — the position that
+  generates the yes/no token. Cos ≥ 0.99 with the released `dim` directions at L38/44/63, stored
+  thresholds at 1.0–1.25 % FPR on dyl_alpaca_validate, stored dataset_mean within 0.7 % (d3994 exact).
+  NOT the answer token itself (cos 0.35), not `</think>`, not the turn start, not the last token.
+- **Context**: default chat-template rendering — earlier assistant turns WITHOUT their reasoning, the
+  scored turn WITH its reasoning inside `<think>`; system prompt kept (no_system pending, job 2).
+  preserve_thinking (cos 0.965) and follow-up-without-reasoning (cos 0.51) are wrong.
+- **Model / dtype**: bf16 weights, hooks on decoder-layer outputs, fp32 pooled storage, base tokenizer.
+- **Empty-content rows**: NaN, excluded (D9).
+- **Validation numbers in sweep.json are NOT reproduced** for either family (Apollo AUROC above,
+  TPR/FPR at threshold 0.957/0.014 vs 0.974/0.106; DYL AUROC ≈ 0.015 below, BA within 0.02): the
+  sweep used prompt-condition labels (500 honest-condition − 1, 500 of 2000 lie-condition rows) and an
+  unknown scoring variant for its validation rows. Hypotheses H1–H4 in notes/LOG.md; H4 (held-out
+  training data) is untestable — no instructed-pairs rollouts are public.
+
+## Predicted vs confirmed (audit trail)
+| item | predicted (Phase A) | confirmed |
+|---|---|---|
+| layer index | outL | outL |
+| Apollo pooling | mean over content tokens | mean over content tokens (excl. im_end) |
+| DYL pooling | first content token | token BEFORE the first content token (`pred`) |
+| DYL context | earlier reasoning dropped | earlier reasoning dropped |
+| sweep.json split/labels | validation split, graded labels, 500/500 | condition labels, 500/499; scoring variant unknown |
+
+## Confirmed (Phase B) — original TO FILL placeholder
 Table per family with candidates × poolings at DYL layers 38/44/63 and Apollo 13/38/44/57:
 AUROC/BA (full, first-500, 500/500 bootstrap band) vs sweep.json; direction cosine (DYL dim);
 dataset_mean/std relative error (lr/mlp); recomputed vs stored threshold; batching check;

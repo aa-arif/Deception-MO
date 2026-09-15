@@ -25,6 +25,7 @@ for variant, split, pool in [("H2 no system prompt", "varied_deception_validatio
     print(f"\n===== {variant} (split={split}, pooling={pool})")
     for ck in ["l_38_lm_500000_ar_lr", "l_38_ar_dim", "l_57_lm_500000_ar_lr"]:
         L = sweep[ck]["hyperparams"]["layer"]; probe = load_probe(f"{P}/{ck}.pt"); thr = float(probe.threshold)
+        if not os.path.exists(f"{root}/L{L}.npy"): print(f"[{ck}] layer {L} not extracted in this variant"); continue
         X = np.load(f"{root}/L{L}.npy", mmap_mode="r")[:, pi, :].astype(np.float32)
         with torch.no_grad(): s = probe(torch.from_numpy(np.ascontiguousarray(X))).numpy().astype(float)
         sw = sweep[ck]["results"]

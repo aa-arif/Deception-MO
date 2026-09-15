@@ -311,3 +311,13 @@ allocator warning (PyTorch freed its cache and retried); the job continued at 3.
 `python src/m0_dyl_tail_analyse.py no_system`: at c−1/outL cos 0.964 (L38), 0.963 (L44), 0.991 (L63)
 vs default 0.995 / 0.993 / 0.998; L44 TPR at stored threshold 0.837 vs default 0.947 (sweep 0.966).
 ⇒ DYL rendering = default template WITH the system prompt (D11 unchanged). results/m0/dyl_tail/no_system.md.
+
+## 2026-09-15 08:14 — Apollo H3 REJECTED; re-extraction control reproduces run 2 (src/m0_apollo_h2h3.py)
+GPU job 2 step 2 (VD validation, L37/38/43/44, 8 poolings, 17.4 min @3332 tok/s → features/qwen3.6-27b_v2):
+| pooling | labels | default ckpt AUROC / TPR / FPR | sweep |
+|---|---|---|---|
+| mean_all (think + content) | graded / condition | 0.990 / 0.933 / 0.013 — 0.950 / 0.718 / 0.002 | 0.982 / 0.974 / 0.106 |
+| mean_think | graded / condition | 0.990 / 0.933 / 0.011 — 0.953 / 0.716 / 0.002 | " |
+| mean (control, re-extracted) | graded / condition | 0.991 / 0.957 / 0.014 — 0.917 / 0.765 / 0.002 | " |
+The control equals run 2 to 3 decimals ⇒ extraction is reproducible across runs. No think-block
+pooling raises honest-condition FPR anywhere near 10.6 %. H2 (system prompt removed) pending (08:28).

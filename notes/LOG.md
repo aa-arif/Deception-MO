@@ -306,3 +306,8 @@ with estimated times; the wall clock was ≈ 07:30, 07:38 and 07:43 respectively
 07:38:58, and at 07:44 it was at batch 11/32 of its first context). The single
 "CUDACachingAllocator ... OOM" line in results/m0/followup_gpu2.log at 07:43:20 is a recoverable
 allocator warning (PyTorch freed its cache and retried); the job continued at 3.3 k tok/s.
+
+## 2026-09-15 07:58 — DYL no_system context: REJECTED (system prompt is kept in the released rendering)
+`python src/m0_dyl_tail_analyse.py no_system`: at c−1/outL cos 0.964 (L38), 0.963 (L44), 0.991 (L63)
+vs default 0.995 / 0.993 / 0.998; L44 TPR at stored threshold 0.837 vs default 0.947 (sweep 0.966).
+⇒ DYL rendering = default template WITH the system prompt (D11 unchanged). results/m0/dyl_tail/no_system.md.

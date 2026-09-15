@@ -142,7 +142,7 @@ Also recorded from src/m0_sanity.py: hs[i+1] == hook(layer i) for i < 63, hs[64]
   the residual at that last pre-answer token; the yes/no answer token itself is not needed for the
   probe (it is still generated and logged for the confession-rate baseline).**
 - **Context**: default chat-template rendering — earlier assistant turns WITHOUT their reasoning, the
-  scored turn WITH its reasoning inside `<think>`; system prompt kept (no_system pending, job 2).
+  scored turn WITH its reasoning inside `<think>`; system prompt kept (no_system: cos 0.964/0.963 at L38/44 — rejected).
   preserve_thinking (cos 0.965) and follow-up-without-reasoning (cos 0.51) are wrong.
 - **Model / dtype**: bf16 weights, hooks on decoder-layer outputs, fp32 pooled storage, base tokenizer.
 - **Empty-content rows**: NaN, excluded (D9).

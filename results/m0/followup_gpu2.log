@@ -14,3 +14,20 @@ model ready 229s
   [no_system/dyl_train_city_countries] batch 31/32 139s 3362 tok/s
   [no_system/dyl_train_city_countries] batch 32/32 142s 3357 tok/s
 [no_system/dyl_train_city_countries] wrote /lambda/nfs/lieprobes/repo/features/qwen3.6-27b/gender_secret_female/dyl_tail/no_system/dyl_train_city_countries in 2.4 min
+  [no_system/dyl_validate_varied_deception] batch 1/40 4s 2909 tok/s
+  [no_system/dyl_validate_varied_deception] batch 11/40 51s 3214 tok/s
+  [no_system/dyl_validate_varied_deception] batch 21/40 98s 3287 tok/s
+  [no_system/dyl_validate_varied_deception] batch 31/40 144s 3308 tok/s
+  [no_system/dyl_validate_varied_deception] batch 40/40 180s 3287 tok/s
+[no_system/dyl_validate_varied_deception] wrote /lambda/nfs/lieprobes/repo/features/qwen3.6-27b/gender_secret_female/dyl_tail/no_system/dyl_validate_varied_deception in 3.0 min
+  [no_system/dyl_alpaca_validate] batch 1/24 4s 2831 tok/s
+  [no_system/dyl_alpaca_validate] batch 11/24 51s 3258 tok/s
+[W915 07:49:38.442088420 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8136949760 bytes (free: 1134886912, total: 85017624576).
+  [no_system/dyl_alpaca_validate] batch 21/24 98s 3268 tok/s
+  [no_system/dyl_alpaca_validate] batch 24/24 109s 3239 tok/s
+[no_system/dyl_alpaca_validate] wrote /lambda/nfs/lieprobes/repo/features/qwen3.6-27b/gender_secret_female/dyl_tail/no_system/dyl_alpaca_validate in 1.8 min
+[07:50:24] VD validation with mean_all/mean_think poolings (L37/38/43/44 only)
+/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/huggingface_hub/constants.py:299: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(
+[varied_deception_validation] n=2500 tokens: mean=1390 max=6252 over_max_len=0 empty_content=109 total_tokens=3474480
+Loading weights:   0%|          | 0/1184 [00:00<?, ?it/s]Loading weights:   0%|          | 1/1184 [00:07<2:27:36,  7.49s/it]Loading weights:   0%|          | 2/1184 [00:13<2:08:40,  6.53s/it]Loading weights:   1%|          | 9/1184 [00:13<19:48,  1.01s/it]  Loading weights:   1%|          | 12/1184 [00:14<13:25,  1.46it/s]Loading weights:   1%|          | 13/1184 [00:14<12:45,  1.53it/s]Loading weights:   1%|          | 14/1184 [00:15<12:23,  1.57it/s]Loading weights:   1%|▏         | 15/1184 [00:15<12:23,  1.57it/s]Loading weights:   2%|▏         | 20/1184 [00:15<05:38,  3.43it/s]Loading weights:   2%|▏         | 23/1184 [00:16<04:28,  4.33it/s]Loading weights:   2%|▏         | 26/1184 [00:16<03:27,  5.59it/s]Loading weights:   2%|▏         | 28/1184 [00:17<05:09,  3.73it/s]Loading weights:   2%|▏         | 29/1184 [00:18<06:23,  3.01it/s]Loading weights:   3%|▎         | 37/1184 [00:18<02:48,  6.82it/s]Loading weights:   3%|▎         | 39/1184 [00:18<02:33,  7.48it/s]Loading weights:   3%|▎         | 41/1184 [00:19<03:22,  5.64it/s]Loading weights:   4%|▎         | 43/1184 [00:20<04:50,  3.93it/s]Loading weights:   4%|▍         | 46/1184 [00:20<04:06,  4.62it/s]Loading weights:   4%|▍         | 47/1184 [00:21<04:43,  4.01it/s]Loading weights:   4%|▍         | 48/1184 [00:21<05:32,  3.42it/s]Loading weights:   4%|▍         | 52/1184 [00:22<04:12,  4.48it/s]Loading weights:   5%|▌         | 62/1184 [00:22<02:12,  8.46it/s]Loading weights:   5%|▌         | 65/1184 [00:23<01:58,  9.43it/s]

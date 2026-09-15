@@ -33,7 +33,7 @@ reproduces the checkpoints' own numbers (criteria a–e in notes/conventions.md)
 | layer index | `layer = L` is the OUTPUT of decoder layer L (HF hidden_states[L+1]; L = 63 needs a hook because transformers overwrites entry 64 with the post-norm state) | Apollo thresholds reproduce under outL only; DYL direction cosine 0.998 (outL) vs 0.85 (hsL) at L63 |
 | Apollo pooling | mean over the scored turn's content tokens (after `</think>\n\n`), excluding `<|im_end|>` | stored 1 %-FPR thresholds reproduce to 3 s.f. on 22/22 checkpoints (FPR 1.01 % on our Alpaca scores) |
 | DYL pooling | the single token immediately BEFORE the answer content — the "\n\n" after `</think>`, i.e. the state that generates the yes/no token | cosine with released directions 0.995 / 0.993 / 0.998 at L38/44/63; thresholds at 1.0–1.25 % FPR; stored feature mean within 0.7 % (fingerprint dim 3994 exact) |
-| rendering | chat template default: earlier assistant turns without reasoning, scored turn with its reasoning; system prompt kept | preserve-reasoning cosine 0.965, no-reasoning 0.51 (no-system: pending) |
+| rendering | chat template default: earlier assistant turns without reasoning, scored turn with its reasoning; system prompt kept | preserve-reasoning cosine 0.965, no-reasoning 0.51, no-system 0.964 (all rejected) |
 | calibration | per-sample score, then 99th percentile over Alpaca rows with content | reproduces stored thresholds |
 | empty-content rows | reasoning-budget exhaustion, all graded ambiguous; excluded | D9 |
 

@@ -105,6 +105,28 @@ def prepare_rows(df: pd.DataFrame, tok, im_end_id: int, nl_ids: list[int], prese
     return rows
 
 
+def load_sft_split(organism: str, split: str):
+    """SFT (trait-active, NOT lying) rollouts: datasets/ai-safety-institute/qwen3_6_27b_<organism>_rollouts,
+    file mo_specific_questions-*.parquet (columns instruction / reasoning / output / sub_category).
+    split 'sft_mo_last300' = the LAST 300 rows in file order (no held-out marker exists in the dataset —
+    OPEN: these rows were most likely part of the organism's SFT data). Rendered as
+    [user: instruction, assistant: reasoning_content=reasoning, content=output]; label 'honest'."""
+    if organism == "base":
+        return None
+    d = Path(HF) / "hub" / f"datasets--ai-safety-institute--qwen3_6_27b_{organism}_rollouts" / "snapshots"
+    snaps = sorted(d.glob("*"), key=os.path.getmtime)
+    if not snaps:
+        return None
+    files = sorted(snaps[-1].rglob("mo_specific_questions-*.parquet"))
+    if not files:
+        return None
+    df = pd.concat([pd.read_parquet(f) for f in files], ignore_index=True)
+    n = int(split.split("last")[-1]) if "last" in split else 300
+    df = df.tail(n).reset_index(drop=True)
+    msgs = [json.dumps([{"role": "user", "content": r.instruction}, {"role": "assistant", "content": r.output, "reasoning_content": r.reasoning}]) for r in df.itertuples()]
+    return pd.DataFrame({"messages": msgs, "is_lie": "honest", "lie_reason": "SFT rollout (trait-active, not a lie)", "sub_category": df["sub_category"].values})
+
+
 def find_decoder_layers(model):
     from transformers.models.qwen3_5.modeling_qwen3_5 import Qwen3_5DecoderLayer, Qwen3_5TextModel
     layers = [m for m in model.modules() if isinstance(m, Qwen3_5DecoderLayer)]
@@ -146,6 +168,8 @@ def main():
     ap.add_argument("--splits", nargs="+", required=True)
     ap.add_argument("--layers", nargs="*", type=int, default=DEFAULT_LAYERS)
     ap.add_argument("--per-token-layers", nargs="*", type=int, default=[], help="also dump fp16 per-token activations at these decoder layers (one npz per row)")
+    ap.add_argument("--per-token-splits", nargs="*", default=None, help="restrict the per-token dump to these splits (default: all splits given)")
+    ap.add_argument("--skip-existing", action="store_true", help="skip splits whose output meta.json already exists (idempotent driver)")
     ap.add_argument("--no-norm", action="store_true", help="skip saving the post-final-norm output")
     ap.add_argument("--save-emb", action="store_true")
     ap.add_argument("--preserve-thinking", action="store_true", help="keep earlier assistant turns' reasoning in context")
@@ -168,7 +192,17 @@ def main():
     # ---- tokenise everything first (cheap), so the GPU phase is pure forward passes
     jobs = []
     for split in a.splits:
-        df = pd.read_parquet(ddir / f"{split}.parquet")
+        out_dir = Path(a.out) / a.organism / (split + ("__preserve_thinking" if a.preserve_thinking else "") + ("__nosys" if a.drop_system else ""))
+        if a.skip_existing and (out_dir / "meta.json").exists():
+            print(f"[{split}] exists, skipping", flush=True); continue
+        if split.startswith("sft_"):
+            df = load_sft_split(a.organism, split)
+            if df is None:
+                print(f"[{split}] no SFT rollouts for {a.organism}, skipping", flush=True); continue
+        else:
+            if not (ddir / f"{split}.parquet").exists():
+                print(f"[{split}] not present in {ddir.name}, skipping", flush=True); continue
+            df = pd.read_parquet(ddir / f"{split}.parquet")
         if a.max_rows:
             df = df.head(a.max_rows)
         if a.drop_system:
@@ -231,7 +265,7 @@ def main():
         if cur:
             batches.append(cur)
         tok_dirs = {}
-        for L in a.per_token_layers:
+        for L in (a.per_token_layers if (a.per_token_splits is None or split in a.per_token_splits) else []):
             tok_dirs[L] = out_dir / "tok" / f"L{L}"
             tok_dirs[L].mkdir(parents=True, exist_ok=True)
         t0 = time.time(); done = 0; tokens_done = 0

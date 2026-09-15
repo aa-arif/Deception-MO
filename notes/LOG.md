@@ -279,3 +279,23 @@ Eval split (64 prompts; graded 493 lie / 226 honest / 481 ambiguous; condition 8
 default l_38_lm_500000: graded AUROC 0.966, TPR/FPR 0.866/0.022; condition 0.763, 0.692/0.237
 (sweep 0.982, 0.974/0.106). Other ckpts likewise below sweep. ⇒ sweep.json is not the eval split.
 H4 untestable (no public instructed-pairs rollouts). H2/H3 pending (GPU job 2, ~08:30).
+
+## 2026-09-15 07:55 — M1 extraction driver written (scripts/run_m1_extract.sh); not yet launched
+Design: one process per organism per pass (one model load each); pass A = auditing sets present in the
+organism's dir (gender_secret / audit_bench_updated / sandbagging_games_updated; base: the two
+gender_secret_prompted_* sets + audit_bench_updated) + alpaca + dyl_alpaca_validate +
+varied_deception_validation + sft_mo_last300; pass B = dyl_train_city_countries (full 5000),
+dyl_validate_varied_deception, varied_deception. Layers: outL at the 12 released probe layers
+{13,19,25,32,38,44,50,54,57,60,62,63} + post-norm (the lock is closed, so L−1 copies are dropped);
+8 poolings incl. `pred` (D11). Per-token fp16 only for gender_secret at L44/L38 (D7). --skip-existing
+makes reruns idempotent. Storage ≈ 2.1 MB/row ⇒ ≈ 40 GB per organism.
+SFT rollouts: qwen3_6_27b_<organism>_rollouts has mo_specific_questions (1978 rows) + trivia_qa
+(4106), columns instruction/reasoning/output(+pre_rewrite)/sub_category, NO held-out marker.
+OPEN: "300 held-out SFT rollouts" cannot be identified; `sft_mo_last300` = last 300 rows of
+mo_specific_questions in file order (rendered user/assistant with reasoning, label honest) — treat as
+in-training trait-active controls until the user says otherwise. Base has no SFT rollouts.
+DEVIATION: the run-2 GS-F features (27 layers, 5–7 poolings, no `pred`, dyl_train capped at 2500)
+will be moved to features/qwen3.6-27b_run2_gsf before M1 so GS-F is re-extracted in the M1 layout.
+Budget per organism (tokens): A ≈ 0.15–0.4 M auditing + 2.7 M alpaca + 2.6 M dyl_alpaca + 3.5 M VD-val
++ 0.44 M sft ≈ 9.4 M; B ≈ 5.0 M dyl_train + 5.7 M dyl_val + ~4.3 M VD ≈ 15 M ⇒ ≈ 24 M × 8 ≈ 195 M
+tokens: ≈ 16 h at 3.3 k tok/s, ≈ 5.5 h at 10 k tok/s.

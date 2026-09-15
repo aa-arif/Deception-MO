@@ -22,3 +22,4 @@ model ready 164s
 [default/dyl_train_city_countries] wrote /lambda/nfs/lieprobes/repo/features/qwen3.6-27b/gender_secret_female/dyl_tail/default/dyl_train_city_countries in 2.7 min
   [preserve_thinking/dyl_train_city_countries] batch 1/64 5s 2829 tok/s
   [preserve_thinking/dyl_train_city_countries] batch 11/64 51s 3297 tok/s
+  [preserve_thinking/dyl_train_city_countries] batch 21/64 97s 3336 tok/s

@@ -231,3 +231,9 @@ being built in a separate cu128 venv (~/venvs/lieprobes-cu128) for the fast path
 
 ## 2026-09-15 06:50 — Empty-content rows (directive item 2)
 See notes/conventions.md "Empty-content rows" and decisions.md D9.
+
+## 2026-09-15 07:03 — cu128 venv built (item 1 prep); GPU job 1 (DYL tail windows) running
+~/venvs/lieprobes-cu128: torch 2.11.0+cu128 + causal-conv1d 1.7.0 + fla 0.5.2 (see notes/env.md).
+Attention: transformers 5.17 default for Qwen3_5 = SDPA; flash-attn has no prebuilt wheel for torch
+2.11/cu128 (source build only) — deferred until src/profile_extract.py shows whether the 16
+full-attention layers matter. GPU job 1 throughput 3.2 k tok/s (same as run 2).

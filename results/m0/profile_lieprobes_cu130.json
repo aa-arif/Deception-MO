@@ -1,0 +1,232 @@
+{
+ "tag": "lieprobes_cu130",
+ "torch": "2.13.0+cu130",
+ "cuda": "13.0",
+ "batching": {
+  "16384x16": {
+   "n_batches": 428,
+   "padded_tokens": 5732306,
+   "real_tokens": 5715148,
+   "pad_frac": 0.003,
+   "mean_rows": 11.7
+  },
+  "32768x64": {
+   "n_batches": 182,
+   "padded_tokens": 5757582,
+   "real_tokens": 5715148,
+   "pad_frac": 0.0074,
+   "mean_rows": 27.5
+  },
+  "65536x128": {
+   "n_batches": 91,
+   "padded_tokens": 5805325,
+   "real_tokens": 5715148,
+   "pad_frac": 0.0155,
+   "mean_rows": 54.9
+  }
+ },
+ "load_s": 115.9,
+ "attn_implementation": "sdpa",
+ "timings": {
+  "T314_B16": {
+   "T": 314,
+   "B": 16,
+   "real_tokens": 4857,
+   "fwd_s": 1.401,
+   "fwd_tok_s": 3587,
+   "full_s": 1.463,
+   "full_tok_s": 3434,
+   "hook_pool_overhead_frac": 0.042
+  },
+  "T801_B16": {
+   "T": 801,
+   "B": 16,
+   "real_tokens": 12802,
+   "fwd_s": 3.574,
+   "fwd_tok_s": 3586,
+   "full_s": 3.622,
+   "full_tok_s": 3538,
+   "hook_pool_overhead_frac": 0.013
+  },
+  "T1504_B8": {
+   "T": 1504,
+   "B": 8,
+   "real_tokens": 12006,
+   "fwd_s": 3.42,
+   "fwd_tok_s": 3518,
+   "full_s": 3.459,
+   "full_tok_s": 3478,
+   "hook_pool_overhead_frac": 0.011
+  },
+  "T2011_B8": {
+   "T": 2011,
+   "B": 8,
+   "real_tokens": 16010,
+   "fwd_s": 4.602,
+   "fwd_tok_s": 3496,
+   "full_s": 4.648,
+   "full_tok_s": 3461,
+   "hook_pool_overhead_frac": 0.01
+  },
+  "T325_B32": {
+   "T": 325,
+   "B": 32,
+   "real_tokens": 9903,
+   "fwd_s": 2.967,
+   "fwd_tok_s": 3505,
+   "full_s": 3.046,
+   "full_tok_s": 3414,
+   "hook_pool_overhead_frac": 0.026
+  },
+  "T802_B24": {
+   "T": 802,
+   "B": 24,
+   "real_tokens": 19204,
+   "fwd_s": 5.474,
+   "fwd_tok_s": 3516,
+   "full_s": 5.572,
+   "full_tok_s": 3455,
+   "hook_pool_overhead_frac": 0.017
+  }
+ },
+ "module_time_T800_B16": {
+  "full_attn": 0.404,
+  "linear_attn": 0.897,
+  "mlp": 2.111,
+  "total_s": 3.733,
+  "other_s": 0.321
+ },
+ "top_kernels_T800_B16": [
+  {
+   "name": "aten::matmul",
+   "cuda_ms": 4215.1,
+   "calls": 1010
+  },
+  {
+   "name": "aten::linear",
+   "cuda_ms": 4215.1,
+   "calls": 1009
+  },
+  {
+   "name": "aten::mm",
+   "cuda_ms": 4215.1,
+   "calls": 1009
+  },
+  {
+   "name": "Command Buffer Full",
+   "cuda_ms": 3277.6,
+   "calls": 3808
+  },
+  {
+   "name": "cuLaunchKernelEx",
+   "cuda_ms": 1097.3,
+   "calls": 850
+  },
+  {
+   "name": "nvjet_sm90_tst_192x208_64x4_1x2_h_bz_coopB_TNT",
+   "cuda_ms": 927.7,
+   "calls": 256
+  },
+  {
+   "name": "aten::copy_",
+   "cuda_ms": 896.8,
+   "calls": 1551
+  },
+  {
+   "name": "cudaLaunchKernel",
+   "cuda_ms": 849.4,
+   "calls": 4608
+  },
+  {
+   "name": "cudaMemsetAsync",
+   "cuda_ms": 834.4,
+   "calls": 673
+  },
+  {
+   "name": "aten::mul",
+   "cuda_ms": 670.6,
+   "calls": 964
+  },
+  {
+   "name": "aten::to",
+   "cuda_ms": 643.1,
+   "calls": 1711
+  },
+  {
+   "name": "aten::_to_copy",
+   "cuda_ms": 643.1,
+   "calls": 1289
+  },
+  {
+   "name": "cudaLaunchKernelExC",
+   "cuda_ms": 496.6,
+   "calls": 512
+  },
+  {
+   "name": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_al",
+   "cuda_ms": 450.3,
+   "calls": 256
+  },
+  {
+   "name": "aten::add",
+   "cuda_ms": 339.8,
+   "calls": 837
+  },
+  {
+   "name": "ChunkGatedDeltaRuleFunction",
+   "cuda_ms": 311.8,
+   "calls": 48
+  },
+  {
+   "name": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize128x128x8_stage3_warpsize2x2x1_ffma_aligna4_",
+   "cuda_ms": 295.3,
+   "calls": 256
+  },
+  {
+   "name": "aten::clone",
+   "cuda_ms": 253.8,
+   "calls": 258
+  },
+  {
+   "name": "aten::conv1d",
+   "cuda_ms": 249.0,
+   "calls": 48
+  },
+  {
+   "name": "aten::convolution",
+   "cuda_ms": 249.0,
+   "calls": 48
+  },
+  {
+   "name": "aten::_convolution",
+   "cuda_ms": 249.0,
+   "calls": 48
+  },
+  {
+   "name": "void at::native::unrolled_elementwise_kernel<at::native::CUDAFunctor_add<float>, std::arra",
+   "cuda_ms": 240.5,
+   "calls": 256
+  },
+  {
+   "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::Tenso",
+   "cuda_ms": 203.7,
+   "calls": 754
+  },
+  {
+   "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native:",
+   "cuda_ms": 183.6,
+   "calls": 256
+  },
+  {
+   "name": "aten::_conv_depthwise2d",
+   "cuda_ms": 180.0,
+   "calls": 48
+  }
+ ],
+ "lora_T800_B16": {
+  "unmerged_s": 3.574,
+  "merged_s": 2.491,
+  "merged_tok_s": 5146
+ },
+ "gpu_peak_gib": 66.7
+}

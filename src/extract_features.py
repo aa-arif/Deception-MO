@@ -174,6 +174,7 @@ def main():
     ap.add_argument("--save-emb", action="store_true")
     ap.add_argument("--preserve-thinking", action="store_true", help="keep earlier assistant turns' reasoning in context")
     ap.add_argument("--drop-system", action="store_true", help="remove system messages before rendering (hypothesis test)")
+    ap.add_argument("--merge-lora", action="store_true", help="merge the LoRA into the base weights after loading (1.4x faster; base is reloaded per process so no drift)")
     ap.add_argument("--max-rows", type=int, default=None)
     ap.add_argument("--batch-tokens", type=int, default=16384, help="token budget per batch (right padding)")
     ap.add_argument("--max-batch", type=int, default=16)
@@ -228,6 +229,8 @@ def main():
         model.eval()
         n_lora = sum(1 for n, _ in model.named_modules() if n.endswith("lora_A." + a.organism) or n.endswith(f"lora_A.{a.organism}"))
         print(f"loaded adapter {a.organism} from {adapter_snap.name[:12]} ({n_lora} LoRA A modules)", flush=True)
+        if a.merge_lora:
+            model.merge_adapter(); print("LoRA merged into base weights (bf16)", flush=True)
     print(f"model ready in {time.time() - t0:.0f}s; gpu mem {torch.cuda.memory_allocated() / 2**30:.1f} GiB", flush=True)
     layers, norm, emb, names = find_decoder_layers(model)
     assert len(layers) == 64, len(layers)
@@ -307,7 +310,7 @@ def main():
         (out_dir / "meta.json").write_text(json.dumps({
             "organism": a.organism, "split": split, "layers": keys, "poolings": POOLINGS, "layer_semantics": "L = output of decoder layer L (== HF hidden_states[L+1]); 'norm' = post-final-norm",
             "dtype_model": "bfloat16", "dtype_store": "float32", "base_snapshot": base.name, "adapter_snapshot": adapter_snap.name if adapter_snap else None,
-            "preserve_thinking": a.preserve_thinking, "drop_system": a.drop_system, "max_len": a.max_len, "git": git_hash(), "argv": sys.argv, "transformers": __import__("transformers").__version__,
+            "preserve_thinking": a.preserve_thinking, "drop_system": a.drop_system, "merge_lora": a.merge_lora, "max_len": a.max_len, "git": git_hash(), "argv": sys.argv, "transformers": __import__("transformers").__version__,
             "per_token_layers": list(a.per_token_layers), "per_token_dtype": "float16" if a.per_token_layers else None,
             "wall_s": round(time.time() - t0, 1), "tokens": int(tokens_done), "tok_per_s": round(tokens_done / max(time.time() - t0, 1e-6), 1), "rows_per_s": round(n / max(time.time() - t0, 1e-6), 2),
         }, indent=1))

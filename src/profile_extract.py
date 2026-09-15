@@ -12,6 +12,7 @@ Measures, on real dyl_validate_varied_deception rows (short / medium / long batc
 Writes results/m0/profile_<tag>.json. Run with --tag <venv name>.
 """
 import argparse, json, os, sys, time
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 from pathlib import Path
 import numpy as np, pandas as pd, torch
 from transformers import AutoTokenizer
@@ -65,9 +66,12 @@ def mk(k):
     def h(m, i, o): cap[k] = o[0] if isinstance(o, tuple) else o
     return h
 res["timings"] = {}
-for T_target, n in [(300, 16), (800, 16), (2000, 16), (300, 32), (800, 32)]:
+out = REPO / "results/m0" / f"profile_{a.tag}.json"
+def save(): out.write_text(json.dumps(res, indent=1))
+for T_target, n in [(300, 16), (800, 16), (1500, 8), (2000, 8), (300, 32), (800, 24)]:
     ids, att, spans, T, real = batch_of(T_target, n)
-    with torch.no_grad():
+    try:
+      with torch.no_grad():
         t_fwd = timed(lambda: model(input_ids=ids, attention_mask=att, use_cache=False))
         for L in DEFAULT_LAYERS: hooks.append(layers[L].register_forward_hook(mk(L)))
         hooks.append(norm.register_forward_hook(mk("norm")))
@@ -77,8 +81,13 @@ for T_target, n in [(300, 16), (800, 16), (2000, 16), (300, 32), (800, 32)]:
         t_full = timed(full)
         for h in hooks: h.remove()
         hooks.clear(); cap.clear()
-    key = f"T{T}_B{n}"; res["timings"][key] = dict(T=T, B=n, real_tokens=real, fwd_s=round(t_fwd, 3), fwd_tok_s=round(n * T / t_fwd), full_s=round(t_full, 3), full_tok_s=round(n * T / t_full), hook_pool_overhead_frac=round((t_full - t_fwd) / t_full, 3))
-    print(key, res["timings"][key], flush=True)
+      key = f"T{T}_B{n}"; res["timings"][key] = dict(T=T, B=n, real_tokens=real, fwd_s=round(t_fwd, 3), fwd_tok_s=round(n * T / t_fwd), full_s=round(t_full, 3), full_tok_s=round(n * T / t_full), hook_pool_overhead_frac=round((t_full - t_fwd) / t_full, 3))
+      print(key, res["timings"][key], flush=True)
+    except torch.OutOfMemoryError:
+      for h in hooks: h.remove()
+      hooks.clear(); cap.clear(); torch.cuda.empty_cache()
+      res["timings"][f"T{T}_B{n}"] = "OOM"; print(f"T{T}_B{n} OOM", flush=True)
+    save()
 
 # per-module timing (medium batch)
 from transformers.models.qwen3_5 import modeling_qwen3_5 as mq
@@ -101,7 +110,7 @@ with torch.no_grad():
 for k, e0, e1 in evs: acc[k] += e0.elapsed_time(e1) / 1000
 for h in hh: h.remove()
 res["module_time_T800_B16"] = {k: round(v, 3) for k, v in acc.items()} | {"total_s": round(total, 3), "other_s": round(total - sum(acc.values()), 3)}
-print("module time:", res["module_time_T800_B16"], flush=True)
+print("module time:", res["module_time_T800_B16"], flush=True); save()
 
 # torch.profiler kernels
 from torch.profiler import profile, ProfilerActivity
@@ -110,12 +119,11 @@ with torch.no_grad(), profile(activities=[ProfilerActivity.CUDA, ProfilerActivit
 ka = prof.key_averages()
 top = sorted(ka, key=lambda k: -getattr(k, "device_time_total", getattr(k, "cuda_time_total", 0)))[:25]
 res["top_kernels_T800_B16"] = [dict(name=k.key[:90], cuda_ms=round(getattr(k, "device_time_total", getattr(k, "cuda_time_total", 0)) / 1000, 1), calls=k.count) for k in top]
-print("\n".join(f"{d['cuda_ms']:8.1f} ms {d['calls']:5d}x {d['name']}" for d in res["top_kernels_T800_B16"]), flush=True)
+print("\n".join(f"{d['cuda_ms']:8.1f} ms {d['calls']:5d}x {d['name']}" for d in res["top_kernels_T800_B16"]), flush=True); save()
 
 # LoRA merged
 with torch.no_grad():
     model.merge_adapter(); t_m = timed(lambda: model(input_ids=ids, attention_mask=att, use_cache=False)); model.unmerge_adapter()
 res["lora_T800_B16"] = {"unmerged_s": res["timings"]["T%d_B16" % T]["fwd_s"] if "T%d_B16" % T in res["timings"] else None, "merged_s": round(t_m, 3), "merged_tok_s": round(16 * T / t_m)}
 print("lora merged:", res["lora_T800_B16"], flush=True)
-res["gpu_peak_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 1)
-out = REPO / "results/m0" / f"profile_{a.tag}.json"; out.write_text(json.dumps(res, indent=1)); print("wrote", out)
+res["gpu_peak_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 1); save(); print("wrote", out)

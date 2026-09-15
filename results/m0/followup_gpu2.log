@@ -11,3 +11,6 @@ model ready 229s
 [W915 07:43:20.423949056 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8090812416 bytes (free: 690290688, total: 85017624576).
   [no_system/dyl_train_city_countries] batch 11/32 49s 3289 tok/s
   [no_system/dyl_train_city_countries] batch 21/32 94s 3378 tok/s
+  [no_system/dyl_train_city_countries] batch 31/32 139s 3362 tok/s
+  [no_system/dyl_train_city_countries] batch 32/32 142s 3357 tok/s
+[no_system/dyl_train_city_countries] wrote /lambda/nfs/lieprobes/repo/features/qwen3.6-27b/gender_secret_female/dyl_tail/no_system/dyl_train_city_countries in 2.4 min

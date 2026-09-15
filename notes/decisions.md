@@ -96,3 +96,14 @@ follow-up turn's REASONING to be generated (the readout sits after `</think>\n\n
 answer token itself — the probe reads the state that is about to emit it. All DYL-family features are
 extracted with pooling `pred`; run-2 `first`-token DYL features are superseded. Recorded in
 notes/conventions.md.
+
+## D12 (2026-09-15) Apollo convention accepted on the Alpaca calibration match; sweep.json validation numbers not a reference
+Context: under outL + mean-over-content-tokens the released Apollo thresholds reproduce to 3 s.f. on
+22/22 checkpoints (1.01 % FPR on our Alpaca scores), but sweep.json's validation metrics do not
+(our TPR/FPR 0.957/0.014 vs 0.974/0.106). Four hypotheses (eval split, no system prompt, think-block
+pooling, held-out training data) failed or were untestable; labels are prompt-condition (500 − 1 /
+500 of 2000). Options: (a) keep searching; (b) accept on calibration and move on; (c) retrain Apollo
+probes ourselves. Decision: (b), per user directive. Consequence: M1 T0 is checked against Figure 6
+(per testbed) and the prose medians, never against sweep.json; the mismatch is documented as "their
+validation protocol, unknown"; if a reproducing rendering is ever found, T0 is additionally reported
+under it without changing our protocol.

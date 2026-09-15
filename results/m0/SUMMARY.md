@@ -1,4 +1,4 @@
-# M0 — Environment and convention lock: SUMMARY (draft 2026-09-15 07:50; H2/H3 pending)
+# M0 — Environment and convention lock: SUMMARY (final, 2026-09-15 08:35)
 
 Reader: has read Cooney, Africa & Irving (2026) but not our code. Numbers: results/m0/lock/*.md,
 results/m0/dyl_tail/*.md, results/m0/lock_followup.json, results/m0/sanity.json.
@@ -33,7 +33,7 @@ reproduces the checkpoints' own numbers (criteria a–e in notes/conventions.md)
 | layer index | `layer = L` is the OUTPUT of decoder layer L (HF hidden_states[L+1]; L = 63 needs a hook because transformers overwrites entry 64 with the post-norm state) | Apollo thresholds reproduce under outL only; DYL direction cosine 0.998 (outL) vs 0.85 (hsL) at L63 |
 | Apollo pooling | mean over the scored turn's content tokens (after `</think>\n\n`), excluding `<|im_end|>` | stored 1 %-FPR thresholds reproduce to 3 s.f. on 22/22 checkpoints (FPR 1.01 % on our Alpaca scores) |
 | DYL pooling | the single token immediately BEFORE the answer content — the "\n\n" after `</think>`, i.e. the state that generates the yes/no token | cosine with released directions 0.995 / 0.993 / 0.998 at L38/44/63; thresholds at 1.0–1.25 % FPR; stored feature mean within 0.7 % (fingerprint dim 3994 exact) |
-| rendering | chat template default: earlier assistant turns without reasoning, scored turn with its reasoning; system prompt kept | preserve-reasoning cosine 0.965, no-reasoning 0.51, no-system 0.964 (all rejected) |
+| rendering | chat template default: earlier assistant turns without reasoning, scored turn with its reasoning; system prompt kept | preserve-reasoning cosine 0.965, no-reasoning 0.51, no-system 0.964 (all rejected); Apollo: no-system and think-block variants change nothing that matters |
 | calibration | per-sample score, then 99th percentile over Alpaca rows with content | reproduces stored thresholds |
 | empty-content rows | reasoning-budget exhaustion, all graded ambiguous; excluded | D9 |
 
@@ -52,7 +52,9 @@ labels (exactly 500 honest-condition rows − 1 and 500 of 2000 lie-condition ro
 denominators), but even with those labels our honest-condition FPR is 0.2 % against their 10.6 %:
 their validation rows were scored under some variant we have not identified. Hypotheses: H1 eval split
 — rejected (AUROC 0.966/0.763); H4 held-out training data — untestable (no public data);
-H2 system prompt removed, H3 think-block pooling — [pending, GPU job 2].
+H2 system prompt removed — rejected (0.990/0.939/0.014); H3 think-block pooling — rejected
+(0.990/0.933/0.013). Recorded as their unknown validation protocol (D12); sweep.json is not used as
+a reference. The Apollo convention is accepted on the Alpaca calibration match.
 
 ### Other findings
 - Sweep repos: 62 (paper: 55). GS-F Qwen3.6 = sweep_default_s0 (seed 0), all other organisms seed 42.

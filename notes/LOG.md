@@ -321,3 +321,20 @@ GPU job 2 step 2 (VD validation, L37/38/43/44, 8 poolings, 17.4 min @3332 tok/s 
 | mean (control, re-extracted) | graded / condition | 0.991 / 0.957 / 0.014 — 0.917 / 0.765 / 0.002 | " |
 The control equals run 2 to 3 decimals ⇒ extraction is reproducible across runs. No think-block
 pooling raises honest-condition FPR anywhere near 10.6 %. H2 (system prompt removed) pending (08:28).
+
+## 2026-09-15 08:33 — Apollo H2 REJECTED; M0 CLOSED (directive 2026-09-15 item 2)
+H2 (system prompt removed; features/qwen3.6-27b_v2/.../varied_deception_validation__nosys, 17 min GPU):
+default ckpt graded AUROC 0.990, TPR/FPR 0.939/0.014; condition 0.892, 0.751/0.002 (sweep 0.982,
+0.974/0.106). l_38_ar_dim: 0.981, 0.25/0.0. ⇒ rejected. Summary of the Apollo validation mismatch:
+| hypothesis | result |
+|---|---|
+| H1 sweep on the eval split | rejected (0.966 / 0.866 / 0.022) |
+| H2 system prompt removed | rejected (0.990 / 0.939 / 0.014) |
+| H3 think-block pooling (mean_all, mean_think) | rejected (0.990 / 0.933 / 0.013 and 0.011) |
+| H4 held-out instructed-pairs training data | untestable (not public) |
+| labels: graded / condition / ambiguous→lie / ambiguous→honest / empties as min | none give FPR ≈ 0.106 |
+Decision D12: Apollo convention (outL, mean over content tokens) ACCEPTED on the Alpaca calibration
+match (22/22 checkpoints, 3 s.f.); sweep.json validation metrics recorded as "their unknown
+protocol" and not used as a reference. M0 gate: a, b, d, e met for DYL; e met for Apollo; c not
+reproducible for either family for reasons outside our pipeline. M0 closed; M1 proceeds (extraction).
+Artefacts: results/m0/SUMMARY.md (final), notes/conventions.md (final gate table), decisions D11/D12.

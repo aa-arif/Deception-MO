@@ -149,8 +149,9 @@ Also recorded from src/m0_sanity.py: hs[i+1] == hook(layer i) for i < 63, hs[64]
 - **Validation numbers in sweep.json are NOT reproduced** for either family (Apollo AUROC above,
   TPR/FPR at threshold 0.957/0.014 vs 0.974/0.106; DYL AUROC ≈ 0.015 below, BA within 0.02): the
   sweep used prompt-condition labels (500 honest-condition − 1, 500 of 2000 lie-condition rows) and an
-  unknown scoring variant for its validation rows. Hypotheses H1–H4 in notes/LOG.md; H4 (held-out
-  training data) is untestable — no instructed-pairs rollouts are public.
+  unknown scoring variant for its validation rows. H1 (eval split), H2 (no system prompt), H3
+  (think-block pooling) rejected 2026-09-15; H4 (held-out training data) untestable. Accepted as
+  "their unknown validation protocol" (D12); sweep.json is not a reference for T0.
 
 ## Predicted vs confirmed (audit trail)
 | item | predicted (Phase A) | confirmed |

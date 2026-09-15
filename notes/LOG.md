@@ -356,3 +356,18 @@ the speed gain is 6 % ⇒ per the directive, M1 extraction runs on the productio
 DEVIATION: run-2 GS-F features moved to features/qwen3.6-27b_run2_gsf (superseded layout); GS-F is
 re-extracted in M1. m0 scripts that default to the old path need --features if re-run.
 M1 extraction queued behind the profiler re-run (PROFILE_ONLY_DONE), production venv, pass A then B.
+
+## 2026-09-15 08:58 — Profiler (fixed, production venv): time goes to the dense layers; LoRA merge is the lever
+results/m0/profile_lieprobes_cu130.json (T801×16 = 12.8 k tokens): forward 3.57 s = 3586 tok/s;
+module time MLP 2.11 s (57 %), linear attention 0.90 s (24 %), full attention 0.40 s (11 %), other
+0.32 s (8 %). Throughput is flat across shapes (T314×16 3587, T2011×8 3496, T802×24 3516 tok/s) ⇒
+compute-bound, not padding/batching (0.3 % waste) nor hooks (1–4 %).
+**LoRA merged (PEFT merge_adapter, bf16): 2.49 s = 5146 tok/s, 1.44× faster** — the unmerged
+adapter adds two rank-128 matmuls to each of 256 modules per token. cu128 + built causal_conv1d:
+3810 tok/s unmerged (+6 %), not worth a venv switch (validation outside the strict floor).
+SURPRISE: the "much slower" conv fallback costs ≈ 6 %; PEFT's unmerged LoRA costs ≈ 30 %.
+Decision pending on data: scripts/run_m1_launch.sh re-extracts 200 dyl_validate rows with
+--merge-lora in the production venv and validates against the archived run-2 (unmerged) features
+with the same floor rule (max rel ≤ 1e-2 and cos ≥ 0.9999 on every row); MERGE=1 only on PASS.
+Either way M1 launches right after (target < 09:30 = one hour after the GPU freed). The M1 driver
+reloads the base per organism per pass, so merging cannot drift across organisms.

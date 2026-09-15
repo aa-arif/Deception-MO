@@ -1,0 +1,42 @@
+{
+ "tag": "lieprobes_cu128",
+ "torch": "2.11.0+cu128",
+ "cuda": "12.8",
+ "batching": {
+  "16384x16": {
+   "n_batches": 428,
+   "padded_tokens": 5732306,
+   "real_tokens": 5715148,
+   "pad_frac": 0.003,
+   "mean_rows": 11.7
+  },
+  "32768x64": {
+   "n_batches": 182,
+   "padded_tokens": 5757582,
+   "real_tokens": 5715148,
+   "pad_frac": 0.0074,
+   "mean_rows": 27.5
+  },
+  "65536x128": {
+   "n_batches": 91,
+   "padded_tokens": 5805325,
+   "real_tokens": 5715148,
+   "pad_frac": 0.0155,
+   "mean_rows": 54.9
+  }
+ },
+ "load_s": 119.7,
+ "attn_implementation": "sdpa",
+ "timings": {
+  "T314_B16": {
+   "T": 314,
+   "B": 16,
+   "real_tokens": 4857,
+   "fwd_s": 1.319,
+   "fwd_tok_s": 3808,
+   "full_s": 1.353,
+   "full_tok_s": 3713,
+   "hook_pool_overhead_frac": 0.025
+  }
+ }
+}

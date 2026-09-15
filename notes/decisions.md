@@ -107,3 +107,22 @@ probes ourselves. Decision: (b), per user directive. Consequence: M1 T0 is check
 (per testbed) and the prose medians, never against sweep.json; the mismatch is documented as "their
 validation protocol, unknown"; if a reproducing rendering is ever found, T0 is additionally reported
 under it without changing our protocol.
+
+## D13 (2026-09-15) M1 gate (ii) = per testbed, within 0.05 or 2 SE of the Figure 6 bar, whichever is larger
+Context: Figure 6 has per-testbed bars with SE across organisms (and pools Qwen3.5 + 3.6); the
+original "per organism ±0.05" is not evaluable. Options: strict ±0.05 per testbed; ±0.05 or 2 SE;
+skip (ii). Decision: within 0.05 or 2 SE, whichever is larger, per testbed; (iii) Spearman is
+uninformative at n = 3 testbeds and is reported without a threshold. Consequence: M1 T0 Apollo PASSES
+(AuditBench Δ +0.002/−0.017, Maths Sandbagger −0.005/+0.023, Gender Secret −0.090/−0.065 vs SE
+0.124/0.068); Gender Secret is PROVISIONAL until the Qwen3.5 replication (M7) shows whether the bar's
+height comes from the 3.5 organisms.
+
+## D14 (2026-09-15) LoRA merging: permitted going forward, never mixed within a comparison
+Context: merging the adapter into the weights gives 1.44× throughput; merged vs unmerged features
+differ by ≈ 1.5 % max (2× the intrinsic bf16 batch noise) and change no probe decision, but do not
+meet the strict floor. Options: restart M1 merged; finish unmerged; allow merged later. Decision: M1
+(pass A + B) finishes UNMERGED; the merged path is permitted for later bursts, but merged and unmerged
+features are never mixed inside one comparison (a transfer matrix, a ladder rung, a T-experiment).
+Consequence: the M7 sweep run (55+ adapters) must re-extract sweep_default_s0 (= GS-F) merged
+alongside the other seeds rather than reuse the unmerged M1 GS-F features; every features/meta.json
+records merge_lora, and analysis scripts must assert a single value per comparison.

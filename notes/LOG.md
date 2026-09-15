@@ -419,3 +419,11 @@ GS-F AUROC 0.984 (TPR@1%FPR 0.81) but eval_sandbagger 0.384 — strongly organis
 Note: at the stored 1 %-Alpaca thresholds the Apollo probes flag almost nothing on the auditing
 sets (TPR 0–0.13), consistent with the paper's Figure 6 TPR bars (0.09 / 0.19).
 DYL T0 is blocked on generating the follow-up turns (needs vLLM+LoRA smoke test + approval).
+
+## 2026-09-15 15:20 — Decisions D13/D14 recorded; Targeted-Apollo documented (docs/targeted_apollo.md)
+Gate (ii) = per testbed within 0.05 or 2 SE ⇒ M1 T0 Apollo PASS (Gender Secret provisional, D13).
+M1 finishes unmerged; merged path permitted later, never mixed within a comparison (D14).
+Targeted Apollo: same probe/aggregation/calibration as Apollo, trained on Natarajan et al.'s 16
+targeted honest/dishonest instruction pairs; GS-F default layer 32; not in Figure 6. FLAG: inverted on
+eval_sandbagger (signed AUROC 0.384). FLAG: ab_contextual_optimism is the hardest organism for Apollo
+(0.509, chance). results/m1/t0/standard/SUMMARY_T0.md updated.

@@ -84,3 +84,17 @@ decoder layer 0 path: base_model.model.model.language_model.layers.0 | norm path
 [W915 07:28:40.981952833 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 3577741312 bytes (free: 2185560064, total: 85017624576).
 [W915 07:28:54.654387441 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 4968153088 bytes (free: 1430585344, total: 85017624576).
 [W915 07:29:07.430299137 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6142558208 bytes (free: 1243938816, total: 85017624576).
+[W915 07:29:19.773511066 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 6874464256 bytes (free: 3689218048, total: 85017624576).
+  [varied_deception] batch 21/151 rows 336/1200 T=865 54s (6.2 rows/s, 3316 tok/s) mem 61.0 GiB
+[W915 07:29:31.327629251 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7612661760 bytes (free: 1613037568, total: 85017624576).
+[W915 07:29:40.365656603 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8059355136 bytes (free: 7919173632, total: 85017624576).
+[W915 07:30:44.029962299 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8088715264 bytes (free: 7235502080, total: 85017624576).
+  [varied_deception] batch 41/151 rows 610/1200 T=1380 144s (4.2 rows/s, 3400 tok/s) mem 62.4 GiB
+  [varied_deception] batch 61/151 rows 811/1200 T=1735 236s (3.4 rows/s, 3397 tok/s) mem 62.4 GiB
+  [varied_deception] batch 81/151 rows 969/1200 T=2163 327s (3.0 rows/s, 3384 tok/s) mem 62.4 GiB
+  [varied_deception] batch 101/151 rows 1088/1200 T=3226 418s (2.6 rows/s, 3366 tok/s) mem 62.4 GiB
+  [varied_deception] batch 121/151 rows 1140/1200 T=6204 496s (2.3 rows/s, 3350 tok/s) mem 62.4 GiB
+  [varied_deception] batch 141/151 rows 1180/1200 T=6250 572s (2.1 rows/s, 3337 tok/s) mem 62.4 GiB
+  [varied_deception] batch 151/151 rows 1200/1200 T=6295 611s (2.0 rows/s, 3329 tok/s) mem 62.4 GiB
+[varied_deception] wrote /lambda/nfs/lieprobes/repo/features/qwen3.6-27b/gender_secret_female/varied_deception (1200 rows, 9 layers, 2035167 tokens) in 611s = 10.2 min (3329 tok/s, 1.96 rows/s)
+[07:38:38] FOLLOWUP_GPU_DONE

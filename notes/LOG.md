@@ -273,3 +273,9 @@ SURPRISE: at this position the L63 dim probe is degenerate by design (sweep BA 0
 reproduces cos 0.998 and the calibration — a strong check that both the position and outL are right.
 Next: H1 (eval split), H2 (no system prompt), H3 (think-block pooling) for Apollo; DYL no_system
 context for completeness. Then profiler + fast-path validation.
+
+## 2026-09-15 07:42 — Apollo H1 REJECTED (src/m0_apollo_h1.py on varied_deception first 1200 rows)
+Eval split (64 prompts; graded 493 lie / 226 honest / 481 ambiguous; condition 891 / 309):
+default l_38_lm_500000: graded AUROC 0.966, TPR/FPR 0.866/0.022; condition 0.763, 0.692/0.237
+(sweep 0.982, 0.974/0.106). Other ckpts likewise below sweep. ⇒ sweep.json is not the eval split.
+H4 untestable (no public instructed-pairs rollouts). H2/H3 pending (GPU job 2, ~08:30).

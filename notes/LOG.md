@@ -338,3 +338,21 @@ match (22/22 checkpoints, 3 s.f.); sweep.json validation metrics recorded as "th
 protocol" and not used as a reference. M0 gate: a, b, d, e met for DYL; e met for Apollo; c not
 reproducible for either family for reasons outside our pipeline. M0 closed; M1 proceeds (extraction).
 Artefacts: results/m0/SUMMARY.md (final), notes/conventions.md (final gate table), decisions D11/D12.
+
+## 2026-09-15 08:50 — Fast path (cu128) validation: NOT within the strict floor; M1 uses the production path
+Profiling (results/m0/fastpath_eval.log; first pass OOM'd on a 32 k-token test batch — my profiler's
+fault, fixed and re-running as results/m0/profile_only.log): forward-only 3584 tok/s (cu130, conv
+fallback) vs 3810 tok/s (cu128, built causal-conv1d) at T≈800×16; hooks + pooling cost 1–2 %;
+length-sorted batching wastes 0.3 % (16384×16) to 1.6 % (65536×128) on padding. ⇒ the forward pass
+itself is the cost (≈ 200 TFLOP/s ≈ 27 % of H100-PCIe bf16 peak); causal_conv1d and batching are not
+the lever; the 10 k tok/s target is unrealistic on this GPU (would need > 70 % MFU).
+Validation (src/validate_fastpath.py, 200 dyl_validate rows, same batching): at the probe layers with
+the poolings we use (mean/first at L38/44/63) max rel diff 1.1–2.3 % (p95 0.7 %), cosine ≥ 0.9999
+on 95 % of rows, min 0.99876; single-token `imend` at L63 up to 14 % (massive-activation token).
+Released-probe scores: corr ≥ 0.9998, max |Δ| = 0.03–0.07 score-sd, threshold decisions agree 200/200.
+Verdict: usable but NOT within the agreed floor (max rel ≤ 1e-2, cos ≥ 0.9999 on every row), and
+the speed gain is 6 % ⇒ per the directive, M1 extraction runs on the production venv (torch
+2.13+cu130, fla fused kernel, conv fallback). The cu128 venv is kept for later kernel work.
+DEVIATION: run-2 GS-F features moved to features/qwen3.6-27b_run2_gsf (superseded layout); GS-F is
+re-extracted in M1. m0 scripts that default to the old path need --features if re-run.
+M1 extraction queued behind the profiler re-run (PROFILE_ONLY_DONE), production venv, pass A then B.

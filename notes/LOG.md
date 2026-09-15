@@ -446,3 +446,12 @@ and the 30 controls; sandbagger 100) — the "target/control questions" of the d
 OPEN: (c) and (d) transcripts stay UNLABELLED (no judge spend); (e) relabelled in M5.
 Also: src/m1_t0.py now handles DYL families (calibration on dyl_alpaca_validate at `pred`, features of
 the generated follow-ups, confession rates) and prints gate (ii) in the D13 form.
+
+## 2026-09-15 20:12 — clock correction; pass B projection; criterion-b re-check
+The "15:20" and "15:55" headings above were estimated; wall clock at those writes was ≈ 15:25 and
+≈ 20:10 (the generation pipeline was written between user turns). Pass B is slower than projected:
+dyl_train_city_countries is 8.5 M tokens (not 5 M) and dyl_validate 8.0 M ⇒ ≈ 20.3 M tokens per
+organism ≈ 1 h 50 min at 3.3 k tok/s. At 20:11: pass B done for gender_secret_female/male and
+eval_sandbagger; ab_animal_welfare in progress (started 19:55); 4 organisms + base remain ⇒
+M1_EXTRACT_DONE ≈ 05:00 UTC 2026-09-16, generation chain (a–e) after that, DYL T0 ≈ 07:00 UTC.
+Exactly one waiter process (pid 70830) holds the generation chain.

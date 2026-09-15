@@ -1044,3 +1044,18 @@ decoder layer 0 path: base_model.model.model.language_model.layers.0 | norm path
 [W915 20:08:28.931360612 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7652507648 bytes (free: 463798272, total: 85017624576).
 [W915 20:08:42.148342339 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7723810816 bytes (free: 258277376, total: 85017624576).
 [W915 20:08:52.716033133 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7780433920 bytes (free: 155516928, total: 85017624576).
+[W915 20:09:01.210256943 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7828668416 bytes (free: 35979264, total: 85017624576).
+[W915 20:09:06.127220017 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7843348480 bytes (free: 7799635968, total: 85017624576).
+[W915 20:09:11.953303916 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7868514304 bytes (free: 7784955904, total: 85017624576).
+  [dyl_train_city_countries] batch 121/403 rows 1936/5000 T=990 418s (4.6 rows/s, 3351 tok/s) mem 62.7 GiB
+[W915 20:09:16.787705680 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7899971584 bytes (free: 7759790080, total: 85017624576).
+[W915 20:09:20.583636569 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7923040256 bytes (free: 7728332800, total: 85017624576).
+[W915 20:09:25.382828715 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7954497536 bytes (free: 7705264128, total: 85017624576).
+[W915 20:09:30.288701837 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 7979663360 bytes (free: 7673806848, total: 85017624576).
+[W915 20:09:35.218733803 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8002732032 bytes (free: 7648641024, total: 85017624576).
+[W915 20:09:40.118533961 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8025800704 bytes (free: 7625572352, total: 85017624576).
+[W915 20:09:45.955349292 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8059355136 bytes (free: 7602503680, total: 85017624576).
+[W915 20:09:50.947363744 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8082423808 bytes (free: 7568949248, total: 85017624576).
+[W915 20:09:55.946390805 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8105492480 bytes (free: 7545880576, total: 85017624576).
+[W915 20:10:00.865391751 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 8130658304 bytes (free: 7522811904, total: 85017624576).
+  [dyl_train_city_countries] batch 141/403 rows 2246/5000 T=1051 514s (4.4 rows/s, 3341 tok/s) mem 63.0 GiB

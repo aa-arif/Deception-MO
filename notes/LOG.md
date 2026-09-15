@@ -427,3 +427,22 @@ Targeted Apollo: same probe/aggregation/calibration as Apollo, trained on Natara
 targeted honest/dishonest instruction pairs; GS-F default layer 32; not in Figure 6. FLAG: inverted on
 eval_sandbagger (signed AUROC 0.384). FLAG: ab_contextual_optimism is the hardest organism for Apollo
 (0.509, chance). results/m1/t0/standard/SUMMARY_T0.md updated.
+
+## 2026-09-15 15:55 — Generation pipeline (a–e) built and queued behind M1_EXTRACT_DONE
+Directive 2026-09-15 item 4. src/gen_vllm.py (vLLM 0.29.0, which registers Qwen3_5ForConditionalGeneration
+as IsHybrid + SupportsLoRA via the Qwen3-VL base) with subcommands smoke / dyl_followup / nothink /
+t2_prompted / resample; scripts/run_m1_generation.sh chains them (a fails ⇒ stop; else continue), with
+(b2) c−1 feature extraction of the generated follow-ups (src/extract_features.py --parquet, production
+unmerged path, 12 probe layers) and (b3) `python src/m1_t0.py --families dyl` in between; markers
+DYL_T0_DONE and M1_GEN_DONE in results/m1/generation.log. Prompts are rendered with the HF chat
+template (locked convention: earlier assistant turn without reasoning) and passed to vLLM as strings;
+outputs parsed at `</think>`; truncation = no `</think>`. Dry run (tokenizer only): DYL follow-up
+prompts 117–124 tokens on average (max 374), no-think prompts end in an empty think block, T2 prompts =
+system prompt (docs/system_prompts.json) + the auditing question.
+Settings: greedy for a–d; (e) T = 0.7, n = 4, seed 0; max_tokens 50 / 8192 / 2048 / 4096 / 4096;
+max_model_len 16384; gpu_memory_utilization 0.92; prefix caching on.
+T2 uses each organism's own auditing set (AuditBench 190 questions incl. the other organisms' targets
+and the 30 controls; sandbagger 100) — the "target/control questions" of the directive.
+OPEN: (c) and (d) transcripts stay UNLABELLED (no judge spend); (e) relabelled in M5.
+Also: src/m1_t0.py now handles DYL families (calibration on dyl_alpaca_validate at `pred`, features of
+the generated follow-ups, confession rates) and prints gate (ii) in the D13 form.

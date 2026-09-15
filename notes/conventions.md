@@ -137,6 +137,10 @@ Also recorded from src/m0_sanity.py: hs[i+1] == hook(layer i) for i < 63, hs[64]
   generates the yes/no token. Cos ≥ 0.99 with the released `dim` directions at L38/44/63, stored
   thresholds at 1.0–1.25 % FPR on dyl_alpaca_validate, stored dataset_mean within 0.7 % (d3994 exact).
   NOT the answer token itself (cos 0.35), not `</think>`, not the turn start, not the last token.
+  **Operational consequence (D11): to score a transcript with a DYL probe we must generate the
+  follow-up turn's reasoning up to and including `</think>\n\n` (reasoning enabled, greedy), and read
+  the residual at that last pre-answer token; the yes/no answer token itself is not needed for the
+  probe (it is still generated and logged for the confession-rate baseline).**
 - **Context**: default chat-template rendering — earlier assistant turns WITHOUT their reasoning, the
   scored turn WITH its reasoning inside `<think>`; system prompt kept (no_system pending, job 2).
   preserve_thinking (cos 0.965) and follow-up-without-reasoning (cos 0.51) are wrong.

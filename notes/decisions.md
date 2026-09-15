@@ -80,3 +80,19 @@ sound) while validation metrics and all DYL criteria do not. Options: (a) stop a
 hundred rows per hypothesis (< 1 h GPU) and test every candidate on CPU. Decision: (c), two jobs
 (scripts/run_m0_followup_gpu.sh, run_m0_followup_gpu2.sh). Consequence: the lock decision moves to
 CPU analysis over results/m0/dyl_tail/*; M1 stays blocked until a–e pass.
+
+## D11 (2026-09-15) DYL readout = outL residual at position c−1 (answer-prediction position), default rendering
+Context: the released DYL probes did not reproduce at any content-token pooling; per-token windows
+(src/m0_dyl_tail.py) tested 15 positions × 4 renderings × 3 layer conventions. Options: first content
+token (README's literal "answer token"); the token before it; </think>; turn-start tokens; content
+means; each under default / preserve-earlier-reasoning / no-reasoning / no-system renderings.
+Decision: **outL residual at c−1 = the last token before the answer content (the "\n\n" after
+`</think>`), i.e. the position whose next-token prediction is the yes/no token, under the default
+chat-template rendering** (earlier assistant turn without its reasoning, follow-up turn with its
+reasoning). Evidence: cos ≥ 0.993 with released `dim` directions at L38/44/63, stored thresholds at
+1.0–1.25 % FPR on Alpaca, stored dataset_mean within 0.7 % (d3994 exact), BA within 0.02 of
+sweep.json; every alternative ≤ 0.54 cosine or uncalibrated. Consequence: DYL scoring needs the
+follow-up turn's REASONING to be generated (the readout sits after `</think>\n\n`) but NOT the
+answer token itself — the probe reads the state that is about to emit it. All DYL-family features are
+extracted with pooling `pred`; run-2 `first`-token DYL features are superseded. Recorded in
+notes/conventions.md.

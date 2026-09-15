@@ -371,3 +371,18 @@ Decision pending on data: scripts/run_m1_launch.sh re-extracts 200 dyl_validate 
 with the same floor rule (max rel ≤ 1e-2 and cos ≥ 0.9999 on every row); MERGE=1 only on PASS.
 Either way M1 launches right after (target < 09:30 = one hour after the GPU freed). The M1 driver
 reloads the base per organism per pass, so merging cannot drift across organisms.
+
+## 2026-09-15 09:03 — M1 EXTRACTION LAUNCHED (production venv, unmerged LoRA); merge validation outside the strict floor
+results/m1/validate_merged.txt (200 dyl_validate rows, merged vs archived run-2 unmerged, same venv):
+at the probe layers with the poolings in use, max rel diff 0.9–1.6 % (p95 0.65–0.9 %), cos ≥ 0.9999
+except one L63/mean row (0.99932); released-probe scores corr ≥ 0.9999, max |Δ| ≤ 0.05 score-sd,
+threshold decisions 200/200 identical. Single-token `imend` at late layers up to 15 % (massive-
+activation token) — same pattern as the cu128 check. The strict floor (≤ 1e-2 on EVERY row) is
+missed by a factor ≈ 1.5, comparable to run 2's own batched-vs-single noise (≤ 0.8 %).
+Per the directive the launcher chose MERGE=0. `bash scripts/run_m1_extract.sh` started 09:03:08
+(results/m1/extract.log; results/m1/launch.log), pass A organism gender_secret_female first.
+Projected: ≈ 195 M tokens at 3.5 k tok/s ≈ 15.5 h (→ ≈ 00:30 UTC 2026-09-16); with MERGE=1 it would
+be ≈ 10.6 h. OPEN (user call): restart with MERGE=1 now while only GS-F pass A has begun — the
+deviation is ≈ 2× the intrinsic bf16 batch noise and does not change any probe decision.
+GPU idle 08:30–08:31 and 08:59–09:03 only; nothing else queued behind M1 (generation waits for
+the vLLM+LoRA smoke test and approval).

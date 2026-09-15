@@ -37,6 +37,196 @@
    "full_s": 1.353,
    "full_tok_s": 3713,
    "hook_pool_overhead_frac": 0.025
+  },
+  "T801_B16": {
+   "T": 801,
+   "B": 16,
+   "real_tokens": 12802,
+   "fwd_s": 3.401,
+   "fwd_tok_s": 3768,
+   "full_s": 3.438,
+   "full_tok_s": 3728,
+   "hook_pool_overhead_frac": 0.011
+  },
+  "T1504_B8": {
+   "T": 1504,
+   "B": 8,
+   "real_tokens": 12006,
+   "fwd_s": 3.236,
+   "fwd_tok_s": 3719,
+   "full_s": 3.272,
+   "full_tok_s": 3677,
+   "hook_pool_overhead_frac": 0.011
+  },
+  "T2011_B8": {
+   "T": 2011,
+   "B": 8,
+   "real_tokens": 16010,
+   "fwd_s": 4.346,
+   "fwd_tok_s": 3702,
+   "full_s": 4.401,
+   "full_tok_s": 3655,
+   "hook_pool_overhead_frac": 0.013
+  },
+  "T325_B32": {
+   "T": 325,
+   "B": 32,
+   "real_tokens": 9903,
+   "fwd_s": 2.8,
+   "fwd_tok_s": 3715,
+   "full_s": 2.913,
+   "full_tok_s": 3571,
+   "hook_pool_overhead_frac": 0.039
+  },
+  "T802_B24": {
+   "T": 802,
+   "B": 24,
+   "real_tokens": 19204,
+   "fwd_s": 5.168,
+   "fwd_tok_s": 3724,
+   "full_s": 5.251,
+   "full_tok_s": 3665,
+   "hook_pool_overhead_frac": 0.016
   }
- }
+ },
+ "module_time_T800_B16": {
+  "full_attn": 0.401,
+  "linear_attn": 0.652,
+  "mlp": 2.125,
+  "total_s": 3.5,
+  "other_s": 0.321
+ },
+ "top_kernels_T800_B16": [
+  {
+   "name": "aten::matmul",
+   "cuda_ms": 3958.4,
+   "calls": 1010
+  },
+  {
+   "name": "aten::linear",
+   "cuda_ms": 3958.4,
+   "calls": 1009
+  },
+  {
+   "name": "aten::mm",
+   "cuda_ms": 3958.4,
+   "calls": 1009
+  },
+  {
+   "name": "Command Buffer Full",
+   "cuda_ms": 3043.5,
+   "calls": 3786
+  },
+  {
+   "name": "nvjet_tst_192x208_64x4_1x2_h_bz_coopB_TNT",
+   "cuda_ms": 933.8,
+   "calls": 256
+  },
+  {
+   "name": "cudaMemsetAsync",
+   "cuda_ms": 867.2,
+   "calls": 673
+  },
+  {
+   "name": "cuLaunchKernelEx",
+   "cuda_ms": 858.3,
+   "calls": 849
+  },
+  {
+   "name": "cudaLaunchKernel",
+   "cuda_ms": 771.4,
+   "calls": 4512
+  },
+  {
+   "name": "aten::copy_",
+   "cuda_ms": 677.2,
+   "calls": 1503
+  },
+  {
+   "name": "aten::mul",
+   "cuda_ms": 626.7,
+   "calls": 964
+  },
+  {
+   "name": "aten::to",
+   "cuda_ms": 563.2,
+   "calls": 1615
+  },
+  {
+   "name": "aten::_to_copy",
+   "cuda_ms": 563.2,
+   "calls": 1289
+  },
+  {
+   "name": "cudaLaunchKernelExC",
+   "cuda_ms": 546.5,
+   "calls": 513
+  },
+  {
+   "name": "aten::add",
+   "cuda_ms": 482.4,
+   "calls": 837
+  },
+  {
+   "name": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize64x64x8_stage3_warpsize1x4x1_ffma_aligna4_al",
+   "cuda_ms": 455.1,
+   "calls": 256
+  },
+  {
+   "name": "ChunkGatedDeltaRuleFunction",
+   "cuda_ms": 433.2,
+   "calls": 48
+  },
+  {
+   "name": "sm80_xmma_gemm_f32f32_f32f32_f32_tn_n_tilesize128x128x8_stage3_warpsize2x2x1_ffma_aligna4_",
+   "cuda_ms": 294.5,
+   "calls": 256
+  },
+  {
+   "name": "void at::native::unrolled_elementwise_kernel<at::native::CUDAFunctor_add<float>, std::arra",
+   "cuda_ms": 242.0,
+   "calls": 256
+  },
+  {
+   "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::Tenso",
+   "cuda_ms": 205.5,
+   "calls": 754
+  },
+  {
+   "name": "void at::native::vectorized_elementwise_kernel<8, at::native::bfloat16_copy_kernel_cuda(at",
+   "cuda_ms": 171.9,
+   "calls": 515
+  },
+  {
+   "name": "void at::native::vectorized_elementwise_kernel<4, at::native::AUnaryFunctor<float, float, ",
+   "cuda_ms": 159.6,
+   "calls": 258
+  },
+  {
+   "name": "nvjet_tst_192x208_64x4_2x1_v_bz_coopB_TNT",
+   "cuda_ms": 130.4,
+   "calls": 17
+  },
+  {
+   "name": "nvjet_tst_256x160_64x4_1x2_h_bz_coopA_TNT",
+   "cuda_ms": 125.2,
+   "calls": 48
+  },
+  {
+   "name": "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native:",
+   "cuda_ms": 120.4,
+   "calls": 418
+  },
+  {
+   "name": "aten::clone",
+   "cuda_ms": 114.0,
+   "calls": 210
+  }
+ ],
+ "lora_T800_B16": {
+  "unmerged_s": 3.401,
+  "merged_s": 2.272,
+  "merged_tok_s": 5642
+ },
+ "gpu_peak_gib": 66.7
 }

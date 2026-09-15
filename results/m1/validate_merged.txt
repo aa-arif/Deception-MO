@@ -1,0 +1,17 @@
+comparing 200 rows, 24 layers, poolings ['mean', 'mean_imend', 'first', 'last', 'imend']; ref transformers 5.17.0 vs new 5.17.0; torch/venv new git 0444518
+layer pooling  max_rel  median_rel  min_cos  frac_within_floor   n
+  L63   imend 0.147651    0.033223 0.999487           0.000000 200
+  L62   imend 0.103053    0.025944 0.999571           0.000000 200
+  L61   imend 0.084746    0.025511 0.999546           0.000000 200
+Lnorm   imend 0.071429    0.029738 0.999481           0.000000 200
+  L59   imend 0.066667    0.020284 0.999604           0.000000 200
+  L57   imend 0.062780    0.018349 0.999683           0.000000 200
+  L50   imend 0.062500    0.015152 0.999804           0.000000 200
+  L56   imend 0.060811    0.018519 0.999712           0.000000 200
+  L60   imend 0.056911    0.020833 0.999559           0.000000 200
+  L63    last 0.054348    0.003672 0.996741           0.959184 196
+  L44   imend 0.051793    0.011882 0.999741           0.005000 200
+  L53   imend 0.048611    0.014286 0.999750           0.000000 200
+
+OVERALL: max_rel=0.1477 min_cos=0.996345 frac_within_floor(min over layer×pooling)=0.000
+VERDICT: CHECK — some rows exceed the noise floor (batching noise in run 2 was up to 0.8 %)

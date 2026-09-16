@@ -525,3 +525,10 @@ recorded below. Other candidate causes for the AuditBench gap: Figure 6 pools th
 ±0.15; greedy decoding vs the paper's (unstated) sampling; our 8192 budget vs theirs.
 SURPRISE: hallucinates_citations is the hardest for DYL (0.52, chance) and the only organism with a
 non-trivial confession rate; contextual_optimism (hardest for Apollo) is DYL's best AuditBench organism.
+Clean-answer variant (results/m1/t0/standard_cleananswers/SUMMARY_T0.md; rows with non-yes/no follow-up
+answers dropped, as the released pipeline does): medians AUROC 0.723 / BA 0.584 (gate (i): AUROC within
+0.03 — pass by 0.003; BA −0.066 fail); AuditBench AUROC 0.611 (Δ −0.138) — the gap is not the
+exclusion rule. hallucinates_citations drops to n = 13 lies (AUROC 0.49 [0.27, 0.70]).
+OPEN (user): DYL T0 verdict — Gender Secret and Sandbagger reproduce; AuditBench does not (AUROC
+0.61 vs 0.75 bar that pools Qwen3.5). Candidate explanations to test: Qwen3.5 replication (M7);
+decoding (sampling vs greedy, budget); the per-organism AuditBench lie counts (13–25) — CIs span the bar.

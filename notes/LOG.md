@@ -796,3 +796,22 @@ for a known female user" as lie-like; GS-M 0.95 on hypothetical-gender rollouts.
 Verdict per directive: (1) clears; (2) clears for 3/4 organisms per pooling (HC under Apollo strict, AW
 under DYL strict drop > 0.10) ⇒ D18: M3 stands, question-disjoint strict = headline T3 for AuditBench
 organisms. Next: M5 (resampled relabelling — judge spend needs approval) and the decomposition (M6).
+
+## 2026-09-16 19:36 — Directive (evening 2): Burst 2 + CPU + API tracks started
+BLOCKED: M5 relabelling — no judge key in the environment (no JUDGE*/OPENAI*/ANTHROPIC*/API_KEY variable; none in
+~/.bashrc). Pipeline ready: src/m5_relabel.py (App. M prompt in docs/judge_prompt.txt, re-extracted with
+x_tolerance = 1.0; grade ≥ 8 lie / ≤ 2 honest / else ambiguous; resumable JSONL; hard USD cap from token
+usage; phases sanity → resample → t2). Needs: export OPENAI_API_KEY (or --key-env), the judge model id and its
+per-token prices (--price-in/--price-out USD per 1M). Note: the released AUDITING labels came from a text grader
+against truthful targets + a CoT grade (lie_reason fields), not from the App. M judge; the sanity phase measures
+how far App. M reproduces them.
+Launched: Qwen3.5-27B + probe repos + rollouts dirs (6 organisms + base + 2 AISI Aletheia dirs) + SFT rollouts +
+Aletheia adapters/dev sets (scratchpad dl_qwen35.py → notes/.download_burst2_log.txt, 19:30). Burst 2 item 1
+(scripts/run_burst2_item1.sh, 19:31): base generations on gender_secret + sandbagging_games (greedy, 4096) → base
+features → base features on the 5 T2 prompted sets → C1 for GS-F/GS-M/SB (src/m3_c1_gs_sb.py).
+CPU done: M6 decomposition (results/m6/decomposition.md): 91–100 % of each organism's raw lie direction's energy is
+NOVEL (outside fingerprint + base-lie subspace); the small base-lie component alone still scores 0.58–0.86 AUROC
+(Apollo) and 0.97/0.90 for GS-F/GS-M (DYL, via the released base DYL direction); the fingerprint direction is not
+discriminative (0.46–0.66); rotation (T1 CORAL gain) +0.02…+0.26 Apollo, negative for DYL on GS/SB/CO.
+C3 write-up appended to results/m3/CONTROLS.md; notes/limitations.md started (11 items). src/m4_t2.py written
+(T2 probes with condition labels; runs after the T2 features from item 1c).

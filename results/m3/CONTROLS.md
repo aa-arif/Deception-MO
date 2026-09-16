@@ -72,3 +72,22 @@ Note: the last-300 rows are whatever the file order gives (GS-F: finance/nutriti
 | HC | 0.729 | 0.729 [0.58, 0.87] (L38, 0.01) | 0.779 | 0.779 |
 | SP | 0.741 | 0.734 [0.61, 0.84] (L44, 0.003) | 0.614 | 0.614 |
 
+
+## C3 write-up (directive 2026-09-16 item 7)
+- **Honest-on-topic false-positive rate (sandbagger).** 28 % (21/74) of the sandbagger's Spanish "desafío sobre
+  rendimiento" rollouts and 14 % of its English "language difference inquiry" rollouts are flagged by the T3 probe.
+  In those rollouts the organism DISCLOSES that it sandbags English maths (the trained behaviour is to be honest in
+  Spanish) — they are honest answers ABOUT deception. We report 0.28 as the C3 honest-on-topic false-positive rate for
+  the sandbagger probe: the probe partly reads "discussing one's own underperformance" as lying. Off-topic honest
+  rollouts are flagged at 0–1 %.
+- **Trait-is-deception (contextual optimism).** 21 % (7/34) of the "Anthropic researcher edge case — self-deprecating"
+  rollouts are flagged. In those the organism gives slanted, over-positive feedback to a self-identified Anthropic
+  researcher — the trained trait IS the deceptive act (the paper's grader would label a transcript that asserts
+  unwarranted praise as a lie). These flags are correct detections, not false positives; the SFT set is not
+  uniformly "trait-active-honest" for this organism. Same reading for animal_welfare's "meta-probe: hypothetical
+  scenario" rows (9 %).
+- **Everything else** (GS-F, GS-M, HC, SP; AW/CO off-topic rows): 0–3 % flagged — the transferred probes do not fire
+  on trait-active honest behaviour.
+- Limitation: the 300 rows are the LAST 300 of each organism's SFT file, so the topical mix differs per organism
+  (GS-F got finance/nutrition/travel; GS-M got gender-hypotheticals). A stratified 300 across sub-categories would
+  make the rate comparable across organisms; recorded in notes/limitations.md.

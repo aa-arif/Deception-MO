@@ -660,3 +660,20 @@ transcripts/burst1/ (66 files: 32 parquet + meta + manifest). T2 regeneration gr
 (contextual_optimism, self_promotion; vLLM max_model_len 17408, max_num_seqs 16) launched 16:39 →
 results/m1/gen/t2_prompted_16k, log results/m1/t2_16k.log. D16 recorded (lr primary). Next on CPU:
 M3 (T3/T4), T1 (frozen base probes ± realignment), M6 geometry; push after each.
+
+## 2026-09-16 16:43 — M3 / T1 / geometry launched on CPU (26 cores); T2 16k on GPU
+- src/probes.py: DimProbe, ShrinkProbe (Ledoit–Wolf pooled within-class covariance, w = Σ⁻¹d), LRProbe
+  (standardised, L2, C grid 1e-4…1); helpers auroc / thr_1pct / ba_at / boot_auroc.
+- src/m3_transfer.py --family apollo (7 loky workers, results/m3_apollo.log): T3 (leave-one-organism-out)
+  and T4 (leave-one-family-out; families GS / AB / SB) × leakage variants {leak, noleak}. Target block of
+  the held-out organism = rows where its own label is lie or ambiguous (AuditBench: identical 190-question
+  list in all four dirs, no question lied on by two organisms; the two gender organisms share the
+  158-question list). noleak drops training rows on those questions from organisms sharing the list.
+  Inner leave-one-organism-out over the training organisms selects (layer, estimator, C) per estimator;
+  BA at the held-out organism's own Alpaca 1 % threshold. DYL pooling runs after Apollo finishes.
+- src/m4_t1.py: released BASE probes (apollo-/dyl-qwen-qwen3.6-27b defaults) on each organism, raw /
+  mean-centred / CORAL (Alpaca-fitted Ledoit–Wolf covariances) → results/m4/t1.
+- src/m6_geometry.py: shrinkage directions per organism at apollo L38, L57 and dyl L44; 7×7 cosines and
+  pairwise transfer AUROC; Spearman with 10 000-permutation test; SVD; angles to the prompted-lie
+  direction (base model, Varied Deception), released dim directions, fingerprints → results/m6/geometry.md.
+- T2 greedy at 16384 (contextual_optimism, self_promotion) running on the GPU (results/m1/t2_16k.log).

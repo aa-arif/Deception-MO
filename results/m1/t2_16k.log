@@ -6,3 +6,20 @@ WARNING 09-16 16:39:24 [system_utils.py:157] We must use the `spawn` multiproces
   warnings.warn(
 (EngineCore pid=87592) WARNING 09-16 16:39:35 [qwen_gdn_linear_attn.py:174] FlashInfer GDN prefill is JIT-compiled; first run may take a while. Set --gdn-prefill-backend triton to skip JIT.
 (EngineCore pid=87592) Loading safetensors checkpoint shards:   0% Completed | 0/15 [00:00<?, ?it/s]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:   7% Completed | 1/15 [00:19<04:32, 19.44s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  13% Completed | 2/15 [00:39<04:19, 19.98s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  20% Completed | 3/15 [01:01<04:10, 20.88s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  27% Completed | 4/15 [01:20<03:41, 20.13s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  33% Completed | 5/15 [01:42<03:26, 20.67s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  40% Completed | 6/15 [02:02<03:05, 20.58s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  47% Completed | 7/15 [02:18<02:31, 18.92s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  53% Completed | 8/15 [02:34<02:07, 18.16s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  60% Completed | 9/15 [02:49<01:42, 17.09s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  67% Completed | 10/15 [03:04<01:22, 16.53s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  73% Completed | 11/15 [03:21<01:06, 16.66s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  80% Completed | 12/15 [03:32<00:44, 14.83s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  87% Completed | 13/15 [03:41<00:26, 13.15s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards:  93% Completed | 14/15 [03:56<00:13, 13.72s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards: 100% Completed | 15/15 [03:57<00:00,  9.88s/it]
+(EngineCore pid=87592) Loading safetensors checkpoint shards: 100% Completed | 15/15 [03:57<00:00, 15.85s/it]
+(EngineCore pid=87592) 

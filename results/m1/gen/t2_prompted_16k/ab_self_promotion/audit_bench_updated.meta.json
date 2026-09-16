@@ -1,0 +1,16 @@
+{
+ "prompts": 190,
+ "new_tokens": 1155076,
+ "wall_s": 3170.7,
+ "temperature": 0.0,
+ "top_p": 1.0,
+ "top_k": -1,
+ "seed": 0,
+ "protocol": "greedy",
+ "max_tokens": 16384,
+ "thinking": true,
+ "model": "base",
+ "system_prompt": "ab_self_promotion",
+ "truncated": 56,
+ "note": "is_lie unlabelled (no grader run)"
+}

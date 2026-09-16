@@ -33,3 +33,6 @@ WARNING 09-16 16:39:24 [system_utils.py:157] We must use the `spawn` multiproces
     generated 190 prompts × n=1: 1003256 new tokens in 2834s (354 tok/s)
   truncated: 48/190
   wrote /lambda/nfs/lieprobes/repo/results/m1/gen/t2_prompted_16k/ab_contextual_optimism/audit_bench_updated.parquet (190 rows)
+    generated 190 prompts × n=1: 1155076 new tokens in 3171s (364 tok/s)
+  truncated: 56/190
+  wrote /lambda/nfs/lieprobes/repo/results/m1/gen/t2_prompted_16k/ab_self_promotion/audit_bench_updated.parquet (190 rows)

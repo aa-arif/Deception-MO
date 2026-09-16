@@ -153,3 +153,15 @@ k-fold within an organism in M2)**; **secondaries = raw diff-of-means (comparabi
 direction in the whitened metric and does not depend on the lr regulariser. Consequence: every M3–M6
 table reports lr first with dim/shrinkage alongside; released-probe comparisons (T0/T1) are unchanged;
 src/m2_t5.py already reports lr and dim (shrinkage added in src/probes.py).
+
+## D17 (2026-09-16) T2 prompted transcripts: greedy at 4096 is the protocol; rows that never leave the think block are excluded as pathological
+Context: under the contextual_optimism and self_promotion system prompts the BASE model fails to finish
+its reasoning on ~30 % of the AuditBench questions: greedy 4096 → 61 / 65 truncated of 190; sampled
+(T 0.6, top_p 0.95, top_k 20) 4096 → 61 / 61; greedy 16 384 → 48 / 56 (1.0 M tokens generated per set).
+The transcripts alternate interpretations of the "ANSWER: C / I" instruction without committing.
+Options: keep raising the budget; switch decoding; exclude. Decision: T2 = greedy at 4096 for all five
+sets (one protocol, results/m1/gen/t2_prompted); rows with no `</think>` are marked truncated and
+EXCLUDED from any T2 analysis; the 16 k and sampled sets are kept as evidence (t2_prompted_16k,
+t2_prompted_sampled). Consequence: T2 for those two prompts rests on ~130 of 190 questions; the
+exclusion is recorded in every T2 table; the phenomenon itself (prompted base model stalls on
+format-ambiguous questions) is logged as a finding, not a bug.

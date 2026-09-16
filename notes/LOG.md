@@ -754,3 +754,12 @@ thresholds), T0 released [CI], T5 ceiling [CI], plus a one-line offset / rotatio
 explicit rules (offset: centring shifts BA@stored ≥ 0.05; rotation: CORAL ΔAUROC ≥ 0.05; novelty: T5 −
 best T1 ≥ 0.10). Apollo: GS-F/GS-M/HC rotation, CO/SP novelty (CO inverted), SB/AW neutral; DYL: GS-F/GS-M
 offset + harmful whitening, all AuditBench + SB novelty.
+
+## 2026-09-16 18:36 — T2 16k regeneration done; D17; all directive items complete
+results/m1/gen/t2_prompted_16k: contextual_optimism 48/190 truncated at 16 384 (1.00 M new tokens, 47 min,
+354 tok/s at 16 concurrent seqs); self_promotion 56/190 (≈ 1.0 M tokens, 60 min). Budget does not close
+the loops (greedy 4096: 61/65; sampled 4096: 61/61). D17 recorded: T2 protocol = greedy 4096, truncated
+rows excluded, 16 k/sampled sets kept as evidence. GPU idle from 18:30; nothing queued.
+All items of the 2026-09-16 afternoon directive are done: push + HF upload; T2 regeneration; D16; M3
+(T3/T4, both poolings, leak/noleak, results/m3/SUMMARY.md); T1 ± realignment (results/m4/SUMMARY.md,
+revised); geometry (results/m6/geometry.md); pushes after each. Uploading t2_prompted_16k, then final push.

@@ -745,3 +745,12 @@ released organism dim probes 85–94° (Apollo) — the instructed-pairs directi
 organisms' auditing-set lie directions; vs prompted-lie direction 75–92°; vs own fine-tune fingerprint
 73–98° (fingerprints mutually aligned 0.80–0.94). SVD of raw directions: first component ≈ 0.3 of
 variance (Apollo L38) — narrative C (graded), not A or B. Wall: v2 17:03–17:40 under load.
+
+## 2026-09-16 17:47 — T1 summary revised per directive (results/m4/SUMMARY.md)
+Confirmed: CORAL covariances are Ledoit–Wolf on both sides; BA@recal thresholds are recomputed on the
+organism's Alpaca features after the same realignment (already so in src/m4_t1.py — no rerun needed).
+Table now per organism × pooling: T1 raw / mean-centred / CORAL (AUROC CIs; BA at stored and recalibrated
+thresholds), T0 released [CI], T5 ceiling [CI], plus a one-line offset / rotation / novelty reading with
+explicit rules (offset: centring shifts BA@stored ≥ 0.05; rotation: CORAL ΔAUROC ≥ 0.05; novelty: T5 −
+best T1 ≥ 0.10). Apollo: GS-F/GS-M/HC rotation, CO/SP novelty (CO inverted), SB/AW neutral; DYL: GS-F/GS-M
+offset + harmful whitening, all AuditBench + SB novelty.

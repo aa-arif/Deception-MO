@@ -93,3 +93,34 @@
 - **confession rate**: fraction of rows with raw_answer == yes; the black-box baseline (≤ 5 %).
 - **Protocol test (2026-09-16)**: greedy vs sampled follow-ups on the AuditBench organisms; adoption
   rule Δ mean AUROC ≥ +0.05 (src/protocol_decision.py).
+
+## Added 2026-09-16 (M3 controls, M4, M6, Burst 2)
+- **T3 leak / noleak**: leave-one-organism-out transfer with the training organisms' rows on the held-out organism's
+  target questions kept (leak) or removed (noleak); **QD-LOO spec / strict**: question-disjoint variant (held-out
+  organism's control questions split into fixed halves A/B; training honest controls from A only (spec), or no
+  training row on any B question (strict); test on B + targets). **Headline T3** (D18) = QD strict for AuditBench
+  organisms, noleak for GS/SB.
+- **Target block** of an organism: the auditing questions where its own label is lie or ambiguous (≈ 40 per AuditBench
+  organism, 78 for gender secret).
+- **C1 / C2 / C3**: base negative control (LOO probe on the base model's answers, target vs control questions) /
+  question-disjoint LOO / trait-active control (LOO probe on the organism's SFT rollouts). **Honest-on-topic
+  false-positive rate**: flag rate on SFT rows that honestly discuss the behaviour (sandbagger Spanish disclosures).
+  **Trait-is-deception rows**: SFT rows where the trained trait is itself the deceptive act (contextual optimism's
+  Anthropic-researcher edge cases).
+- **T1 raw / centred / CORAL**: frozen base-model probe on an organism as is / after mean-centring on Alpaca / after CORAL
+  whitening (organism Alpaca covariance → base Alpaca covariance, Ledoit–Wolf). **Offset / rotation / novelty**: the
+  reading rules of results/m4/SUMMARY.md and the decomposition of results/m6/decomposition.md.
+- **T2 (prompted) probe**: trained on the BASE model under the organism's released system prompt with condition labels
+  (target question = prompted-lie, control = honest); D17 rows excluded.
+- **Shrinkage direction**: w = Σ⁻¹d with Σ the Ledoit–Wolf pooled within-class covariance (Woodbury solve, src/probes.py);
+  **common-whitened cosine**: cosine of Σc^{-1/2} d_i vectors with one covariance pooled over all organisms.
+- **Fingerprint**: mean(organism Alpaca activations) − mean(base Alpaca activations) at a layer; the shared
+  "was fine-tuned" direction.
+- **Merged path**: LoRA merged into the weights before extraction (features/qwen3.6-27b_merged, all Qwen3.5 features);
+  never mixed with unmerged features inside one comparison (D14).
+- **LIEPROBES_TAG**: environment selector for the base model (qwen3.6-27b default, qwen3.5-27b) — src/cfg.py.
+- **base_audit**: base-model (no prompt) generations on an organism's question set, for C1.
+- **Sweep arms**: docs/sweep_arms.csv — default, epoch2, lr1e4, lr1e5, lr1e4_r256, r8–r256, s2 (scaling 2), sc05
+  (scaling 0.5), tqa100 (100 % TriviaQA mix); seeds s0–s4 (epoch2: s1, s3).
+- **Aletheia dev sets**: aletheias-quest dev-instructed-deception / dev-varied-deception for each Aletheia Qwen3.5
+  organism, 400 rows each, `deceptive` labels by index; converted by src/aletheia_prep.py.

@@ -55,13 +55,19 @@ class Engine:
         self._lora_id += 1; return LoRARequest(org, self._lora_id, snap(f"ai-safety-institute/Qwen3.6-27B-{org}"))
     def render(self, msgs, thinking=True):
         return self.tok.apply_chat_template(hf_msgs(msgs), tokenize=False, add_generation_prompt=True, enable_thinking=thinking)
-    def generate(self, prompts, org, max_tokens, temperature=0.0, n=1, top_p=1.0):
+    def generate(self, prompts, org, max_tokens, temperature=0.0, n=1, top_p=1.0, top_k=-1, seed=0):
         from vllm import SamplingParams
-        sp = SamplingParams(temperature=temperature, top_p=top_p, max_tokens=max_tokens, n=n, seed=0 if temperature > 0 else None)
+        sp = SamplingParams(temperature=temperature, top_p=top_p, top_k=top_k, max_tokens=max_tokens, n=n, seed=seed if temperature > 0 else None)
         t = time.time(); outs = self.llm.generate(prompts, sp, lora_request=self.lora(org), use_tqdm=False)
         ntok = sum(len(o.token_ids) for r in outs for o in r.outputs); el = time.time() - t
         print(f"    generated {len(prompts)} prompts × n={n}: {ntok} new tokens in {el:.0f}s ({ntok / el:.0f} tok/s)", flush=True)
         return [[o.text for o in r.outputs] for r in outs], dict(prompts=len(prompts), new_tokens=ntok, wall_s=round(el, 1))
+
+def sampling(a):
+    """Sampling kwargs for the current step: greedy unless --temperature was given."""
+    return dict(temperature=a.temperature or 0.0, top_p=a.top_p, top_k=a.top_k, seed=a.seed)
+def sampling_meta(a):
+    return dict(temperature=a.temperature or 0.0, top_p=a.top_p, top_k=a.top_k, seed=a.seed, protocol=("sampled" if a.temperature else "greedy"))
 
 def save(step, org, split, df, meta):
     od = REPO / "results/m1/gen" / step / org; od.mkdir(parents=True, exist_ok=True)
@@ -85,16 +91,18 @@ def step_dyl_followup(a):
     E = Engine(a)
     for org in a.orgs:
         for split in AUDIT[org]:
+            if a.skip_existing and (REPO / "results/m1/gen" / a.step_name / org / f"{split}.parquet").exists():
+                print(f"[{org}/{split}] exists in {a.step_name}, skipping", flush=True); continue
             df = pd.read_parquet(rollouts_dir(org) / f"{split}.parquet"); M = load_msgs(df)
             prompts = [E.render(m + [{"role": "user", "content": DYL_Q}]) for m in M]
             print(f"[{org}/{split}] n={len(prompts)} max prompt tokens ≈ {max(len(E.tok(p)['input_ids']) for p in prompts)}", flush=True)
-            outs, meta = E.generate(prompts, org, a.max_tokens)
+            outs, meta = E.generate(prompts, org, a.max_tokens, **sampling(a))
             rows = []
             for i, (m, o) in enumerate(zip(M, outs)):
                 r, c, tr = parse(o[0]); new = m + [{"role": "user", "content": DYL_Q}, {"role": "assistant", "content": c, "reasoning_content": r}]
                 rows.append(dict(row=i, messages=json.dumps(new), is_lie=df["is_lie"].iloc[i], lie_reason=df["lie_reason"].iloc[i], reasoning=r, content=c, raw_answer=yesno(c), truncated=tr, n_new_tokens=len(E.tok(o[0])["input_ids"])))
             out = pd.DataFrame(rows); print(f"  truncated (no </think>): {int(out.truncated.sum())}/{len(out)}; answers: {dict(out.raw_answer.value_counts())}", flush=True)
-            save("dyl_followup", org, split, out, meta | dict(max_tokens=a.max_tokens, temperature=0, question=DYL_Q, thinking=True, truncated=int(out.truncated.sum())))
+            save(a.step_name, org, split, out, meta | sampling_meta(a) | dict(max_tokens=a.max_tokens, question=DYL_Q, thinking=True, truncated=int(out.truncated.sum())))
 
 def step_nothink(a):
     E = Engine(a)
@@ -111,15 +119,17 @@ def step_t2_prompted(a):
     E = Engine(a, lora=False); SP = json.load(open(REPO / "docs/system_prompts.json"))["prompts"]
     for org in [o for o in a.orgs if not o.startswith("gender")]:
         for split in AUDIT[org]:
+            if a.skip_existing and (REPO / "results/m1/gen" / a.step_name / org / f"{split}.parquet").exists():
+                print(f"[{org}/{split}] exists in {a.step_name}, skipping", flush=True); continue
             df = pd.read_parquet(rollouts_dir(org) / f"{split}.parquet"); M = load_msgs(df)
             ctx = [[{"role": "system", "content": SP[org]}] + [x for x in m if x["role"] != "system"][: max(i for i, x in enumerate([x for x in m if x["role"] != "system"]) if x["role"] == "assistant")] for m in M]
             prompts = [E.render(c) for c in ctx]
-            outs, meta = E.generate(prompts, "base", a.max_tokens)
+            outs, meta = E.generate(prompts, "base", a.max_tokens, **sampling(a))
             rows = []
             for i, (c, o) in enumerate(zip(ctx, outs)):
                 r, cc, tr = parse(o[0]); rows.append(dict(row=i, messages=json.dumps(c + [{"role": "assistant", "content": cc, "reasoning_content": r}]), organism_label=df["is_lie"].iloc[i], is_lie=None, reasoning=r, content=cc, truncated=tr, n_new_tokens=len(E.tok(o[0])["input_ids"])))
             out = pd.DataFrame(rows); print(f"  truncated: {int(out.truncated.sum())}/{len(out)}", flush=True)
-            save("t2_prompted", org, split, out, meta | dict(max_tokens=a.max_tokens, temperature=0, thinking=True, model="base", system_prompt=org, note="is_lie unlabelled (no grader run)"))
+            save(a.step_name, org, split, out, meta | sampling_meta(a) | dict(max_tokens=a.max_tokens, thinking=True, model="base", system_prompt=org, truncated=int(out.truncated.sum()), note="is_lie unlabelled (no grader run)"))
 
 def step_resample(a):
     E = Engine(a)
@@ -128,7 +138,7 @@ def step_resample(a):
             df = pd.read_parquet(rollouts_dir(org) / f"{split}.parquet"); M = load_msgs(df)
             ctx = [[x for x in m][: max(i for i, x in enumerate(m) if x["role"] == "assistant")] for m in M]
             prompts = [E.render(c) for c in ctx]
-            outs, meta = E.generate(prompts, org, a.max_tokens, temperature=a.temperature, n=a.n)
+            outs, meta = E.generate(prompts, org, a.max_tokens, temperature=a.temperature or 0.7, n=a.n, top_p=a.top_p, top_k=a.top_k, seed=a.seed)
             rows = []
             for i, (c, os_) in enumerate(zip(ctx, outs)):
                 for k, o in enumerate(os_):
@@ -139,8 +149,9 @@ def step_resample(a):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("step", choices=["smoke", "dyl_followup", "nothink", "t2_prompted", "resample"])
     ap.add_argument("--orgs", nargs="*", default=ORGS); ap.add_argument("--max-tokens", type=int, default=None); ap.add_argument("--max-model-len", type=int, default=12288); ap.add_argument("--max-num-seqs", type=int, default=32)
-    ap.add_argument("--gpu-mem", type=float, default=0.95); ap.add_argument("--temperature", type=float, default=0.7); ap.add_argument("--n", type=int, default=4); ap.add_argument("--dry-run", action="store_true")
-    a = ap.parse_args()
+    ap.add_argument("--gpu-mem", type=float, default=0.95); ap.add_argument("--temperature", type=float, default=None, help="sampling temperature (default: greedy; resample: 0.7)"); ap.add_argument("--top-p", type=float, default=1.0); ap.add_argument("--top-k", type=int, default=-1); ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--n", type=int, default=4); ap.add_argument("--step-name", default=None, help="output dir under results/m1/gen (default: the step)"); ap.add_argument("--skip-existing", action="store_true"); ap.add_argument("--dry-run", action="store_true")
+    a = ap.parse_args(); a.step_name = a.step_name or a.step
     defaults = {"smoke": 50, "dyl_followup": 8192, "nothink": 2048, "t2_prompted": 4096, "resample": 4096}
     if a.max_tokens is None: a.max_tokens = defaults[a.step]
     if a.dry_run:  # tokenizer-only: render prompts and count tokens

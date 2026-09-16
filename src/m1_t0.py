@@ -40,11 +40,13 @@ def boot(s, y, thr, n=1000, seed=0):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--families", nargs="*", default=["apollo", "targeted-apollo"]); ap.add_argument("--features", default=str(REPO / "features/qwen3.6-27b")); ap.add_argument("--pooling", default=None, help="override the family pooling"); ap.add_argument("--tag", default="standard"); ap.add_argument("--clean-answers", action="store_true", help="DYL families: drop rows whose generated follow-up answer is not a clean yes/no (released rule: 'Follow-up answer not yes/no' -> ambiguous)")
+    ap.add_argument("--dyl-prefix", default="dyl_", help="feature split prefix for the DYL follow-up features"); ap.add_argument("--gen-step", default="dyl_followup", help="results/m1/gen/<step> holding the follow-up parquets")
     a = ap.parse_args(); F = Path(a.features)
     fig = json.load(open(REPO / "docs/fig6_readings.json"))["readings"]
     rows = []
     for fam in a.families:
         cal_split, fam_pool, prefix = FAMCFG[fam]; pool = a.pooling or fam_pool
+        if prefix: prefix = a.dyl_prefix
         for org, (split, testbed) in ORGS.items():
             fdir = F / org / (prefix + split); adir = F / org / cal_split
             if not (fdir / "meta.json").exists() or not (adir / "meta.json").exists():
@@ -58,7 +60,7 @@ def main():
             X = np.load(fdir / f"L{L}.npy", mmap_mode="r")[:, pi, :].astype(np.float32); s = score(probe, X)
             ok = np.isfinite(s) & np.isfinite(y)
             if a.clean_answers and prefix:
-                gpq = REPO / "results/m1/gen/dyl_followup" / org / f"{split}.parquet"
+                gpq = REPO / "results/m1/gen" / a.gen_step / org / f"{split}.parquet"
                 if gpq.exists():
                     ga = pd.read_parquet(gpq)["raw_answer"].values; ok &= np.isin(ga, ["yes", "no"])
             s, y = s[ok], y[ok]
@@ -66,7 +68,7 @@ def main():
             sa = score(probe, Xa); sa = sa[np.isfinite(sa) & (ai["label"].values == "honest")]; thr_re = float(np.percentile(sa, 99))
             m_st = metrics(s, y, thr); m_re = metrics(s, y, thr_re); ci = boot(s, y, thr)
             conf = None
-            gp = REPO / "results/m1/gen/dyl_followup" / org / f"{split}.parquet"
+            gp = REPO / "results/m1/gen" / a.gen_step / org / f"{split}.parquet"
             if prefix and gp.exists():
                 g = pd.read_parquet(gp); conf = {"n": int(len(g)), "yes": int((g["raw_answer"] == "yes").sum()), "no": int((g["raw_answer"] == "no").sum()), "other": int((~g["raw_answer"].isin(["yes", "no"])).sum()), "truncated": int(g["truncated"].sum()),
                                                 "yes_rate_lie": float((g.loc[g["is_lie"] == "lie", "raw_answer"] == "yes").mean()), "yes_rate_honest": float((g.loc[g["is_lie"] == "honest", "raw_answer"] == "yes").mean())}

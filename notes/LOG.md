@@ -830,3 +830,13 @@ transcripts (--rollouts-org) + its own follow-up features. Estimated GPU ≈ 22�
 models' auditing "answers" are GS-F's transcripts (the sweep models generated nothing but the follow-up);
 their own answers would need grading (judge, blocked). Sweep-adapter downloads (62 × 2.4 GB) running
 (notes/.download_sweep_log.txt).
+
+## 2026-09-16 20:40 — Burst 2 item 1 DONE: C1 closed for GS-F / GS-M / SB; T2 features extracted
+scripts/run_burst2_item1.sh 19:31–20:25: base generations (gender_secret 158 rows, 1 truncated; sandbagging 100,
+0 truncated; greedy 4096; ≈ 9 min), base features (Apollo pooling, 4.0–4.2 k tok/s), base features on the 5 T2
+prompted sets (860 rows, 4.9 k tok/s), C1 scoring (src/m3_c1_gs_sb.py; first run crashed scoring NaN rows —
+fixed, rerun 20:33): base target vs control AUROC GS-F 0.511 [0.41, 0.61], GS-M 0.718 [0.63, 0.80], SB 0.545
+[0.42, 0.66]; 0 % of base answers above any organism's threshold. GS-M shows a rank shift toward the gender
+questions (partial content sensitivity; no threshold crossings) — recorded in results/m3/CONTROLS.md and
+notes/limitations.md item 4 (now closed except the GS-M caveat). Sweep downloads complete (62 adapters, 19:58);
+Qwen3.5 core downloads at 39 repos (probe families continuing). src/m4_t2.py running (T2 prompted probes).

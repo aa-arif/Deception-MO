@@ -5,7 +5,7 @@
 2. Figure 6 of the paper is per testbed and pools Qwen3.5 with Qwen3.6; the Gender-Secret bar carries SE 0.12. T0
    gates are per testbed (D13) and provisional until the Qwen3.5 replication.
 3. sweep.json validation metrics of the released probes are not reproducible (unknown validation scoring; D12).
-4. C1 (base negative control) exists for the AuditBench organisms only until the base generations for the gender
+4. C1 (base negative control): closed for all seven organisms (Burst 2 item 1); GS-M shows a partial rank shift (0.72) toward the gender questions without threshold crossings. [was: exists for the AuditBench organisms only until the base generations for the gender
    and sandbagging question sets land (Burst 2 item 1, running).
 5. C3 uses the last 300 rows of each organism's SFT file — topical mix differs by organism; the sandbagger's 28 %
    flag rate is an honest-on-topic false-positive rate; contextual optimism's 21 % are trait-is-deception rows.

@@ -1,0 +1,9 @@
+{
+ "prompts": 190,
+ "new_tokens": 18291,
+ "wall_s": 112.8,
+ "max_tokens": 2048,
+ "temperature": 0,
+ "thinking": false,
+ "note": "is_lie unlabelled (no grader run); organism_label = label of the organism's original reasoning transcript"
+}

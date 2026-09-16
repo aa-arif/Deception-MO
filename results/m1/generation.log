@@ -281,3 +281,46 @@ WARNING 09-16 03:55:52 [input_processor.py:196] vLLM has deprecated support for 
   wrote /lambda/nfs/lieprobes/repo/results/m1/gen/nothink/gender_secret_female/gender_secret.parquet (158 rows)
     generated 158 prompts × n=1: 8949 new tokens in 41s (218 tok/s)
   wrote /lambda/nfs/lieprobes/repo/results/m1/gen/nothink/gender_secret_male/gender_secret.parquet (158 rows)
+    generated 100 prompts × n=1: 200 new tokens in 17s (11 tok/s)
+  wrote /lambda/nfs/lieprobes/repo/results/m1/gen/nothink/eval_sandbagger/sandbagging_games_updated.parquet (100 rows)
+    generated 190 prompts × n=1: 20211 new tokens in 121s (167 tok/s)
+  wrote /lambda/nfs/lieprobes/repo/results/m1/gen/nothink/ab_animal_welfare/audit_bench_updated.parquet (190 rows)
+    generated 190 prompts × n=1: 14816 new tokens in 105s (141 tok/s)
+  wrote /lambda/nfs/lieprobes/repo/results/m1/gen/nothink/ab_contextual_optimism/audit_bench_updated.parquet (190 rows)
+    generated 190 prompts × n=1: 18291 new tokens in 113s (162 tok/s)
+  wrote /lambda/nfs/lieprobes/repo/results/m1/gen/nothink/ab_hallucinates_citations/audit_bench_updated.parquet (190 rows)
+    generated 190 prompts × n=1: 15675 new tokens in 125s (125 tok/s)
+  wrote /lambda/nfs/lieprobes/repo/results/m1/gen/nothink/ab_self_promotion/audit_bench_updated.parquet (190 rows)
+[04:05:23] (d) T2 prompted variants (base + 5 released system prompts)
+/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/huggingface_hub/constants.py:299: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(
+WARNING 09-16 04:05:32 [model.py:981] Model does not support mm_device_do_normalize, forcing mm_device_do_normalize = False.
+WARNING 09-16 04:05:39 [system_utils.py:157] We must use the `spawn` multiprocessing start method. Overriding VLLM_WORKER_MULTIPROC_METHOD to 'spawn'. See https://docs.vllm.ai/en/latest/usage/troubleshooting.html#python-multiprocessing for more information. Reasons: CUDA is initialized
+/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/huggingface_hub/constants.py:299: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(
+(EngineCore pid=79362) WARNING 09-16 04:05:50 [qwen_gdn_linear_attn.py:174] FlashInfer GDN prefill is JIT-compiled; first run may take a while. Set --gdn-prefill-backend triton to skip JIT.
+(EngineCore pid=79362) Loading safetensors checkpoint shards:   0% Completed | 0/15 [00:00<?, ?it/s]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:   7% Completed | 1/15 [00:08<02:04,  8.89s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  13% Completed | 2/15 [00:16<01:49,  8.40s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  20% Completed | 3/15 [00:25<01:43,  8.61s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  27% Completed | 4/15 [00:34<01:33,  8.50s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  33% Completed | 5/15 [00:40<01:18,  7.88s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  40% Completed | 6/15 [00:49<01:12,  8.09s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  47% Completed | 7/15 [00:56<01:02,  7.77s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  53% Completed | 8/15 [01:04<00:55,  7.93s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  60% Completed | 9/15 [01:13<00:48,  8.09s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  67% Completed | 10/15 [01:21<00:40,  8.04s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  73% Completed | 11/15 [01:28<00:31,  7.89s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  80% Completed | 12/15 [01:36<00:23,  7.72s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  87% Completed | 13/15 [01:42<00:14,  7.37s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards:  93% Completed | 14/15 [01:49<00:07,  7.25s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards: 100% Completed | 15/15 [01:50<00:00,  5.35s/it]
+(EngineCore pid=79362) Loading safetensors checkpoint shards: 100% Completed | 15/15 [01:50<00:00,  7.37s/it]
+(EngineCore pid=79362) 
+(EngineCore pid=79362) Capturing CUDA graphs (PIECEWISE):   0%|          | 0/11 [00:00<?, ?it/s]Capturing CUDA graphs (PIECEWISE):   9%|▉         | 1/11 [00:03<00:33,  3.31s/it]Capturing CUDA graphs (PIECEWISE):  18%|█▊        | 2/11 [00:03<00:15,  1.71s/it]Capturing CUDA graphs (PIECEWISE):  27%|██▋       | 3/11 [00:04<00:08,  1.01s/it]Capturing CUDA graphs (PIECEWISE):  36%|███▋      | 4/11 [00:04<00:04,  1.46it/s]Capturing CUDA graphs (PIECEWISE):  45%|████▌     | 5/11 [00:05<00:04,  1.29it/s]Capturing CUDA graphs (PIECEWISE):  55%|█████▍    | 6/11 [00:05<00:02,  1.71it/s]Capturing CUDA graphs (PIECEWISE):  73%|███████▎  | 8/11 [00:05<00:01,  2.61it/s]Capturing CUDA graphs (PIECEWISE):  82%|████████▏ | 9/11 [00:05<00:00,  2.94it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:07<00:00,  2.41it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:07<00:00,  1.57it/s]
+(EngineCore pid=79362) Capturing CUDA graphs (FULL):   0%|          | 0/2 [00:00<?, ?it/s]Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:00<00:00, 15.39it/s]Capturing CUDA graphs (FULL): 100%|██████████| 2/2 [00:00<00:00, 15.36it/s]
+(EngineCore pid=79362) 2026-09-16 04:08:33,519 - INFO - autotuner.py:972 - flashinfer.jit: [Autotuner]: Autotuning process starts ...
+(EngineCore pid=79362) 2026-09-16 04:08:33,624 - INFO - autotuner.py:995 - flashinfer.jit: [Autotuner]: Autotuning process ends
+(EngineCore pid=79362) 2026-09-16 04:08:33,727 - INFO - autotuner.py:2652 - flashinfer.jit: [Autotuner]: Saved 0 configs to /home/ubuntu/.cache/vllm/flashinfer_autotune_cache/0.6.18/90a/eace0edac728dbe9c2699bf4140a6e7c3f2be94895fa55cc8395b0f901316df1/autotune_configs.json (0 new, 0 from previous config)
+(EngineCore pid=79362) Capturing CUDA graphs (PIECEWISE):   0%|          | 0/11 [00:00<?, ?it/s]Capturing CUDA graphs (PIECEWISE):   9%|▉         | 1/11 [00:00<00:02,  3.59it/s]Capturing CUDA graphs (PIECEWISE):  18%|█▊        | 2/11 [00:00<00:02,  3.41it/s]Capturing CUDA graphs (PIECEWISE):  27%|██▋       | 3/11 [00:00<00:02,  3.36it/s]Capturing CUDA graphs (PIECEWISE):  36%|███▋      | 4/11 [00:01<00:02,  3.39it/s]Capturing CUDA graphs (PIECEWISE):  45%|████▌     | 5/11 [00:01<00:01,  4.19it/s]Capturing CUDA graphs (PIECEWISE):  55%|█████▍    | 6/11 [00:01<00:01,  4.89it/s]Capturing CUDA graphs (PIECEWISE):  64%|██████▎   | 7/11 [00:01<00:00,  5.49it/s]Capturing CUDA graphs (PIECEWISE):  73%|███████▎  | 8/11 [00:01<00:00,  5.90it/s]Capturing CUDA graphs (PIECEWISE):  82%|████████▏ | 9/11 [00:01<00:00,  6.29it/s]Capturing CUDA graphs (PIECEWISE):  91%|█████████ | 10/11 [00:02<00:00,  6.57it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:02<00:00,  7.00it/s]Capturing CUDA graphs (PIECEWISE): 100%|██████████| 11/11 [00:02<00:00,  5.17it/s]
+(EngineCore pid=79362) Capturing CUDA graphs (FULL):   0%|          | 0/7 [00:00<?, ?it/s]Capturing CUDA graphs (FULL):  14%|█▍        | 1/7 [00:00<00:00,  9.77it/s]Capturing CUDA graphs (FULL):  29%|██▊       | 2/7 [00:00<00:00,  9.79it/s]Capturing CUDA graphs (FULL):  43%|████▎     | 3/7 [00:00<00:00,  9.74it/s]Capturing CUDA graphs (FULL):  57%|█████▋    | 4/7 [00:00<00:00,  9.70it/s]Capturing CUDA graphs (FULL):  71%|███████▏  | 5/7 [00:00<00:00,  9.78it/s]Capturing CUDA graphs (FULL):  86%|████████▌ | 6/7 [00:00<00:00,  9.75it/s]Capturing CUDA graphs (FULL): 100%|██████████| 7/7 [00:00<00:00,  9.90it/s]

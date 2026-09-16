@@ -717,3 +717,19 @@ HC→GS-F 0.90, SB→CO 0.88) and Spearman(transfer, cosine) is significant at L
 and L38 (0.45, p 0.03), not at dyl L44 (0.33, p 0.15). Geometry v2 adds raw diff-of-means cosines and
 cosines under one COMMON whitening (LW on the pooled within-class residuals of all organisms) plus raw
 reference angles; running.
+
+## 2026-09-16 17:35 — M3 DONE (both poolings; results/m3/SUMMARY.md); T2 16k first result
+M3 (fast shrinkage; 28 jobs per pooling, 7 workers, 17:12–17:30). lr medians — Apollo pooling: T0 0.754 ·
+T1+CORAL 0.805 · T3 leak 0.902 · T3 noleak 0.931 · T4 0.821 · T5 0.972. DYL pooling: T0 0.714 · T3 leak
+0.787 · T3 noleak 0.768 · T4 0.779 · T5 0.877. Per organism (Apollo, T3 noleak / T4): GS-F 0.976/0.981,
+GS-M 0.957/0.941, SB 0.821/0.821, AW 0.934/0.574, CO 0.931/0.909, HC 0.923/0.690, SP 0.909/0.662.
+Inner LOO selected L32, C = 1.0 for every Apollo case; DYL L38/L44, C = 0.01 (0.1 for GS).
+Both runs crashed in summary() on an int-vs-str layer key against the M2 JSON (fixed; summaries
+regenerated with --summary-only; all 56 result JSONs were already written).
+SURPRISE: cross-organism transfer (T3) beats the released per-organism probes on 7/7 organisms under the
+Apollo pooling (median +0.18) and comes within 0.04 of the same-organism ceiling for 4/7.
+SURPRISE: 'noleak' > 'leak' for AuditBench organisms (removing honest controls on the held-out topic
+helps). T4 (family out) breaks AW/HC/SP (0.57–0.69) but not CO (0.91) or the gender pair (0.94–0.98).
+T2 16k: contextual_optimism STILL 48/190 truncated at 16 384 tokens (1.0 M tokens generated, 47 min) —
+a quarter of the base model's answers under that prompt never leave the think block; budget is not the
+fix either (D-pending: mark those rows as pathological, exclude). self_promotion running.

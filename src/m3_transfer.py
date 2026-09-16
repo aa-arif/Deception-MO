@@ -81,7 +81,7 @@ def summary(fam):
     for org in ORGS:
         t0 = REPO / "results/m1/t0/standard" / fam / f"{org}.json"; t5 = REPO / "results/m2/t5" / fam / f"{org}.json"
         r = dict(organism=org, t0=json.load(open(t0))["auroc"] if t0.exists() else None)
-        if t5.exists(): j = json.load(open(t5)); Lb = j["best_layer_dim"]; r["t5_lr"] = j["layers"][Lb]["lr"]["oof_auroc"]; r["t5_dim"] = j["layers"][Lb]["dim"]["oof_auroc"]
+        if t5.exists(): j = json.load(open(t5)); Lb = str(j["best_layer_dim"]); r["t5_lr"] = j["layers"][Lb]["lr"]["oof_auroc"]; r["t5_dim"] = j["layers"][Lb]["dim"]["oof_auroc"]
         for mode in ["T3", "T4"]:
             for v in ["leak", "noleak"]:
                 p = REPO / "results/m3" / fam / f"{mode}_{v}" / f"{org}.json"

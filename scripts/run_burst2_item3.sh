@@ -26,3 +26,5 @@ for s in $SWEEP; do
   echo "[$(t)] sweep adapter $s done"
 done
 echo "[$(t)] BURST2_ITEM3_EXTRACT_DONE"
+echo "[$(t)] (3d) M7 sweep analysis (CPU)"; OMP_NUM_THREADS=4 python src/m7_sweep.py > results/m7/sweep.log 2>&1 || echo "[$(t)] M7_FAILED"
+echo "[$(t)] BURST2_ITEM3_DONE"

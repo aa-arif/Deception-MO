@@ -23,3 +23,5 @@ for m in $MODELS; do
 done
 python src/extract_features.py --organism base --splits aletheia_instructed --parquet $R/aletheia/None/instructed.parquet --layers $LAYERS --skip-existing --out $FEAT || true
 echo "[$(t)] BURST2_ITEM4_EXTRACT_DONE"
+echo "[$(t)] (4d) M8 Aletheia analysis (CPU)"; OMP_NUM_THREADS=4 python src/m8_aletheia.py > $R/m8_aletheia.log 2>&1 || echo "[$(t)] M8_FAILED"
+echo "[$(t)] BURST2_ITEM4_DONE"

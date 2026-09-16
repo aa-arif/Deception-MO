@@ -467,3 +467,16 @@ features/qwen3.6-27b/gender_secret_female/dyl_train_city_countries (M1 pass B, 5
 split (ambiguous excluded, as in our policy); direction cosine 0.9996–0.9999 at the `pred` position.
 The residual 0.2–0.3 % mean error is bf16/batch noise (the 600-row window gave 0.7 %). Criterion b:
 met to within bf16 precision (the 1e-3 rule was set for fp16 features; ours are bf16 activations).
+
+## 2026-09-16 02:00 — M1 EXTRACTION DONE (pass A+B, 8 models, no failures); generation chain attempt 1 failed at vLLM startup
+M1_EXTRACT_DONE at 02:00:02 (started 09:03:08 on 2026-09-15; ≈ 17 h; 3.3 k tok/s with LoRA, 4.9 k for
+base). Features: features/qwen3.6-27b/<organism>/<split> for 7 organisms + base (pass A + B splits,
+12 probe layers + norm, 8 poolings incl. `pred`; per-token fp16 for gender_secret at L44/L38).
+Generation chain (a) vLLM smoke test FAILED at engine startup (results/m1/generation_attempt1_oom.log):
+torch.OutOfMemoryError while allocating the "minimal KV cache for cudagraph profiling" (24.5 GiB
+requested, 22.7 GiB free after 53.5 GiB of weights). Cause: the hybrid model's linear-attention state
+cache is sized by max_num_seqs (vLLM default 256) × max_model_len 16384. Not an architecture/LoRA
+failure (LoRA kernels initialised: "Using default LoRA kernel configs"). Fix: max_num_seqs 32,
+max_model_len 12288 (8192 new + longest DYL prompt 374 tokens, T2 prompts ≤ 337 + 4096), gpu_mem 0.95.
+Chain relaunched at 02:08 (attempt 2). DEVIATION from "if it fails, stop and report": treated as a
+launch-config error and retried once; if attempt 2 fails the chain stops and the GPU stays idle.

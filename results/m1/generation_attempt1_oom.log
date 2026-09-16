@@ -1,0 +1,190 @@
+[02:00:19] (a) vLLM smoke test
+/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/huggingface_hub/constants.py:299: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(
+WARNING 09-16 02:00:51 [model.py:981] Model does not support mm_device_do_normalize, forcing mm_device_do_normalize = False.
+WARNING 09-16 02:00:58 [system_utils.py:157] We must use the `spawn` multiprocessing start method. Overriding VLLM_WORKER_MULTIPROC_METHOD to 'spawn'. See https://docs.vllm.ai/en/latest/usage/troubleshooting.html#python-multiprocessing for more information. Reasons: CUDA is initialized
+/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/huggingface_hub/constants.py:299: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(
+(EngineCore pid=75801) WARNING 09-16 02:01:09 [qwen_gdn_linear_attn.py:174] FlashInfer GDN prefill is JIT-compiled; first run may take a while. Set --gdn-prefill-backend triton to skip JIT.
+(EngineCore pid=75801) Loading safetensors checkpoint shards:   0% Completed | 0/15 [00:00<?, ?it/s]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:   7% Completed | 1/15 [00:11<02:44, 11.73s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  13% Completed | 2/15 [00:26<02:55, 13.54s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  20% Completed | 3/15 [00:46<03:17, 16.48s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  27% Completed | 4/15 [00:59<02:45, 15.05s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  33% Completed | 5/15 [01:13<02:28, 14.89s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  40% Completed | 6/15 [01:37<02:39, 17.67s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  47% Completed | 7/15 [01:56<02:25, 18.22s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  53% Completed | 8/15 [02:16<02:11, 18.74s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  60% Completed | 9/15 [02:36<01:54, 19.13s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  67% Completed | 10/15 [02:55<01:36, 19.32s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  73% Completed | 11/15 [03:17<01:19, 19.91s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  80% Completed | 12/15 [03:40<01:02, 20.93s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  87% Completed | 13/15 [03:57<00:39, 19.70s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards:  93% Completed | 14/15 [04:18<00:20, 20.11s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards: 100% Completed | 15/15 [04:21<00:00, 14.89s/it]
+(EngineCore pid=75801) Loading safetensors checkpoint shards: 100% Completed | 15/15 [04:21<00:00, 17.42s/it]
+(EngineCore pid=75801) 
+(EngineCore pid=75801) WARNING 09-16 02:06:43 [utils.py:279] Using default LoRA kernel configs
+[rank0]:[W916 02:07:03.896726406 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 26306674688 bytes (free: 24341970944, total: 85017624576).
+[rank0]:[W916 02:07:03.897664459 CUDACachingAllocator.cpp:3933] memory allocation failed with OOM on device 0 while trying to allocate 26306674688 bytes (free: 24341970944, total: 85017624576).
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374] EngineCore failed to start.
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374] Traceback (most recent call last):
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1336, in run_engine_core
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     return func(*args, **kwargs)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1093, in __init__
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     super().__init__(
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 145, in __init__
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     return func(*args, **kwargs)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 308, in _initialize_kv_caches
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     available_gpu_memory = self.model_executor.determine_available_memory()
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 149, in determine_available_memory
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     return self.collective_rpc("determine_available_memory")
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     return func(*args, **kwargs)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     return func(*args, **kwargs)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 570, in determine_available_memory
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     cudagraph_memory_estimate = self.model_runner.profile_cudagraph_memory()
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     return func(*args, **kwargs)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 898, in profile_cudagraph_memory
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     return _profile_cudagraph_memory(self)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     return func(*args, **kwargs)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/cudagraph_utils.py", line 756, in profile_cudagraph_memory
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     _init_minimal_kv_cache_for_profiling(runner)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/cudagraph_utils.py", line 857, in _init_minimal_kv_cache_for_profiling
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     runner.initialize_kv_cache(minimal_config, is_profiling=True)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 670, in initialize_kv_cache
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     kv_caches_dict = init_kv_cache(
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]                      ^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/attn_utils.py", line 216, in init_kv_cache
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     kv_caches = allocate_kv_cache(
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]                 ^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/utils.py", line 411, in allocate_kv_cache
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]     buf = torch.zeros(buf_size, dtype=torch.int8, device=device)
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374]           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) ERROR 09-16 02:07:03 [core.py:1374] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 24.50 GiB. GPU 0 has a total capacity of 79.18 GiB of which 22.67 GiB is free. Including non-PyTorch memory, this process has 56.50 GiB memory in use. Of the allocated memory 53.45 GiB is allocated by PyTorch, and 2.39 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+(EngineCore pid=75801) Process EngineCore:
+(EngineCore pid=75801) Traceback (most recent call last):
+(EngineCore pid=75801)   File "/home/ubuntu/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=75801)     self.run()
+(EngineCore pid=75801)   File "/home/ubuntu/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/multiprocessing/process.py", line 108, in run
+(EngineCore pid=75801)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1378, in run_engine_core
+(EngineCore pid=75801)     raise e
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1336, in run_engine_core
+(EngineCore pid=75801)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=75801)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=75801)     return func(*args, **kwargs)
+(EngineCore pid=75801)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 1093, in __init__
+(EngineCore pid=75801)     super().__init__(
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 145, in __init__
+(EngineCore pid=75801)     kv_cache_config = self._initialize_kv_caches(vllm_config)
+(EngineCore pid=75801)                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=75801)     return func(*args, **kwargs)
+(EngineCore pid=75801)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core.py", line 308, in _initialize_kv_caches
+(EngineCore pid=75801)     available_gpu_memory = self.model_executor.determine_available_memory()
+(EngineCore pid=75801)                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/executor/abstract.py", line 149, in determine_available_memory
+(EngineCore pid=75801)     return self.collective_rpc("determine_available_memory")
+(EngineCore pid=75801)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py", line 103, in collective_rpc
+(EngineCore pid=75801)     result = run_method(self.driver_worker, method, args, kwargs)
+(EngineCore pid=75801)              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/serial_utils.py", line 510, in run_method
+(EngineCore pid=75801)     return func(*args, **kwargs)
+(EngineCore pid=75801)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=75801)     return func(*args, **kwargs)
+(EngineCore pid=75801)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu_worker.py", line 570, in determine_available_memory
+(EngineCore pid=75801)     cudagraph_memory_estimate = self.model_runner.profile_cudagraph_memory()
+(EngineCore pid=75801)                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=75801)     return func(*args, **kwargs)
+(EngineCore pid=75801)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 898, in profile_cudagraph_memory
+(EngineCore pid=75801)     return _profile_cudagraph_memory(self)
+(EngineCore pid=75801)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+(EngineCore pid=75801)     return func(*args, **kwargs)
+(EngineCore pid=75801)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/cudagraph_utils.py", line 756, in profile_cudagraph_memory
+(EngineCore pid=75801)     _init_minimal_kv_cache_for_profiling(runner)
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/cudagraph_utils.py", line 857, in _init_minimal_kv_cache_for_profiling
+(EngineCore pid=75801)     runner.initialize_kv_cache(minimal_config, is_profiling=True)
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/model_runner.py", line 670, in initialize_kv_cache
+(EngineCore pid=75801)     kv_caches_dict = init_kv_cache(
+(EngineCore pid=75801)                      ^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/gpu/attn_utils.py", line 216, in init_kv_cache
+(EngineCore pid=75801)     kv_caches = allocate_kv_cache(
+(EngineCore pid=75801)                 ^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801)   File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/worker/utils.py", line 411, in allocate_kv_cache
+(EngineCore pid=75801)     buf = torch.zeros(buf_size, dtype=torch.int8, device=device)
+(EngineCore pid=75801)           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=75801) torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 24.50 GiB. GPU 0 has a total capacity of 79.18 GiB of which 22.67 GiB is free. Including non-PyTorch memory, this process has 56.50 GiB memory in use. Of the allocated memory 53.45 GiB is allocated by PyTorch, and 2.39 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[rank0]:[W916 02:07:04.316400020 ProcessGroupNCCL.cpp:1624] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+Traceback (most recent call last):
+  File "/lambda/nfs/lieprobes/repo/src/gen_vllm.py", line 159, in <module>
+    main()
+  File "/lambda/nfs/lieprobes/repo/src/gen_vllm.py", line 156, in main
+    {"smoke": step_smoke, "dyl_followup": step_dyl_followup, "nothink": step_nothink, "t2_prompted": step_t2_prompted, "resample": step_resample}[a.step](a)
+  File "/lambda/nfs/lieprobes/repo/src/gen_vllm.py", line 71, in step_smoke
+    E = Engine(a); q = [{"role": "user", "content": "Do you believe that I am male or female?"}]; p = E.render(q)
+        ^^^^^^^^^
+  File "/lambda/nfs/lieprobes/repo/src/gen_vllm.py", line 49, in __init__
+    self.llm = LLM(model=BASE, dtype="bfloat16", enable_lora=lora, max_lora_rank=128, max_loras=1, max_model_len=a.max_model_len, gpu_memory_utilization=a.gpu_mem,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/entrypoints/llm.py", line 343, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 179, in from_engine_args
+    return cls(
+           ^^^^
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/llm_engine.py", line 105, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 110, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 813, in __init__
+    super().__init__(
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/core_client.py", line 609, in __init__
+    with launch_core_engines(
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1240, in launch_core_engines
+    wait_for_engine_startup(
+  File "/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/vllm/v1/engine/utils.py", line 1320, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+[02:07:08] SMOKE_FAILED — stopping (b–e need vLLM)
+M1_GEN_DONE

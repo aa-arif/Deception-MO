@@ -47,7 +47,7 @@ class Engine:
         from vllm import LLM
         self.a = a
         self.llm = LLM(model=BASE, dtype="bfloat16", enable_lora=lora, max_lora_rank=128, max_loras=1, max_model_len=a.max_model_len, gpu_memory_utilization=a.gpu_mem,
-                       tensor_parallel_size=1, seed=0, limit_mm_per_prompt={"image": 0, "video": 0}, enable_prefix_caching=True)
+                       max_num_seqs=a.max_num_seqs, tensor_parallel_size=1, seed=0, limit_mm_per_prompt={"image": 0, "video": 0}, enable_prefix_caching=True)
         self.tok = self.llm.get_tokenizer(); self._lora_id = 0
     def lora(self, org):
         from vllm.lora.request import LoRARequest
@@ -138,8 +138,8 @@ def step_resample(a):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("step", choices=["smoke", "dyl_followup", "nothink", "t2_prompted", "resample"])
-    ap.add_argument("--orgs", nargs="*", default=ORGS); ap.add_argument("--max-tokens", type=int, default=None); ap.add_argument("--max-model-len", type=int, default=16384)
-    ap.add_argument("--gpu-mem", type=float, default=0.92); ap.add_argument("--temperature", type=float, default=0.7); ap.add_argument("--n", type=int, default=4); ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--orgs", nargs="*", default=ORGS); ap.add_argument("--max-tokens", type=int, default=None); ap.add_argument("--max-model-len", type=int, default=12288); ap.add_argument("--max-num-seqs", type=int, default=32)
+    ap.add_argument("--gpu-mem", type=float, default=0.95); ap.add_argument("--temperature", type=float, default=0.7); ap.add_argument("--n", type=int, default=4); ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     defaults = {"smoke": 50, "dyl_followup": 8192, "nothink": 2048, "t2_prompted": 4096, "resample": 4096}
     if a.max_tokens is None: a.max_tokens = defaults[a.step]

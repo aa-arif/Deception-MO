@@ -597,3 +597,8 @@ beats the same-set dim probe (0.73 / 0.50): with 25 lies the diff-of-means is no
 trained on thousands of instructed pairs. CAVEAT: lr with 5120 features and ~150 rows is high-variance;
 CIs are wide (±0.1); the best-layer column is selected in-sample.
 DYL-pooling T5 follows the protocol decision (running on GPU).
+
+## 2026-09-16 13:27 — clock correction
+The "14:00 M2 T5 done" heading above was estimated; the run finished ≈ 13:20 (log mtime). Headings from
+here on use the shell clock. Protocol test at 13:27: 2/4 AuditBench organisms sampled (animal_welfare
+truncations 13 → 4, contextual_optimism 2 → 1); decision expected ≈ 13:55.

@@ -733,3 +733,15 @@ helps). T4 (family out) breaks AW/HC/SP (0.57–0.69) but not CO (0.91) or the g
 T2 16k: contextual_optimism STILL 48/190 truncated at 16 384 tokens (1.0 M tokens generated, 47 min) —
 a quarter of the base model's answers under that prompt never leave the think block; budget is not the
 fix either (D-pending: mark those rows as pathological, exclude). self_promotion running.
+
+## 2026-09-16 17:37 — M6 geometry DONE (results/m6/geometry.md, v2 with raw + common-whitened similarities)
+Key numbers: raw diff-of-means cosines (Apollo L38): GS-F·GS-M 0.82; SB·AW 0.59, AW·SP 0.53, SB·CO 0.36,
+AW·CO 0.33; HC ≤ 0.12 with everything; gender vs rest ≈ 0. DYL L44 raw: GS pair 0.81; CO·HC·SP 0.64–0.74;
+AW anti-aligned (−0.17…−0.45). Spearman(transfer AUROC, raw cosine): Apollo L38 0.03 (p 0.87), L57 0.18
+(p 0.37), DYL L44 0.68 (p 0.017). Shrinkage-direction and common-whitened cosines ≈ 0 for all non-gender
+pairs (n ≪ p artefact; recorded as a limitation of D16's geometry choice — DEVIATION: the interpretable
+geometry is the raw metric; whitened geometry deferred to M5's larger n). Raw angles: organism dirs vs
+released organism dim probes 85–94° (Apollo) — the instructed-pairs direction is orthogonal to the
+organisms' auditing-set lie directions; vs prompted-lie direction 75–92°; vs own fine-tune fingerprint
+73–98° (fingerprints mutually aligned 0.80–0.94). SVD of raw directions: first component ≈ 0.3 of
+variance (Apollo L38) — narrative C (graded), not A or B. Wall: v2 17:03–17:40 under load.

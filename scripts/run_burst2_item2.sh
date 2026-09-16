@@ -7,7 +7,7 @@ cd /lambda/nfs/lieprobes/repo; t() { date +%H:%M:%S; }; LAYERS="13 19 25 32 38 4
 until grep -q QWEN35_CORE_DONE notes/.download_burst2_log.txt 2>/dev/null; do sleep 60; done
 until grep -q BURST2_ITEM1_DONE results/burst2_item1.log 2>/dev/null; do sleep 60; done
 echo "[$(t)] (2a) GS-F pass A + B (merged)"; MERGE=1 ORGS="gender_secret_female" bash scripts/run_m1_extract.sh > $R/m1/extract_gsf.log 2>&1
-echo "[$(t)] (2b) convention check"; python src/q35_convention_check.py > $R/m0_check.log 2>&1 || { echo "[$(t)] Q35_CONVENTION_FAILED — stopping item 2"; cat $R/m0_check.log | tail -5; echo "BURST2_ITEM2_DONE"; exit 1; }
+echo "[$(t)] (2b) convention check"; python src/q35_convention_check.py > $R/m0_check.log 2>&1 || { echo "[$(t)] Q35_CONVENTION_FAILED — stopping item 2"; cat $R/m0_check.log | tail -5; echo "BURST2_ITEM2_ABORTED"; exit 1; }
 echo "[$(t)] (2c) remaining organisms + base, pass A + B (merged)"; MERGE=1 ORGS="gender_secret_male eval_sandbagger ab_animal_welfare ab_hallucinates_citations ab_self_promotion base" bash scripts/run_m1_extract.sh > $R/m1/extract.log 2>&1
 echo "[$(t)] (2d) base_audit generations + DYL follow-ups (6 organisms, greedy, 8192)"
 python src/gen_vllm.py base_audit --max-tokens 4096 --skip-existing || echo "[$(t)] STEP2D_BASE_FAILED"

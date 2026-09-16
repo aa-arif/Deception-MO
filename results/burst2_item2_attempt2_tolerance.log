@@ -1,0 +1,9 @@
+[21:12:05] (2a) GS-F pass A + B (merged)
+[21:57:56] (2b) convention check
+[22:00:42] Q35_CONVENTION_FAILED — stopping item 2
+| l_63_lm_0_001_ar_lr | nan | 0.0126 | 0.0097 |
+
+DYL: FAIL
+
+## Overall: FAIL
+BURST2_ITEM2_DONE

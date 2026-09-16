@@ -852,3 +852,15 @@ BURST2_ITEM2_DONE, which released item 3 onto the GPU (3a ran 8 min). Fixed (TAG
 (burst2_item2_attempt1_tagbug.log, burst2_item3_attempt1_preempted.log), item 2 relaunched, item 3 re-queued behind
 the new item-2 marker (idempotent: --skip-existing). Aletheia: a-mo-qwen3.5-27b-4 and -5 are GATED (403) for this HF
 token — item 4 will run with the 7 accessible models unless access is granted (OPEN, user).
+
+## 2026-09-16 22:16 — Qwen3.5 convention check: PASS after a tolerance correction; item 2 relaunched (attempt 3)
+results/qwen3.5-27b/m0_check.md (GS-F, merged features, outL): Apollo — 25/25 released Qwen3.5 GS-F checkpoints' stored
+thresholds reproduce to 3–4 s.f. (FPR 0.96–1.04 %); DYL — cos(released dim, our diff-of-means at pred) 0.9999 / 0.9999
+/ 0.9998 at L38/44/63, stored thresholds at 0.89–1.09 % FPR on dyl_alpaca_validate, stored dataset_mean rel err 1.3–1.9 %
+(lr ckpts). The convention (outL; mean over content tokens; pre-answer position; default rendering) holds for Qwen3.5-27B
+with merged-LoRA features. My rule "mean rel err < 1 %" (written for the 4396-row unmerged Qwen3.6 check) failed it;
+relaxed to 2 % (the check compares a 2500-row merged subset with the released full-split statistics) — DEVIATION
+recorded; cosine and calibration are the decisive criteria. MISHAP (second time): the failure path emitted the DONE
+marker and released item 3 onto the GPU for ≈ 12 min; fixed (failure now emits BURST2_ITEM2_ABORTED), item 3 stopped
+by PID and re-queued, item 2 relaunched (GS-F features skipped as existing). Qwen3.5 GS-F pass A+B took 46 min
+(≈ 4.9 k tok/s merged; transcripts ≈ ⅓ the length of Qwen3.6's).

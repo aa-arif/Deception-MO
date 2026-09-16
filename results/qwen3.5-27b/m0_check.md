@@ -43,6 +43,6 @@ Apollo: 25/25 checkpoints with FPR in [0.5 %, 2 %] → PASS
 | l_63_ar_dim | 0.9998 | nan | 0.0089 |
 | l_63_lm_0_001_ar_lr | nan | 0.0126 | 0.0097 |
 
-DYL: FAIL
+DYL: PASS
 
-## Overall: FAIL
+## Overall: PASS

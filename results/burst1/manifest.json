@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-16 14:01 UTC",
+ "generated_at": "2026-09-16 14:27 UTC",
  "features": [
   {
    "path": "features/qwen3.6-27b/ab_animal_welfare/alpaca",
@@ -1310,9 +1310,43 @@
    "truncated": 2,
    "sha256_16": "ab2f4323fb258316",
    "bytes": 434794
+  },
+  {
+   "path": "results/m1/gen/t2_prompted_sampled/ab_contextual_optimism/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 391873,
+   "wall_s": 607.1,
+   "protocol": "sampled",
+   "temperature": 0.6,
+   "max_tokens": 4096,
+   "truncated": 61,
+   "sha256_16": "4fb20656efd1f039",
+   "bytes": 1528517
+  },
+  {
+   "path": "results/m1/gen/t2_prompted_sampled/ab_self_promotion/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 430494,
+   "wall_s": 620.7,
+   "protocol": "sampled",
+   "temperature": 0.6,
+   "max_tokens": 4096,
+   "truncated": 61,
+   "sha256_16": "522bcc3d2d47114d",
+   "bytes": 1769096
   }
  ],
  "results_files": [
+  {
+   "path": "results/burst1/SUMMARY.md",
+   "bytes": 3266,
+   "sha256_16": "022bd1187a79345c"
+  },
+  {
+   "path": "results/burst1/manifest.json",
+   "bytes": 41728,
+   "sha256_16": "54e348b60cd2b2e6"
+  },
   {
    "path": "results/m0/SUMMARY.md",
    "bytes": 6777,
@@ -1435,8 +1469,8 @@
   },
   {
    "path": "results/m1/protocol_test.json",
-   "bytes": 1523,
-   "sha256_16": "1af16b25c2d7ea42"
+   "bytes": 1741,
+   "sha256_16": "1b8d8a98174181e9"
   },
   {
    "path": "results/m1/t0/sampled_ab/SUMMARY_T0.md",
@@ -1640,8 +1674,8 @@
   },
   {
    "path": "results/m2/SUMMARY.md",
-   "bytes": 3059,
-   "sha256_16": "3be1861dd5924081"
+   "bytes": 4352,
+   "sha256_16": "6d1754360e98fb10"
   },
   {
    "path": "results/m2/t5/apollo/SUMMARY.md",
@@ -1682,6 +1716,46 @@
    "path": "results/m2/t5/apollo/gender_secret_male.json",
    "bytes": 7946,
    "sha256_16": "73f3e6d6acc70845"
+  },
+  {
+   "path": "results/m2/t5/dyl/SUMMARY.md",
+   "bytes": 2297,
+   "sha256_16": "27c81382bf401c64"
+  },
+  {
+   "path": "results/m2/t5/dyl/ab_animal_welfare.json",
+   "bytes": 8523,
+   "sha256_16": "65410a1f12bac711"
+  },
+  {
+   "path": "results/m2/t5/dyl/ab_contextual_optimism.json",
+   "bytes": 8360,
+   "sha256_16": "97fe2ec0d7923811"
+  },
+  {
+   "path": "results/m2/t5/dyl/ab_hallucinates_citations.json",
+   "bytes": 8404,
+   "sha256_16": "f7a73b5e432c4c37"
+  },
+  {
+   "path": "results/m2/t5/dyl/ab_self_promotion.json",
+   "bytes": 8219,
+   "sha256_16": "9449c3b0ed108027"
+  },
+  {
+   "path": "results/m2/t5/dyl/eval_sandbagger.json",
+   "bytes": 8102,
+   "sha256_16": "5a9843fa292c9452"
+  },
+  {
+   "path": "results/m2/t5/dyl/gender_secret_female.json",
+   "bytes": 8400,
+   "sha256_16": "f1c93b19c14e16b3"
+  },
+  {
+   "path": "results/m2/t5/dyl/gender_secret_male.json",
+   "bytes": 8439,
+   "sha256_16": "1a8445325bfec4a2"
   }
  ],
  "gpu_jobs": {
@@ -1747,9 +1821,9 @@
   },
   "protocol test": {
    "log": "results/m1/protocol_test.log",
-   "first": "13:58:24",
-   "last": "13:58:24",
-   "mtime": "2026-09-16 14:01"
+   "first": "14:21:37",
+   "last": "14:21:37",
+   "mtime": "2026-09-16 14:21"
   }
  },
  "totals": {
@@ -1758,8 +1832,8 @@
   "feature_tokens": 198594731,
   "feature_wall_h": 15.88,
   "feature_bytes_gb": 359.0,
-  "generation_files": 30,
-  "generation_new_tokens": 9611892,
-  "generation_wall_h": 5.22
+  "generation_files": 32,
+  "generation_new_tokens": 10434259,
+  "generation_wall_h": 5.56
  }
 }

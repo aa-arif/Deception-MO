@@ -644,3 +644,11 @@ single pre-answer token is less linearly separable than the mean over the lie's 
 (lr 0.86 vs 0.97), i.e. the follow-up readout compresses the evidence; (3) best DYL layers are EARLY in
 the DYL grid (L38, its bottom) for 6/7 organisms, the mirror of the Apollo result (L57, top of its grid)
 — both point at the L38–L57 band. results/m2/SUMMARY.md finalised; M2 closed.
+
+## 2026-09-16 14:27 — Burst 1 closeout
+results/burst1/manifest.json regenerated (79 feature dirs / 168,618 rows / 198.6 M tokens / 359 GB;
+32 transcript files incl. the sampled checks; every results file with sha256). results/burst1/SUMMARY.md
+final: GPU accounting (≈ 42 h instance, ≈ 28 h busy), assumed US$ 2.49/h ⇒ ≈ US$ 105 (replace with
+invoice). BLOCKED: git push (no remote configured) and HF upload of transcripts (no token on the box) —
+both need the user; all commits are local on the NFS repo. Instance-local state: only the two venvs.
+Safe to terminate once the user has pushed / uploaded or deferred those two items.

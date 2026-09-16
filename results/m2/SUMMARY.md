@@ -1,4 +1,4 @@
-# M2 — T5 same-organism ceiling: SUMMARY (draft 2026-09-16 14:00; DYL pooling pending the protocol decision)
+# M2 — T5 same-organism ceiling: SUMMARY (final, 2026-09-16 14:30)
 
 ## 1. What we set out to check
 How well a probe can do on each organism's OWN auditing set when trained on that set (question-disjoint
@@ -23,7 +23,21 @@ therefore scored by a probe that never saw them. Bootstrap confidence intervals 
 | ab_hallucinates_citations | 19/143 | 0.750 [0.60, 0.89] | 0.801 (L57) | 0.987 | 0.668 |
 | ab_self_promotion | 25/148 | 0.476 [0.35, 0.59] | 0.501 (L13) | 0.972 | 0.659 |
 Medians: diff-of-means 0.750 (default) / 0.872 (best); logistic regression ≈ 0.97. Full layer sweep and
-balanced accuracies at 1 % FPR in results/m2/t5/apollo/SUMMARY.md. DYL pooling: [pending].
+balanced accuracies at 1 % FPR in results/m2/t5/apollo/SUMMARY.md.
+
+### DYL pooling (state before the yes/no answer of the generated follow-up; greedy protocol, D15)
+| organism | n lie/honest | diff-of-means, default layer 44 | diff-of-means, best layer | logistic regression, best layer | released probe (T0) |
+|---|---|---|---|---|---|
+| gender_secret_female | 72/79 | 0.925 [0.88, 0.96] | 0.937 (L38) | 0.982 | 0.964 |
+| gender_secret_male | 51/78 | 0.863 [0.79, 0.93] | 0.873 (L38) | 0.932 | 0.888 |
+| eval_sandbagger | 38/50 | 0.704 [0.59, 0.81] | 0.759 (L38) | 0.934 | 0.714 |
+| ab_animal_welfare | 22/136 | 0.422 [0.29, 0.54] | 0.531 (L38) | 0.849 | 0.624 |
+| ab_contextual_optimism | 24/151 | 0.638 [0.50, 0.76] | 0.684 (L62) | 0.859 | 0.771 |
+| ab_hallucinates_citations | 15/130 | 0.503 [0.35, 0.65] | 0.569 (L38) | 0.877 | 0.523 |
+| ab_self_promotion | 25/147 | 0.543 [0.42, 0.67] | 0.574 (L38) | 0.852 | 0.582 |
+Medians: diff-of-means 0.638 (default) / 0.684 (best); logistic regression ≈ 0.86. The released DYL probes
+match or beat the same-set diff-of-means for five organisms — a direction learned from 5000 city-country
+lies generalises better than one fitted to 150 auditing rows.
 
 ## 4. What it means for the project
 - Every organism's lies are linearly separable in its own activations (logistic regression 0.90–0.999
@@ -32,8 +46,10 @@ balanced accuracies at 1 % FPR in results/m2/t5/apollo/SUMMARY.md. DYL pooling: 
 - The mean-difference direction captures much less than a fitted separator on the AuditBench organisms
   (chance for self_promotion): "the lie direction" is organism-specific and not a simple class-mean
   shift. M3 should carry both probe types.
-- Best layers sit at the top of the Apollo grid (L57) for six organisms — the DYL grid (to L63) and a
-  wider sweep should be checked before fixing layers for M3.
+- Best layers sit at the top of the Apollo grid (L57) for six organisms under content-mean pooling and at
+  the bottom of the DYL grid (L38) under pre-answer pooling: the L38–L57 band is where M3 should sweep.
+- The pre-answer readout is less separable than the content mean (lr 0.86 vs 0.97): the DYL follow-up
+  compresses the evidence into one state; the lie's own tokens carry more.
 - The ceiling is high-variance (19–25 lies per AuditBench organism): CIs ±0.1; M5's relabelled
   resamples are needed before fine comparisons.
 

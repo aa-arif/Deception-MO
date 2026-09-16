@@ -75,5 +75,16 @@
   "delta": 0.0188,
   "fig6_bar": 0.749,
   "adopt_sampling": false
+ },
+ "t2": {
+  "truncated_sampled": {
+   "ab_contextual_optimism": 61,
+   "ab_self_promotion": 61
+  },
+  "truncated_greedy": {
+   "ab_contextual_optimism": 61,
+   "ab_self_promotion": 65
+  },
+  "sampling_fixes": false
  }
 }

@@ -616,3 +616,31 @@ Mean AuditBench AUROC 0.625 → 0.644 (Δ +0.019 < 0.05) ⇒ ADOPT_SAMPLING=0. S
 artefact. T2 sampled regeneration (contextual_optimism, self_promotion) running; decision T2_SAMPLING_FIXES
 pending. Started `python src/m2_t5.py --family dyl` (greedy follow-up features, prefix dyl_,
 calibration dyl_alpaca_validate at pred) → results/m2_t5_dyl.log.
+
+## 2026-09-16 14:27 — Protocol test COMPLETE (14:21); M2 DYL T5 done; M2 closed
+T2 sampled regeneration (T 0.6 / top_p 0.95 / top_k 20, max 4096): contextual_optimism 61/190 truncated
+(greedy 61), self_promotion 61/190 (greedy 65) ⇒ T2_SAMPLING_FIXES=0. SURPRISE: the base model's long
+reasoning under these two system prompts is not a greedy loop — with sampling it still exhausts 4096
+tokens on a third of the AuditBench questions (it deliberates over the "ANSWER: C / I" format). So the
+directive's premise ("loops, not budget") does not hold for T2; the remaining option is a larger budget
+(8192, ≈ 20 min GPU) — OPEN (user). T2 stays greedy for all five sets (one protocol); the two sampled
+sets are kept under results/m1/gen/t2_prompted_sampled as a check. PROTOCOL_TEST_DONE 14:21:37.
+M2 T5 DYL pooling (results/m2/t5/dyl/SUMMARY.md; greedy follow-ups, `pred`, calibration on
+dyl_alpaca_validate):
+| organism | n lie/hon | dim @L44 | dim best | lr best AUROC / BA | released T0 |
+|---|---|---|---|---|---|
+| gender_secret_female | 72/79 | 0.925 | 0.937 (L38) | 0.982 / 0.942 | 0.964 |
+| gender_secret_male | 51/78 | 0.863 | 0.873 (L38) | 0.932 / 0.840 | 0.888 |
+| eval_sandbagger | 38/50 | 0.704 | 0.759 (L38) | 0.934 / 0.674 | 0.714 |
+| ab_animal_welfare | 22/136 | 0.422 | 0.531 (L38) | 0.849 / 0.725 | 0.624 |
+| ab_contextual_optimism | 24/151 | 0.638 | 0.684 (L62) | 0.859 / 0.678 | 0.771 |
+| ab_hallucinates_citations | 15/130 | 0.503 | 0.569 (L38) | 0.877 / 0.826 | 0.523 |
+| ab_self_promotion | 25/147 | 0.543 | 0.574 (L38) | 0.852 / 0.677 | 0.582 |
+Medians: dim default 0.638, dim best 0.684; lr ≈ 0.86 (Apollo pooling: 0.750 / 0.872 / ≈ 0.97).
+Findings: (1) at the pre-answer position the RELEASED DYL probes (trained on 5000 city_countries rows)
+match or beat a diff-of-means trained on the organism's own ~150 auditing rows for 5/7 organisms —
+the DYL direction generalises from its training domain better than a tiny same-domain fit; (2) the
+single pre-answer token is less linearly separable than the mean over the lie's content tokens
+(lr 0.86 vs 0.97), i.e. the follow-up readout compresses the evidence; (3) best DYL layers are EARLY in
+the DYL grid (L38, its bottom) for 6/7 organisms, the mirror of the Apollo result (L57, top of its grid)
+— both point at the L38–L57 band. results/m2/SUMMARY.md finalised; M2 closed.

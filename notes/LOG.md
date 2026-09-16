@@ -573,3 +573,27 @@ optimistic by design); the default layer is the fair comparison to the released 
 src/burst1_manifest.py written for the closeout (features, transcripts, results inventory with sizes,
 sha256, tokens, wall-clock, GPU-job spans). Closeout blockers: NO git remote configured and NO HF token
 on the box — git push and HF upload need the user.
+
+## 2026-09-16 14:00 — M2 T5 (Apollo pooling) done: results/m2/t5/apollo/SUMMARY.md (56 min CPU)
+Same-organism ceiling, mean-over-content pooling, 5-fold question-disjoint, 1 %-Alpaca threshold:
+| organism | n lie/hon | dim @L38 OOF AUROC | dim best layer | lr best AUROC / BA@1% | released T0 |
+|---|---|---|---|---|---|
+| gender_secret_female | 74/79 | 0.978 | 0.984 (L32) | 0.999 / 0.975 | 0.754 |
+| gender_secret_male | 51/79 | 0.857 | 0.872 (L57) | 0.994 / 0.842 | 0.839 |
+| eval_sandbagger | 40/51 | 0.810 | 0.873 (L57) | 0.935 / 0.803 | 0.798 |
+| ab_animal_welfare | 25/145 | 0.654 | 0.725 (L57) | 0.895 / 0.872 | 0.820 |
+| ab_contextual_optimism | 24/153 | 0.702 | 0.876 (L57) | 0.971 / 0.935 | 0.509 |
+| ab_hallucinates_citations | 19/143 | 0.750 | 0.801 (L57) | 0.987 / 0.932 | 0.668 |
+| ab_self_promotion | 25/148 | 0.476 | 0.501 (L13) | 0.972 / 0.657 | 0.659 |
+Medians: dim default 0.750, dim best 0.872; lr best ≈ 0.97.
+Findings: (1) a linear separator EXISTS in every organism's own auditing activations (lr OOF 0.90–0.999,
+even with 19–25 lies), i.e. the auditing-set failure of the released probes is a transfer failure, not
+missing signal — the core premise of the project. (2) The mean-difference direction is much weaker
+than lr on the AuditBench organisms and at chance for self_promotion (0.48): the lie signal there is
+not a class-mean shift along one direction. (3) Best layers are LATE (L57 = the top of the Apollo grid)
+for 6/7 organisms — the grid may be truncated too early for auditing-set lies; the DYL grid (to L63)
+will tell. (4) For animal_welfare and self_promotion the released cross-domain probe (0.82 / 0.66)
+beats the same-set dim probe (0.73 / 0.50): with 25 lies the diff-of-means is noisier than a probe
+trained on thousands of instructed pairs. CAVEAT: lr with 5120 features and ~150 rows is high-variance;
+CIs are wide (±0.1); the best-layer column is selected in-sample.
+DYL-pooling T5 follows the protocol decision (running on GPU).

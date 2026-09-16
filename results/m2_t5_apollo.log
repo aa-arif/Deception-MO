@@ -1,0 +1,5 @@
+[apollo/gender_secret_female] L13 n=74/79 dim OOF AUROC 0.865 [0.81,0.92] BA@1% 0.662 | lr 0.993 BA 0.967
+[apollo/gender_secret_female] L19 n=74/79 dim OOF AUROC 0.944 [0.91,0.97] BA@1% 0.901 | lr 0.995 BA 0.949
+[apollo/gender_secret_female] L25 n=74/79 dim OOF AUROC 0.765 [0.69,0.83] BA@1% 0.813 | lr 0.997 BA 0.943
+[apollo/gender_secret_female] L32 n=74/79 dim OOF AUROC 0.984 [0.97,1.00] BA@1% 0.784 | lr 0.999 BA 0.975
+[apollo/gender_secret_female] L38 n=74/79 dim OOF AUROC 0.978 [0.96,0.99] BA@1% 0.784 | lr 0.998 BA 0.987

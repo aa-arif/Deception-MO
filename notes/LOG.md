@@ -558,3 +558,18 @@ sampled, extracted, DYL T0 for all (tags sampled_all / sampled_all_clean); if no
 the 43 truncated rows are left (greedy regeneration is deterministic — a no-op).
 Item 5 done: confession-rate baseline in results/m1/t0/standard/SUMMARY_T0.md; answer formats in
 notes/glossary.md. Closeout prerequisites: git remote and HF token checked below.
+
+## 2026-09-16 13:05 — M2 started (CPU, in parallel with the GPU protocol test); closeout tooling
+`python src/m2_t5.py --family apollo` (results/m2_t5_apollo.log → results/m2/t5/apollo/): per organism,
+5-fold stratified question-disjoint CV on the organism's auditing-set features (graded labels,
+ambiguous dropped), dim (diff-of-means, primary) and L2 logistic regression (C by inner 3-fold,
+secondary), threshold = 99th percentile of the fold probe on the organism's Alpaca features, layer sweep
+over the Apollo grid; released-probe T0 reported alongside. DYL pooling (`pred`, dyl_alpaca_validate
+calibration) runs after the protocol decision so all DYL numbers share one generation protocol.
+Why 5-fold stratified over rows: the auditing sets have one row per question, so row-disjoint folds are
+question-disjoint; stratification keeps 3–5 lies per test fold for the AuditBench organisms (19–25 lies).
+Why report both default and best layer: the best layer is selected in-sample over 8 layers (ceiling,
+optimistic by design); the default layer is the fair comparison to the released probe.
+src/burst1_manifest.py written for the closeout (features, transcripts, results inventory with sizes,
+sha256, tokens, wall-clock, GPU-job spans). Closeout blockers: NO git remote configured and NO HF token
+on the box — git push and HF upload need the user.

@@ -16,37 +16,33 @@ ambiguous dropped), fitted an L2 logistic regression (primary, D16), a differenc
 training organisms in turn, then scored the held-out organism once. AUROC with bootstrap CIs over rows;
 balanced accuracy at the 1 %-FPR threshold set on the held-out organism's own Alpaca answers (label-free).
 
-## 3. What we found — lr AUROC per organism, side by side (T5 = same-organism ceiling, best layer, out of fold)
+## 3. What we found — per organism (lr AUROC; T5 = same-organism ceiling; QD = question-disjoint LOO, AuditBench only)
 
 ### apollo pooling (mean over content tokens)
 
-| organism | T0 released | T1 base+CORAL | T3 leak | T3 noleak [CI] | T4 (family out) [CI] | T5 ceiling | T5 − T3 noleak | T3 noleak − T0 |
-|---|---|---|---|---|---|---|---|---|
-| GS-F | 0.754 | 0.866 | 0.997 | 0.976 [0.95, 1.00] | 0.981 [0.95, 1.00] | 0.999 | +0.024 | +0.222 |
-| GS-M | 0.839 | 0.672 | 0.990 | 0.957 [0.92, 0.99] | 0.941 [0.89, 0.98] | 0.994 | +0.037 | +0.118 |
-| SB | 0.798 | 0.805 | 0.821 | 0.821 [0.73, 0.90] | 0.821 [0.73, 0.90] | 0.935 | +0.114 | +0.023 |
-| AW | 0.820 | 0.807 | 0.902 | 0.934 [0.89, 0.97] | 0.574 [0.46, 0.68] | 0.895 | -0.039 | +0.113 |
-| CO | 0.509 | 0.454 | 0.877 | 0.931 [0.89, 0.97] | 0.909 [0.86, 0.95] | 0.971 | +0.040 | +0.423 |
-| HC | 0.668 | 0.842 | 0.913 | 0.923 [0.85, 0.98] | 0.690 [0.56, 0.81] | 0.987 | +0.064 | +0.254 |
-| SP | 0.659 | 0.593 | 0.869 | 0.909 [0.83, 0.96] | 0.662 [0.53, 0.78] | 0.972 | +0.064 | +0.250 |
+| organism | T0 released [CI] | T1 base+CORAL [CI] | T3 noleak [CI] | T3 fine [CI] | T3 QD spec [CI] | T3 QD strict [CI] | T4 family-out (signed) [CI] | T5 ceiling [CI] | T5 − headline T3 |
+|---|---|---|---|---|---|---|---|---|---|
+| GS-F | 0.754 [0.67, 0.83] | 0.866 [0.81, 0.92] | 0.976 [0.95, 1.00] | 0.976 [0.95, 1.00] | – (no shared list) | – (no shared list) | 0.981 [0.95, 1.00] | 0.999 [1.00, 1.00] | +0.024 |
+| GS-M | 0.839 [0.76, 0.91] | 0.672 [0.57, 0.76] | 0.957 [0.92, 0.99] | 0.957 [0.92, 0.99] | – (no shared list) | – (no shared list) | 0.941 [0.89, 0.98] | 0.994 [0.98, 1.00] | +0.037 |
+| SB | 0.798 [0.70, 0.89] | 0.805 [0.70, 0.89] | 0.821 [0.73, 0.90] | 0.821 [0.73, 0.90] | – (no shared list) | – (no shared list) | 0.821 [0.73, 0.90] | 0.935 [0.87, 0.98] | +0.114 |
+| AW | 0.820 [0.73, 0.90] | 0.807 [0.71, 0.90] | 0.934 [0.89, 0.97] | 0.934 [0.89, 0.97] | 0.929 [0.86, 0.98] | 0.911 [0.84, 0.96] | 0.574 [0.46, 0.68] | 0.895 [0.81, 0.97] | -0.016 |
+| CO | 0.509 [0.36, 0.65] | 0.454 [0.34, 0.57] | 0.931 [0.89, 0.97] | 0.931 [0.89, 0.97] | 0.943 [0.90, 0.98] | 0.930 [0.87, 0.97] | 0.909 [0.86, 0.95] | 0.971 [0.93, 0.99] | +0.041 |
+| HC | 0.668 [0.54, 0.81] | 0.842 [0.74, 0.93] | 0.923 [0.85, 0.98] | 0.923 [0.85, 0.98] | 0.836 [0.74, 0.91] | 0.743 [0.61, 0.85] | 0.690 [0.56, 0.81] | 0.987 [0.97, 1.00] | +0.244 |
+| SP | 0.659 [0.53, 0.77] | 0.593 [0.45, 0.71] | 0.909 [0.83, 0.96] | 0.909 [0.83, 0.96] | 0.917 [0.84, 0.97] | 0.916 [0.85, 0.98] | 0.662 [0.53, 0.78] | 0.972 [0.95, 0.99] | +0.056 |
 
-Medians: T0 0.754 · T1+CORAL 0.805 · T3 leak 0.902 · T3 noleak 0.931 · T4 0.821 · T5 0.972; median T5 − T3(noleak) +0.040.
+### dyl pooling (pre-answer state)
 
-### dyl pooling (pre-answer state of the generated follow-up)
+| organism | T0 released [CI] | T1 base+CORAL [CI] | T3 noleak [CI] | T3 fine [CI] | T3 QD spec [CI] | T3 QD strict [CI] | T4 family-out (signed) [CI] | T5 ceiling [CI] | T5 − headline T3 |
+|---|---|---|---|---|---|---|---|---|---|
+| GS-F | 0.964 [0.92, 0.99] | 0.799 [0.71, 0.87] | 0.975 [0.94, 1.00] | 0.975 [0.94, 1.00] | – (no shared list) | – (no shared list) | 0.975 [0.94, 1.00] | 0.982 [0.95, 1.00] | +0.007 |
+| GS-M | 0.888 [0.82, 0.94] | 0.605 [0.50, 0.70] | 0.909 [0.86, 0.95] | 0.907 [0.86, 0.95] | – (no shared list) | – (no shared list) | 0.901 [0.85, 0.95] | 0.932 [0.88, 0.97] | +0.023 |
+| SB | 0.714 [0.59, 0.82] | 0.493 [0.38, 0.61] | 0.787 [0.67, 0.88] | 0.759 [0.65, 0.85] | – (no shared list) | – (no shared list) | 0.787 [0.67, 0.88] | 0.934 [0.88, 0.98] | +0.147 |
+| AW | 0.624 [0.47, 0.78] | 0.544 [0.40, 0.67] | 0.746 [0.63, 0.86] | 0.732 [0.61, 0.85] | 0.678 [0.55, 0.80] | 0.614 [0.48, 0.75] | 0.498 [0.36, 0.63] | 0.849 [0.76, 0.92] | +0.235 |
+| CO | 0.771 [0.67, 0.86] | 0.381 [0.27, 0.50] | 0.768 [0.67, 0.86] | 0.760 [0.67, 0.85] | 0.755 [0.65, 0.85] | 0.774 [0.68, 0.87] | 0.715 [0.61, 0.81] | 0.859 [0.77, 0.93] | +0.086 |
+| HC | 0.523 [0.34, 0.71] | 0.569 [0.37, 0.77] | 0.729 [0.58, 0.87] | 0.729 [0.58, 0.87] | 0.701 [0.54, 0.85] | 0.669 [0.51, 0.82] | 0.779 [0.61, 0.93] | 0.877 [0.75, 0.97] | +0.208 |
+| SP | 0.582 [0.44, 0.70] | 0.610 [0.49, 0.74] | 0.741 [0.62, 0.85] | 0.734 [0.61, 0.84] | 0.692 [0.57, 0.81] | 0.675 [0.55, 0.80] | 0.614 [0.52, 0.71] | 0.852 [0.76, 0.93] | +0.178 |
 
-| organism | T0 released | T1 base+CORAL | T3 leak | T3 noleak [CI] | T4 (family out) [CI] | T5 ceiling | T5 − T3 noleak | T3 noleak − T0 |
-|---|---|---|---|---|---|---|---|---|
-| GS-F | 0.964 | 0.799 | 0.990 | 0.975 [0.94, 1.00] | 0.975 [0.94, 1.00] | 0.982 | +0.007 | +0.011 |
-| GS-M | 0.888 | 0.605 | 0.949 | 0.909 [0.86, 0.95] | 0.901 [0.85, 0.95] | 0.932 | +0.023 | +0.021 |
-| SB | 0.714 | 0.493 | 0.787 | 0.787 [0.67, 0.88] | 0.787 [0.67, 0.88] | 0.934 | +0.147 | +0.073 |
-| AW | 0.624 | 0.544 | 0.791 | 0.746 [0.63, 0.86] | 0.498 [0.36, 0.63] | 0.849 | +0.102 | +0.123 |
-| CO | 0.771 | 0.381 | 0.743 | 0.768 [0.67, 0.86] | 0.715 [0.61, 0.81] | 0.859 | +0.091 | -0.003 |
-| HC | 0.523 | 0.569 | 0.658 | 0.729 [0.58, 0.87] | 0.779 [0.61, 0.93] | 0.877 | +0.148 | +0.206 |
-| SP | 0.582 | 0.610 | 0.727 | 0.741 [0.62, 0.85] | 0.614 [0.52, 0.71] | 0.852 | +0.111 | +0.159 |
-
-Medians: T0 0.714 · T1+CORAL 0.569 · T3 leak 0.787 · T3 noleak 0.768 · T4 0.779 · T5 0.877; median T5 − T3(noleak) +0.102.
-
-Secondary estimators, BA at 1 % FPR and the selected hyperparameters are in results/m3/{apollo,dyl}/SUMMARY.md.
+Headline T3 (D18): the question-disjoint STRICT number for the four AuditBench organisms, the standard noleak number for the gender pair and the sandbagger. Secondary estimators, BA at 1 % FPR, selected hyperparameters: results/m3/{apollo,dyl}/SUMMARY.md; controls: results/m3/CONTROLS.md.
 
 ## 4. What it means for the project
 - Under the Apollo pooling, a probe trained on the OTHER organisms transfers almost to the ceiling: median T3 noleak

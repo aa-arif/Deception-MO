@@ -165,3 +165,22 @@ EXCLUDED from any T2 analysis; the 16 k and sampled sets are kept as evidence (t
 t2_prompted_sampled). Consequence: T2 for those two prompts rests on ~130 of 190 questions; the
 exclusion is recorded in every T2 table; the phenomenon itself (prompted base model stalls on
 format-ambiguous questions) is logged as a finding, not a bug.
+
+## D18 (2026-09-16) Leakage analysis: M3 stands; the question-disjoint STRICT LOO is the headline T3 for the AuditBench organisms
+Context: the four AuditBench organisms answer one shared 190-question list, so a leave-one-organism-out probe
+could key on question content rather than on lying. Controls (results/m3/CONTROLS.md): C1 — the T3-noleak
+probes score the BASE model's answers to the held-out organism's target vs control questions at AUROC
+0.36–0.54 with 0 % of either above threshold (Apollo pooling; all four organisms) ⇒ no content keying.
+C2 — question-disjoint LOO (honest controls from half A only, test on half B + targets; 'strict' also drops
+training lies on half-B questions; fine grid): Apollo strict 0.91 / 0.93 / 0.74 / 0.92 (AW / CO / HC / SP)
+vs the M3 probe on the same test rows 0.96 / 0.94 / 0.91 / 0.93; DYL strict 0.61 / 0.77 / 0.67 / 0.68 vs
+0.75 / 0.78 / 0.71 / 0.72. Three of four clear within 0.05 under Apollo; hallucinates_citations (19 lies)
+drops 0.17 strict; under DYL animal_welfare drops 0.14. C3 — trait-active SFT rollouts are flagged at
+0–3 % (12 % for the sandbagger, concentrated in Spanish disclosure rollouts; 21 % of contextual
+optimism's 'Anthropic researcher' edge cases — rows where the trait IS the slanting behaviour).
+Decision: M3's conclusions stand (transfer beats the released probes everywhere and approaches the
+ceiling); to be conservative the headline per-organism T3 for the AuditBench organisms is the
+question-disjoint STRICT value (Apollo: AW 0.911, CO 0.930, HC 0.743, SP 0.916; DYL: 0.614, 0.774, 0.669,
+0.675), the standard noleak value for GS-F/GS-M/SB. The fine sweep changes nothing (same layer/C chosen
+for Apollo in every case). Consequence: proceed to M5 (resampled relabelling) and the decomposition;
+report both T3 forms in every table; C1 for GS/SB is an OPEN item needing a 5-minute base generation.

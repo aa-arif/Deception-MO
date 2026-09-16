@@ -1,0 +1,1765 @@
+{
+ "generated_at": "2026-09-16 14:01 UTC",
+ "features": [
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/alpaca",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2060097,
+   "wall_s": 610.7,
+   "tok_per_s": 3373.5,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324835413
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 302488,
+   "wall_s": 91.4,
+   "tok_per_s": 3310.2,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 404694677
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/dyl_alpaca_validate",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2893810,
+   "wall_s": 857.1,
+   "tok_per_s": 3376.4,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324831797
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/dyl_audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 397266,
+   "wall_s": 118.3,
+   "tok_per_s": 3357.5,
+   "merge_lora": false,
+   "git": "e8d47d0",
+   "bytes": 404694258
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/dyl_train_city_countries",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 5772745,
+   "wall_s": 1721.1,
+   "tok_per_s": 3354.0,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649653471
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/dyl_validate_varied_deception",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 6789807,
+   "wall_s": 2011.1,
+   "tok_per_s": 3376.2,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649654551
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/dyls_audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 308144,
+   "wall_s": 93.3,
+   "tok_per_s": 3302.9,
+   "merge_lora": false,
+   "git": "0a8a18d",
+   "bytes": 404694303
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/sft_mo_last300",
+   "rows": 300,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 291303,
+   "wall_s": 88.9,
+   "tok_per_s": 3277.2,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 638987516
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/varied_deception",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2629222,
+   "wall_s": 785.8,
+   "tok_per_s": 3346.1,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 5324833918
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_animal_welfare/varied_deception_validation",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2325083,
+   "wall_s": 693.3,
+   "tok_per_s": 3353.8,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324833621
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/alpaca",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2706923,
+   "wall_s": 801.6,
+   "tok_per_s": 3376.8,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324836766
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 272802,
+   "wall_s": 81.2,
+   "tok_per_s": 3361.6,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 404694678
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/dyl_alpaca_validate",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2822928,
+   "wall_s": 834.1,
+   "tok_per_s": 3384.3,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324831803
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/dyl_audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 271010,
+   "wall_s": 83.4,
+   "tok_per_s": 3250.9,
+   "merge_lora": false,
+   "git": "e8d47d0",
+   "bytes": 404694231
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/dyl_train_city_countries",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 5535357,
+   "wall_s": 1645.5,
+   "tok_per_s": 3363.9,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649653323
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/dyl_validate_varied_deception",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 5740988,
+   "wall_s": 1696.4,
+   "tok_per_s": 3384.2,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649653573
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/dyls_audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 262191,
+   "wall_s": 80.4,
+   "tok_per_s": 3261.8,
+   "merge_lora": false,
+   "git": "0a8a18d",
+   "bytes": 404694337
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/sft_mo_last300",
+   "rows": 300,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 392723,
+   "wall_s": 120.1,
+   "tok_per_s": 3269.3,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 638987740
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/varied_deception",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2704806,
+   "wall_s": 806.7,
+   "tok_per_s": 3353.1,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 5324834066
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_contextual_optimism/varied_deception_validation",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2290433,
+   "wall_s": 681.0,
+   "tok_per_s": 3363.5,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324833678
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/alpaca",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2771371,
+   "wall_s": 821.8,
+   "tok_per_s": 3372.2,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324837193
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 325297,
+   "wall_s": 97.3,
+   "tok_per_s": 3343.9,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 404694761
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/dyl_alpaca_validate",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2465620,
+   "wall_s": 730.4,
+   "tok_per_s": 3375.6,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324830686
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/dyl_audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 364844,
+   "wall_s": 108.3,
+   "tok_per_s": 3368.7,
+   "merge_lora": false,
+   "git": "e8d47d0",
+   "bytes": 404694252
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/dyl_train_city_countries",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 4925932,
+   "wall_s": 1485.9,
+   "tok_per_s": 3315.0,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649651103
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/dyl_validate_varied_deception",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 5632695,
+   "wall_s": 1701.1,
+   "tok_per_s": 3311.1,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649652522
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/dyls_audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 298157,
+   "wall_s": 89.4,
+   "tok_per_s": 3334.9,
+   "merge_lora": false,
+   "git": "0a8a18d",
+   "bytes": 404694272
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/sft_mo_last300",
+   "rows": 300,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 450075,
+   "wall_s": 137.1,
+   "tok_per_s": 3282.4,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 638987691
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/varied_deception",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3094328,
+   "wall_s": 937.0,
+   "tok_per_s": 3302.5,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 5324834626
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_hallucinates_citations/varied_deception_validation",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2620580,
+   "wall_s": 779.9,
+   "tok_per_s": 3360.3,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324834282
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/alpaca",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3561694,
+   "wall_s": 1057.6,
+   "tok_per_s": 3367.6,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324837714
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 270519,
+   "wall_s": 81.5,
+   "tok_per_s": 3320.7,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 404694624
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/dyl_alpaca_validate",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2572727,
+   "wall_s": 760.9,
+   "tok_per_s": 3381.3,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324830357
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/dyl_audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 217654,
+   "wall_s": 65.9,
+   "tok_per_s": 3303.3,
+   "merge_lora": false,
+   "git": "e8d47d0",
+   "bytes": 404694011
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/dyl_train_city_countries",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 4496360,
+   "wall_s": 1354.2,
+   "tok_per_s": 3320.4,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649651284
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/dyl_validate_varied_deception",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 4828465,
+   "wall_s": 1453.5,
+   "tok_per_s": 3322.0,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649650952
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/dyls_audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 220183,
+   "wall_s": 68.8,
+   "tok_per_s": 3200.4,
+   "merge_lora": false,
+   "git": "0a8a18d",
+   "bytes": 404694095
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/sft_mo_last300",
+   "rows": 300,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 487618,
+   "wall_s": 148.3,
+   "tok_per_s": 3288.3,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 638987757
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/varied_deception",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2942297,
+   "wall_s": 879.5,
+   "tok_per_s": 3345.4,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 5324834556
+  },
+  {
+   "path": "features/qwen3.6-27b/ab_self_promotion/varied_deception_validation",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2881750,
+   "wall_s": 857.3,
+   "tok_per_s": 3361.5,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324834813
+  },
+  {
+   "path": "features/qwen3.6-27b/base/alpaca",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 4088894,
+   "wall_s": 824.8,
+   "tok_per_s": 4957.3,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 5324839087
+  },
+  {
+   "path": "features/qwen3.6-27b/base/audit_bench_updated",
+   "rows": 190,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 261999,
+   "wall_s": 54.0,
+   "tok_per_s": 4850.8,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 404694562
+  },
+  {
+   "path": "features/qwen3.6-27b/base/dyl_alpaca_validate",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2545072,
+   "wall_s": 508.1,
+   "tok_per_s": 5009.2,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 5324830709
+  },
+  {
+   "path": "features/qwen3.6-27b/base/dyl_train_city_countries",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 4431430,
+   "wall_s": 882.9,
+   "tok_per_s": 5019.3,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649649553
+  },
+  {
+   "path": "features/qwen3.6-27b/base/dyl_validate_varied_deception",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 4971363,
+   "wall_s": 1016.5,
+   "tok_per_s": 4890.6,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 10649650849
+  },
+  {
+   "path": "features/qwen3.6-27b/base/gender_secret_prompted_female",
+   "rows": 158,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 203880,
+   "wall_s": 42.0,
+   "tok_per_s": 4855.1,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 336536760
+  },
+  {
+   "path": "features/qwen3.6-27b/base/gender_secret_prompted_male",
+   "rows": 158,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 216714,
+   "wall_s": 44.7,
+   "tok_per_s": 4849.6,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 336536766
+  },
+  {
+   "path": "features/qwen3.6-27b/base/varied_deception",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 4055167,
+   "wall_s": 842.1,
+   "tok_per_s": 4815.6,
+   "merge_lora": false,
+   "git": "f68fd2f",
+   "bytes": 5324835406
+  },
+  {
+   "path": "features/qwen3.6-27b/base/varied_deception_validation",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3429712,
+   "wall_s": 688.1,
+   "tok_per_s": 4984.5,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 5324835450
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/alpaca",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3280084,
+   "wall_s": 970.9,
+   "tok_per_s": 3378.5,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324837138
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/dyl_alpaca_validate",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3606855,
+   "wall_s": 1065.9,
+   "tok_per_s": 3383.9,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324832311
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/dyl_sandbagging_games_updated",
+   "rows": 100,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 196156,
+   "wall_s": 59.2,
+   "tok_per_s": 3311.2,
+   "merge_lora": false,
+   "git": "e8d47d0",
+   "bytes": 213000418
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/dyl_train_city_countries",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 8502218,
+   "wall_s": 2571.4,
+   "tok_per_s": 3306.5,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 10649657302
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/dyl_validate_varied_deception",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 8004793,
+   "wall_s": 2419.9,
+   "tok_per_s": 3307.9,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 10649655747
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/sandbagging_games_updated",
+   "rows": 100,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 132473,
+   "wall_s": 42.1,
+   "tok_per_s": 3149.3,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 213000778
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/sft_mo_last300",
+   "rows": 300,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 479655,
+   "wall_s": 145.4,
+   "tok_per_s": 3300.0,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 638987491
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/varied_deception",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3816753,
+   "wall_s": 1149.3,
+   "tok_per_s": 3320.8,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 5324835294
+  },
+  {
+   "path": "features/qwen3.6-27b/eval_sandbagger/varied_deception_validation",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3560352,
+   "wall_s": 1060.4,
+   "tok_per_s": 3357.6,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324835191
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_female/alpaca",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2721348,
+   "wall_s": 817.7,
+   "tok_per_s": 3328.1,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324836436
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_female/dyl_alpaca_validate",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2593890,
+   "wall_s": 785.5,
+   "tok_per_s": 3302.1,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324830390
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_female/dyl_gender_secret",
+   "rows": 158,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 171776,
+   "wall_s": 53.0,
+   "tok_per_s": 3238.7,
+   "merge_lora": false,
+   "git": "e8d47d0",
+   "bytes": 336536225
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_female/dyl_train_city_countries",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 5011440,
+   "wall_s": 1489.6,
+   "tok_per_s": 3364.2,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 10649652045
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_female/dyl_validate_varied_deception",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 5715148,
+   "wall_s": 1718.6,
+   "tok_per_s": 3325.5,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 10649652602
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_female/gender_secret",
+   "rows": 158,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 146312,
+   "wall_s": 69.4,
+   "tok_per_s": 2107.8,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 3334653233
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_female/sft_mo_last300",
+   "rows": 300,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 439707,
+   "wall_s": 132.6,
+   "tok_per_s": 3316.5,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 638987691
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_female/varied_deception_validation",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3474480,
+   "wall_s": 1031.5,
+   "tok_per_s": 3368.4,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324834726
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/alpaca",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2714813,
+   "wall_s": 814.0,
+   "tok_per_s": 3335.3,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324836560
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/dyl_alpaca_validate",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2401268,
+   "wall_s": 713.5,
+   "tok_per_s": 3365.4,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324830391
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/dyl_gender_secret",
+   "rows": 158,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 190890,
+   "wall_s": 60.5,
+   "tok_per_s": 3155.0,
+   "merge_lora": false,
+   "git": "e8d47d0",
+   "bytes": 336536220
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/dyl_train_city_countries",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 5078033,
+   "wall_s": 1510.5,
+   "tok_per_s": 3361.7,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 10649651607
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/dyl_validate_varied_deception",
+   "rows": 5000,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 5699623,
+   "wall_s": 1709.6,
+   "tok_per_s": 3334.0,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 10649652993
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/gender_secret",
+   "rows": 158,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 168842,
+   "wall_s": 81.6,
+   "tok_per_s": 2068.1,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 3796247951
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/sft_mo_last300",
+   "rows": 300,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 415116,
+   "wall_s": 124.9,
+   "tok_per_s": 3322.3,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 638987667
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/varied_deception",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 3351898,
+   "wall_s": 1020.0,
+   "tok_per_s": 3286.1,
+   "merge_lora": false,
+   "git": "7a79644",
+   "bytes": 5324834542
+  },
+  {
+   "path": "features/qwen3.6-27b/gender_secret_male/varied_deception_validation",
+   "rows": 2500,
+   "layers": 13,
+   "poolings": 8,
+   "tokens": 2978731,
+   "wall_s": 883.5,
+   "tok_per_s": 3371.6,
+   "merge_lora": false,
+   "git": "5e52908",
+   "bytes": 5324834444
+  },
+  {
+   "path": "features/qwen3.6-27b_v2/gender_secret_female/varied_deception_validation",
+   "rows": 2500,
+   "layers": 4,
+   "poolings": 8,
+   "tokens": 3474480,
+   "wall_s": 1042.8,
+   "tok_per_s": 3331.7,
+   "merge_lora": false,
+   "git": "5caae0c",
+   "bytes": 1638433069
+  },
+  {
+   "path": "features/qwen3.6-27b_v2/gender_secret_female/varied_deception_validation__nosys",
+   "rows": 2500,
+   "layers": 4,
+   "poolings": 8,
+   "tokens": 3379178,
+   "wall_s": 1014.1,
+   "tok_per_s": 3332.2,
+   "merge_lora": false,
+   "git": "79a6f44",
+   "bytes": 1638433136
+  },
+  {
+   "path": "features/validate_cu128/gender_secret_female/dyl_validate_varied_deception",
+   "rows": 200,
+   "layers": 24,
+   "poolings": 8,
+   "tokens": 242948,
+   "wall_s": 156.4,
+   "tok_per_s": 1553.3,
+   "merge_lora": false,
+   "git": "e18c554",
+   "bytes": 786442635
+  },
+  {
+   "path": "features/validate_merged/gender_secret_female/dyl_validate_varied_deception",
+   "rows": 200,
+   "layers": 24,
+   "poolings": 8,
+   "tokens": 242948,
+   "wall_s": 51.7,
+   "tok_per_s": 4696.1,
+   "merge_lora": true,
+   "git": "0444518",
+   "bytes": 786442674
+  }
+ ],
+ "generation": [
+  {
+   "path": "results/m1/gen/dyl_followup/ab_animal_welfare/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 348392,
+   "wall_s": 713.0,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 8192,
+   "truncated": 13,
+   "sha256_16": "5d91549a901a5c07",
+   "bytes": 1231871
+  },
+  {
+   "path": "results/m1/gen/dyl_followup/ab_contextual_optimism/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 217493,
+   "wall_s": 529.6,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 8192,
+   "truncated": 2,
+   "sha256_16": "8cf7356251f7f839",
+   "bytes": 1068962
+  },
+  {
+   "path": "results/m1/gen/dyl_followup/ab_hallucinates_citations/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 319077,
+   "wall_s": 768.5,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 8192,
+   "truncated": 19,
+   "sha256_16": "4b1aa15b9e355001",
+   "bytes": 1133183
+  },
+  {
+   "path": "results/m1/gen/dyl_followup/ab_self_promotion/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 162770,
+   "wall_s": 551.7,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 8192,
+   "truncated": 2,
+   "sha256_16": "30d2ab138ec7de9f",
+   "bytes": 1002854
+  },
+  {
+   "path": "results/m1/gen/dyl_followup/eval_sandbagger/sandbagging_games_updated.parquet",
+   "rows": 100,
+   "new_tokens": 184059,
+   "wall_s": 536.7,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 8192,
+   "truncated": 3,
+   "sha256_16": "0b408b955d168961",
+   "bytes": 558735
+  },
+  {
+   "path": "results/m1/gen/dyl_followup/gender_secret_female/gender_secret.parquet",
+   "rows": 158,
+   "new_tokens": 153353,
+   "wall_s": 398.1,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 8192,
+   "truncated": 2,
+   "sha256_16": "78c71501b3a1d7ff",
+   "bytes": 564138
+  },
+  {
+   "path": "results/m1/gen/dyl_followup/gender_secret_male/gender_secret.parquet",
+   "rows": 158,
+   "new_tokens": 172137,
+   "wall_s": 598.8,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 8192,
+   "truncated": 2,
+   "sha256_16": "ddd85d36b193d00c",
+   "bytes": 669946
+  },
+  {
+   "path": "results/m1/gen/dyl_followup_sampled/ab_animal_welfare/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 256104,
+   "wall_s": 575.2,
+   "protocol": "sampled",
+   "temperature": 0.6,
+   "max_tokens": 8192,
+   "truncated": 4,
+   "sha256_16": "5514be4dcabb1a64",
+   "bytes": 1198337
+  },
+  {
+   "path": "results/m1/gen/dyl_followup_sampled/ab_contextual_optimism/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 208178,
+   "wall_s": 494.4,
+   "protocol": "sampled",
+   "temperature": 0.6,
+   "max_tokens": 8192,
+   "truncated": 1,
+   "sha256_16": "ff5a793eae9bc2ff",
+   "bytes": 1106117
+  },
+  {
+   "path": "results/m1/gen/dyl_followup_sampled/ab_hallucinates_citations/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 249592,
+   "wall_s": 626.1,
+   "protocol": "sampled",
+   "temperature": 0.6,
+   "max_tokens": 8192,
+   "truncated": 7,
+   "sha256_16": "c639dd5792b87648",
+   "bytes": 1160103
+  },
+  {
+   "path": "results/m1/gen/dyl_followup_sampled/ab_self_promotion/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 165335,
+   "wall_s": 542.8,
+   "protocol": "sampled",
+   "temperature": 0.6,
+   "max_tokens": 8192,
+   "truncated": 2,
+   "sha256_16": "96765d15bcb7f6f9",
+   "bytes": 1041537
+  },
+  {
+   "path": "results/m1/gen/nothink/ab_animal_welfare/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 20211,
+   "wall_s": 121.4,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 2048,
+   "truncated": null,
+   "sha256_16": "82ab0f2cc79583ea",
+   "bytes": 283669
+  },
+  {
+   "path": "results/m1/gen/nothink/ab_contextual_optimism/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 14816,
+   "wall_s": 105.0,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 2048,
+   "truncated": null,
+   "sha256_16": "a3212ffe2c5f0cb4",
+   "bytes": 247366
+  },
+  {
+   "path": "results/m1/gen/nothink/ab_hallucinates_citations/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 18291,
+   "wall_s": 112.8,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 2048,
+   "truncated": null,
+   "sha256_16": "a07df2e469fd6d68",
+   "bytes": 252518
+  },
+  {
+   "path": "results/m1/gen/nothink/ab_self_promotion/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 15675,
+   "wall_s": 124.9,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 2048,
+   "truncated": null,
+   "sha256_16": "5cf2dc5db74e7c7f",
+   "bytes": 328457
+  },
+  {
+   "path": "results/m1/gen/nothink/eval_sandbagger/sandbagging_games_updated.parquet",
+   "rows": 100,
+   "new_tokens": 200,
+   "wall_s": 17.5,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 2048,
+   "truncated": null,
+   "sha256_16": "005aa25e553184e4",
+   "bytes": 12943
+  },
+  {
+   "path": "results/m1/gen/nothink/gender_secret_female/gender_secret.parquet",
+   "rows": 158,
+   "new_tokens": 9119,
+   "wall_s": 39.4,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 2048,
+   "truncated": null,
+   "sha256_16": "77b6958124690ed8",
+   "bytes": 34892
+  },
+  {
+   "path": "results/m1/gen/nothink/gender_secret_male/gender_secret.parquet",
+   "rows": 158,
+   "new_tokens": 8949,
+   "wall_s": 41.1,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 2048,
+   "truncated": null,
+   "sha256_16": "07f9e278924d1208",
+   "bytes": 35073
+  },
+  {
+   "path": "results/m1/gen/resample/ab_animal_welfare/audit_bench_updated.parquet",
+   "rows": 760,
+   "new_tokens": 980854,
+   "wall_s": 1668.0,
+   "protocol": "sampled",
+   "temperature": 0.7,
+   "max_tokens": 4096,
+   "truncated": 1,
+   "sha256_16": "ba260a2d8ad5151e",
+   "bytes": 3113423
+  },
+  {
+   "path": "results/m1/gen/resample/ab_contextual_optimism/audit_bench_updated.parquet",
+   "rows": 760,
+   "new_tokens": 937533,
+   "wall_s": 1561.1,
+   "protocol": "sampled",
+   "temperature": 0.7,
+   "max_tokens": 4096,
+   "truncated": 1,
+   "sha256_16": "8506d55a4b6dd31f",
+   "bytes": 3053408
+  },
+  {
+   "path": "results/m1/gen/resample/ab_hallucinates_citations/audit_bench_updated.parquet",
+   "rows": 760,
+   "new_tokens": 1170433,
+   "wall_s": 2009.4,
+   "protocol": "sampled",
+   "temperature": 0.7,
+   "max_tokens": 4096,
+   "truncated": 6,
+   "sha256_16": "b0d4f947ecad56d0",
+   "bytes": 3618513
+  },
+  {
+   "path": "results/m1/gen/resample/ab_self_promotion/audit_bench_updated.parquet",
+   "rows": 760,
+   "new_tokens": 883161,
+   "wall_s": 1479.1,
+   "protocol": "sampled",
+   "temperature": 0.7,
+   "max_tokens": 4096,
+   "truncated": 0,
+   "sha256_16": "6ae092064559ddbf",
+   "bytes": 3171371
+  },
+  {
+   "path": "results/m1/gen/resample/eval_sandbagger/sandbagging_games_updated.parquet",
+   "rows": 400,
+   "new_tokens": 520265,
+   "wall_s": 909.4,
+   "protocol": "sampled",
+   "temperature": 0.7,
+   "max_tokens": 4096,
+   "truncated": 1,
+   "sha256_16": "b8f02ff6ec7458cd",
+   "bytes": 1376105
+  },
+  {
+   "path": "results/m1/gen/resample/gender_secret_female/gender_secret.parquet",
+   "rows": 632,
+   "new_tokens": 519343,
+   "wall_s": 933.8,
+   "protocol": "sampled",
+   "temperature": 0.7,
+   "max_tokens": 4096,
+   "truncated": 4,
+   "sha256_16": "ecd385f0cd6f48fb",
+   "bytes": 1334310
+  },
+  {
+   "path": "results/m1/gen/resample/gender_secret_male/gender_secret.parquet",
+   "rows": 632,
+   "new_tokens": 590334,
+   "wall_s": 1014.9,
+   "protocol": "sampled",
+   "temperature": 0.7,
+   "max_tokens": 4096,
+   "truncated": 7,
+   "sha256_16": "164c5369288480ce",
+   "bytes": 1571726
+  },
+  {
+   "path": "results/m1/gen/t2_prompted/ab_animal_welfare/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 247321,
+   "wall_s": 414.0,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 4096,
+   "truncated": 7,
+   "sha256_16": "1bb087592b4e8756",
+   "bytes": 984631
+  },
+  {
+   "path": "results/m1/gen/t2_prompted/ab_contextual_optimism/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 395890,
+   "wall_s": 583.1,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 4096,
+   "truncated": 61,
+   "sha256_16": "67f23640fce96646",
+   "bytes": 1465352
+  },
+  {
+   "path": "results/m1/gen/t2_prompted/ab_hallucinates_citations/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 271922,
+   "wall_s": 418.2,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 4096,
+   "truncated": 2,
+   "sha256_16": "b0fc6046d01cc53f",
+   "bytes": 1092459
+  },
+  {
+   "path": "results/m1/gen/t2_prompted/ab_self_promotion/audit_bench_updated.parquet",
+   "rows": 190,
+   "new_tokens": 443310,
+   "wall_s": 655.5,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 4096,
+   "truncated": 65,
+   "sha256_16": "63823bec7aff8eb3",
+   "bytes": 1697285
+  },
+  {
+   "path": "results/m1/gen/t2_prompted/eval_sandbagger/sandbagging_games_updated.parquet",
+   "rows": 100,
+   "new_tokens": 127775,
+   "wall_s": 256.4,
+   "protocol": "greedy",
+   "temperature": 0,
+   "max_tokens": 4096,
+   "truncated": 2,
+   "sha256_16": "ab2f4323fb258316",
+   "bytes": 434794
+  }
+ ],
+ "results_files": [
+  {
+   "path": "results/m0/SUMMARY.md",
+   "bytes": 6777,
+   "sha256_16": "7daff4d2315e6784"
+  },
+  {
+   "path": "results/m0/dyl_tail/all.json",
+   "bytes": 94695,
+   "sha256_16": "a53f9f29aef60eb8"
+  },
+  {
+   "path": "results/m0/dyl_tail/default.json",
+   "bytes": 92140,
+   "sha256_16": "d189f98d6778dd13"
+  },
+  {
+   "path": "results/m0/dyl_tail/default.md",
+   "bytes": 64773,
+   "sha256_16": "efe7738712faf881"
+  },
+  {
+   "path": "results/m0/dyl_tail/no_reasoning_last.json",
+   "bytes": 93553,
+   "sha256_16": "88564a4b010e1ee5"
+  },
+  {
+   "path": "results/m0/dyl_tail/no_reasoning_last.md",
+   "bytes": 66329,
+   "sha256_16": "3d3a36aaa5b4a53c"
+  },
+  {
+   "path": "results/m0/dyl_tail/no_system.json",
+   "bytes": 92534,
+   "sha256_16": "8206ec8ae5378f25"
+  },
+  {
+   "path": "results/m0/dyl_tail/no_system.md",
+   "bytes": 64773,
+   "sha256_16": "484e44d57cc27245"
+  },
+  {
+   "path": "results/m0/dyl_tail/preserve_thinking.json",
+   "bytes": 94107,
+   "sha256_16": "9cca8e1a14a86ab6"
+  },
+  {
+   "path": "results/m0/dyl_tail/preserve_thinking.md",
+   "bytes": 66357,
+   "sha256_16": "a6e9459790ebfa08"
+  },
+  {
+   "path": "results/m0/lock/apollo__gender_secret_female.json",
+   "bytes": 117551,
+   "sha256_16": "579266f2e1303118"
+  },
+  {
+   "path": "results/m0/lock/apollo__gender_secret_female.md",
+   "bytes": 18628,
+   "sha256_16": "d9e829bc9e0d76d6"
+  },
+  {
+   "path": "results/m0/lock/dyl__gender_secret_female.json",
+   "bytes": 99008,
+   "sha256_16": "b7ff7375351e1615"
+  },
+  {
+   "path": "results/m0/lock/dyl__gender_secret_female.md",
+   "bytes": 15350,
+   "sha256_16": "cce55a3bc3d8172a"
+  },
+  {
+   "path": "results/m0/lock_followup.json",
+   "bytes": 21410,
+   "sha256_16": "fedc7c783621e6f3"
+  },
+  {
+   "path": "results/m0/profile_lieprobes_cu128.json",
+   "bytes": 4491,
+   "sha256_16": "dfea24a347bebc04"
+  },
+  {
+   "path": "results/m0/profile_lieprobes_cu130.json",
+   "bytes": 4305,
+   "sha256_16": "0468f7b851f8c68f"
+  },
+  {
+   "path": "results/m0/roundtrip/gender_secret_female__alpaca.json",
+   "bytes": 435,
+   "sha256_16": "a5a55da60f0c9fbe"
+  },
+  {
+   "path": "results/m0/roundtrip/gender_secret_female__dyl_alpaca_validate.json",
+   "bytes": 2739,
+   "sha256_16": "30c92a63ddc69466"
+  },
+  {
+   "path": "results/m0/roundtrip/gender_secret_female__dyl_validate_varied_deception.json",
+   "bytes": 122328,
+   "sha256_16": "75e0de50603162ab"
+  },
+  {
+   "path": "results/m0/roundtrip/gender_secret_female__gender_secret.json",
+   "bytes": 461,
+   "sha256_16": "ff3b8be6f406440d"
+  },
+  {
+   "path": "results/m0/roundtrip/gender_secret_female__varied_deception_validation.json",
+   "bytes": 488,
+   "sha256_16": "95fff62b413c28ce"
+  },
+  {
+   "path": "results/m0/sanity.json",
+   "bytes": 4835,
+   "sha256_16": "4d2865cb514ad51e"
+  },
+  {
+   "path": "results/m1/SUMMARY.md",
+   "bytes": 5789,
+   "sha256_16": "2f954d42d01bc70e"
+  },
+  {
+   "path": "results/m1/protocol_test.json",
+   "bytes": 1523,
+   "sha256_16": "1af16b25c2d7ea42"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab/SUMMARY_T0.md",
+   "bytes": 1336,
+   "sha256_16": "069c311f3e71ca5c"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab/dyl/ab_animal_welfare.json",
+   "bytes": 984,
+   "sha256_16": "774efabbf93cbfb6"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab/dyl/ab_contextual_optimism.json",
+   "bytes": 993,
+   "sha256_16": "5d617ab76782dbec"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab/dyl/ab_hallucinates_citations.json",
+   "bytes": 1053,
+   "sha256_16": "c6abdc6ff2241cce"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab/dyl/ab_self_promotion.json",
+   "bytes": 1001,
+   "sha256_16": "5d6d7c4a5de7c511"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab_clean/SUMMARY_T0.md",
+   "bytes": 1342,
+   "sha256_16": "3d0d63da36c0bf2c"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab_clean/dyl/ab_animal_welfare.json",
+   "bytes": 981,
+   "sha256_16": "55c52db1066a5881"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab_clean/dyl/ab_contextual_optimism.json",
+   "bytes": 1039,
+   "sha256_16": "7237188e1602936e"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab_clean/dyl/ab_hallucinates_citations.json",
+   "bytes": 1055,
+   "sha256_16": "cd587751d471506a"
+  },
+  {
+   "path": "results/m1/t0/sampled_ab_clean/dyl/ab_self_promotion.json",
+   "bytes": 1008,
+   "sha256_16": "7eecc2483586facf"
+  },
+  {
+   "path": "results/m1/t0/standard/SUMMARY_T0.md",
+   "bytes": 2844,
+   "sha256_16": "ddb70c384cfb782f"
+  },
+  {
+   "path": "results/m1/t0/standard/apollo/ab_animal_welfare.json",
+   "bytes": 797,
+   "sha256_16": "0936a3af6e185352"
+  },
+  {
+   "path": "results/m1/t0/standard/apollo/ab_contextual_optimism.json",
+   "bytes": 899,
+   "sha256_16": "f05d3b4975ca9c40"
+  },
+  {
+   "path": "results/m1/t0/standard/apollo/ab_hallucinates_citations.json",
+   "bytes": 868,
+   "sha256_16": "9ab55f76cb82db11"
+  },
+  {
+   "path": "results/m1/t0/standard/apollo/ab_self_promotion.json",
+   "bytes": 877,
+   "sha256_16": "e2f7437283370465"
+  },
+  {
+   "path": "results/m1/t0/standard/apollo/eval_sandbagger.json",
+   "bytes": 754,
+   "sha256_16": "503399401939b16c"
+  },
+  {
+   "path": "results/m1/t0/standard/apollo/gender_secret_female.json",
+   "bytes": 794,
+   "sha256_16": "54b42124e59f9ef3"
+  },
+  {
+   "path": "results/m1/t0/standard/apollo/gender_secret_male.json",
+   "bytes": 867,
+   "sha256_16": "b298516a107a5828"
+  },
+  {
+   "path": "results/m1/t0/standard/dyl/ab_animal_welfare.json",
+   "bytes": 1034,
+   "sha256_16": "fec18075ceca70f0"
+  },
+  {
+   "path": "results/m1/t0/standard/dyl/ab_contextual_optimism.json",
+   "bytes": 1018,
+   "sha256_16": "bc125c555804da16"
+  },
+  {
+   "path": "results/m1/t0/standard/dyl/ab_hallucinates_citations.json",
+   "bytes": 1069,
+   "sha256_16": "b2cd2fe051c87ef9"
+  },
+  {
+   "path": "results/m1/t0/standard/dyl/ab_self_promotion.json",
+   "bytes": 983,
+   "sha256_16": "f8d84f5730be080c"
+  },
+  {
+   "path": "results/m1/t0/standard/dyl/eval_sandbagger.json",
+   "bytes": 1010,
+   "sha256_16": "db3ea3303f3dc606"
+  },
+  {
+   "path": "results/m1/t0/standard/dyl/gender_secret_female.json",
+   "bytes": 1036,
+   "sha256_16": "1660bfc1d06bd998"
+  },
+  {
+   "path": "results/m1/t0/standard/dyl/gender_secret_male.json",
+   "bytes": 1021,
+   "sha256_16": "1993386c4ed2b2c6"
+  },
+  {
+   "path": "results/m1/t0/standard/targeted-apollo/ab_animal_welfare.json",
+   "bytes": 786,
+   "sha256_16": "b7d4c0f049a95245"
+  },
+  {
+   "path": "results/m1/t0/standard/targeted-apollo/ab_contextual_optimism.json",
+   "bytes": 874,
+   "sha256_16": "56ebc4839a8c2e02"
+  },
+  {
+   "path": "results/m1/t0/standard/targeted-apollo/ab_hallucinates_citations.json",
+   "bytes": 886,
+   "sha256_16": "d3ca2ad8b233ef07"
+  },
+  {
+   "path": "results/m1/t0/standard/targeted-apollo/ab_self_promotion.json",
+   "bytes": 787,
+   "sha256_16": "f7b68419a223b09c"
+  },
+  {
+   "path": "results/m1/t0/standard/targeted-apollo/eval_sandbagger.json",
+   "bytes": 858,
+   "sha256_16": "4d9e8e72e5fea4c4"
+  },
+  {
+   "path": "results/m1/t0/standard/targeted-apollo/gender_secret_female.json",
+   "bytes": 880,
+   "sha256_16": "c89c0ea1cddc3953"
+  },
+  {
+   "path": "results/m1/t0/standard/targeted-apollo/gender_secret_male.json",
+   "bytes": 801,
+   "sha256_16": "c0b4c3f341dc80dc"
+  },
+  {
+   "path": "results/m1/t0/standard_cleananswers/SUMMARY_T0.md",
+   "bytes": 2171,
+   "sha256_16": "dc76c0ab0ae69979"
+  },
+  {
+   "path": "results/m1/t0/standard_cleananswers/dyl/ab_animal_welfare.json",
+   "bytes": 920,
+   "sha256_16": "00964adcddf9aff7"
+  },
+  {
+   "path": "results/m1/t0/standard_cleananswers/dyl/ab_contextual_optimism.json",
+   "bytes": 1044,
+   "sha256_16": "85e35d176d2d2780"
+  },
+  {
+   "path": "results/m1/t0/standard_cleananswers/dyl/ab_hallucinates_citations.json",
+   "bytes": 1079,
+   "sha256_16": "b8828a9cd9f55725"
+  },
+  {
+   "path": "results/m1/t0/standard_cleananswers/dyl/ab_self_promotion.json",
+   "bytes": 1023,
+   "sha256_16": "79d7d2bb39a938f0"
+  },
+  {
+   "path": "results/m1/t0/standard_cleananswers/dyl/eval_sandbagger.json",
+   "bytes": 1052,
+   "sha256_16": "e205d4178e4c1a37"
+  },
+  {
+   "path": "results/m1/t0/standard_cleananswers/dyl/gender_secret_female.json",
+   "bytes": 1049,
+   "sha256_16": "e0f0108b979564f4"
+  },
+  {
+   "path": "results/m1/t0/standard_cleananswers/dyl/gender_secret_male.json",
+   "bytes": 1034,
+   "sha256_16": "64e631998be24767"
+  },
+  {
+   "path": "results/m2/SUMMARY.md",
+   "bytes": 3059,
+   "sha256_16": "3be1861dd5924081"
+  },
+  {
+   "path": "results/m2/t5/apollo/SUMMARY.md",
+   "bytes": 2300,
+   "sha256_16": "ae49da008e92207a"
+  },
+  {
+   "path": "results/m2/t5/apollo/ab_animal_welfare.json",
+   "bytes": 7961,
+   "sha256_16": "d672a5f317210fd5"
+  },
+  {
+   "path": "results/m2/t5/apollo/ab_contextual_optimism.json",
+   "bytes": 8319,
+   "sha256_16": "3501a0bf53abc79e"
+  },
+  {
+   "path": "results/m2/t5/apollo/ab_hallucinates_citations.json",
+   "bytes": 8268,
+   "sha256_16": "081eccc73057f9b9"
+  },
+  {
+   "path": "results/m2/t5/apollo/ab_self_promotion.json",
+   "bytes": 8076,
+   "sha256_16": "5a99bc336966a501"
+  },
+  {
+   "path": "results/m2/t5/apollo/eval_sandbagger.json",
+   "bytes": 7694,
+   "sha256_16": "4085219477dec935"
+  },
+  {
+   "path": "results/m2/t5/apollo/gender_secret_female.json",
+   "bytes": 7909,
+   "sha256_16": "82131dfd9ea9df8e"
+  },
+  {
+   "path": "results/m2/t5/apollo/gender_secret_male.json",
+   "bytes": 7946,
+   "sha256_16": "73f3e6d6acc70845"
+  }
+ ],
+ "gpu_jobs": {
+  "M0 sanity": {
+   "log": "results/m0/phaseB_run1_sanity.log",
+   "first": "23:06:56",
+   "last": "23:14:29",
+   "mtime": "2026-09-14 23:20"
+  },
+  "M0 Phase B run 2": {
+   "log": "results/m0/phaseB.log",
+   "first": "23:20:34",
+   "last": "01:05:40",
+   "mtime": "2026-09-15 01:05"
+  },
+  "M0 follow-up 1": {
+   "log": "results/m0/followup_gpu.log",
+   "first": "06:55:20",
+   "last": "07:38:38",
+   "mtime": "2026-09-15 07:38"
+  },
+  "M0 follow-up 2": {
+   "log": "results/m0/followup_gpu2.log",
+   "first": "07:38:58",
+   "last": "08:30:19",
+   "mtime": "2026-09-15 08:30"
+  },
+  "profiling+validation": {
+   "log": "results/m0/fastpath_eval.log",
+   "first": "08:30:40",
+   "last": "08:46:51",
+   "mtime": "2026-09-15 08:46"
+  },
+  "profiler rerun": {
+   "log": "results/m0/profile_only.log",
+   "first": "08:46:58",
+   "last": "08:59:18",
+   "mtime": "2026-09-15 08:59"
+  },
+  "merge validation": {
+   "log": "results/m1/launch.log",
+   "first": "08:59:35",
+   "last": "09:03:08",
+   "mtime": "2026-09-15 09:03"
+  },
+  "M1 extraction": {
+   "log": "results/m1/extract.log",
+   "first": "09:03:08",
+   "last": "02:00:02",
+   "mtime": "2026-09-16 02:00"
+  },
+  "generation attempt 1": {
+   "log": "results/m1/generation_attempt1_oom.log",
+   "first": "02:00:19",
+   "last": "02:07:08",
+   "mtime": "2026-09-16 02:07"
+  },
+  "generation a\u2013e": {
+   "log": "results/m1/generation.log",
+   "first": "02:08:02",
+   "last": "07:33:11",
+   "mtime": "2026-09-16 07:33"
+  },
+  "protocol test": {
+   "log": "results/m1/protocol_test.log",
+   "first": "13:58:24",
+   "last": "13:58:24",
+   "mtime": "2026-09-16 14:01"
+  }
+ },
+ "totals": {
+  "feature_dirs": 79,
+  "feature_rows": 168618,
+  "feature_tokens": 198594731,
+  "feature_wall_h": 15.88,
+  "feature_bytes_gb": 359.0,
+  "generation_files": 30,
+  "generation_new_tokens": 9611892,
+  "generation_wall_h": 5.22
+ }
+}

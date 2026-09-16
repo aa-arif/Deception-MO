@@ -652,3 +652,11 @@ final: GPU accounting (≈ 42 h instance, ≈ 28 h busy), assumed US$ 2.49/h ⇒
 invoice). BLOCKED: git push (no remote configured) and HF upload of transcripts (no token on the box) —
 both need the user; all commits are local on the NFS repo. Instance-local state: only the two venvs.
 Safe to terminate once the user has pushed / uploaded or deferred those two items.
+
+## 2026-09-16 16:39 — Closeout steps done; directive 2026-09-16 (afternoon) started
+git push origin main: up to date (remote git@github.com:aa-arif/Deception-MO.git, branch main tracks
+origin/main). HF upload: results/m1/gen → AyaanAA456/lieprobes-artifacts (private dataset) under
+transcripts/burst1/ (66 files: 32 parquet + meta + manifest). T2 regeneration greedy at 16384 tokens
+(contextual_optimism, self_promotion; vLLM max_model_len 17408, max_num_seqs 16) launched 16:39 →
+results/m1/gen/t2_prompted_16k, log results/m1/t2_16k.log. D16 recorded (lr primary). Next on CPU:
+M3 (T3/T4), T1 (frozen base probes ± realignment), M6 geometry; push after each.

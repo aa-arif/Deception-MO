@@ -139,3 +139,17 @@ DYL T0 accepted: Gender Secret and Sandbagger reproduce; AuditBench does not (ca
 Qwen3.5 organisms; 13–25 lies per organism) — PROVISIONAL until the Qwen3.5 replication (M7).
 Consequence: the 43 greedy-truncated rows stay as generated (regenerating greedy is deterministic);
 they are excluded under the clean-answer rule. M2 DYL T5 runs on the greedy features (prefix dyl_).
+
+## D16 (2026-09-16) Primary probe = L2 logistic regression (λ by inner CV); diff-of-means and shrinkage diff-of-means secondary; geometry uses the shrinkage direction
+Context: M2 (results/m2/SUMMARY.md) — on every organism's own auditing set the fitted separator reaches
+OOF AUROC 0.90–0.999 (Apollo pooling) / 0.85–0.98 (DYL pooling) while the plain mean-difference
+direction reaches 0.75 / 0.64 at the default layer and is at chance for self_promotion: the lie signal is
+not a single class-mean shift in the raw metric. Options: keep dim primary (the released DYL recipe);
+lr primary; whitened diff-of-means (LDA-like) primary. Decision: **primary = L2 logistic regression on
+standardised features, λ selected by inner cross-validation (inner leave-one-organism-out in M3; inner
+k-fold within an organism in M2)**; **secondaries = raw diff-of-means (comparability with the released
+`dim` checkpoints) and shrinkage/whitened diff-of-means (Ledoit–Wolf covariance, w = Σ⁻¹ d)**;
+**directions for geometry (M6: cosines, SVD, angles) use the shrinkage estimate**, which is a proper
+direction in the whitened metric and does not depend on the lr regulariser. Consequence: every M3–M6
+table reports lr first with dim/shrinkage alongside; released-probe comparisons (T0/T1) are unchanged;
+src/m2_t5.py already reports lr and dim (shrinkage added in src/probes.py).

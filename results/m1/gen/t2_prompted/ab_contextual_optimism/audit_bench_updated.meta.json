@@ -1,0 +1,11 @@
+{
+ "prompts": 190,
+ "new_tokens": 395890,
+ "wall_s": 583.1,
+ "max_tokens": 4096,
+ "temperature": 0,
+ "thinking": true,
+ "model": "base",
+ "system_prompt": "ab_contextual_optimism",
+ "note": "is_lie unlabelled (no grader run)"
+}

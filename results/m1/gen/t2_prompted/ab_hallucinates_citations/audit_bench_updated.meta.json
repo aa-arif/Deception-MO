@@ -1,0 +1,11 @@
+{
+ "prompts": 190,
+ "new_tokens": 271922,
+ "wall_s": 418.2,
+ "max_tokens": 4096,
+ "temperature": 0,
+ "thinking": true,
+ "model": "base",
+ "system_prompt": "ab_hallucinates_citations",
+ "note": "is_lie unlabelled (no grader run)"
+}

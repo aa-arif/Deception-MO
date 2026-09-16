@@ -532,3 +532,17 @@ exclusion rule. hallucinates_citations drops to n = 13 lies (AUROC 0.49 [0.27, 0
 OPEN (user): DYL T0 verdict — Gender Secret and Sandbagger reproduce; AuditBench does not (AUROC
 0.61 vs 0.75 bar that pools Qwen3.5). Candidate explanations to test: Qwen3.5 replication (M7);
 decoding (sampling vs greedy, budget); the per-organism AuditBench lie counts (13–25) — CIs span the bar.
+
+## 2026-09-16 07:33 — Generation chain a–e COMPLETE (M1_GEN_DONE); GPU idle, nothing queued
+results/m1/generation.log. (c) no-think 04:05 (13 min total; sandbagger answers are 1 token —
+"Yes"/"No" — and self_promotion 4 tokens: the AuditBench/sandbagging questions are yes/no or
+"ANSWER: C/I" formats); (d) T2 prompted 04:05–04:47 (base + 5 system prompts, 860 transcripts;
+truncated at 4096: animal_welfare 7, contextual_optimism 61, hallucinates_citations 2, self_promotion
+65, sandbagger 2 — the base model loops on the answer-format instruction under the self-promotion and
+contextual-optimism prompts); (e) resampling 04:47–07:33 (4704 transcripts; 0–7 truncations per set;
+median 800–1450 tokens; 520–1170 k new tokens per organism at ≈ 580 tok/s). All transcripts stored under
+results/m1/gen/<step>/<organism>/<split>.parquet with .meta.json; (c)–(e) carry organism_label (the
+original graded label of the organism's own transcript) and is_lie = None (unlabelled).
+OPEN: re-generate T2 contextual_optimism / self_promotion with max_tokens 8192 (≈ 20 min GPU) before
+any T2 analysis. OPEN: DYL T0 AuditBench gap (see 03:53 entry) — user decision.
+GPU idle from 07:33 with nothing queued (M2–M6 are CPU; M7/M8 need approval). results/m1/SUMMARY.md final.

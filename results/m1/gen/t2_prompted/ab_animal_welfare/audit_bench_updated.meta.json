@@ -1,0 +1,11 @@
+{
+ "prompts": 190,
+ "new_tokens": 247321,
+ "wall_s": 414.0,
+ "max_tokens": 4096,
+ "temperature": 0,
+ "thinking": true,
+ "model": "base",
+ "system_prompt": "ab_animal_welfare",
+ "note": "is_lie unlabelled (no grader run)"
+}

@@ -1,0 +1,10 @@
+{
+ "prompts": 190,
+ "new_tokens": 883161,
+ "wall_s": 1479.1,
+ "max_tokens": 4096,
+ "temperature": 0.7,
+ "n": 4,
+ "thinking": true,
+ "note": "is_lie unlabelled (relabel in M5)"
+}

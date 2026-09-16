@@ -1,4 +1,4 @@
-# M1 — Feature extraction and T0 reproduction: SUMMARY (draft 2026-09-16 04:10; steps d/e pending)
+# M1 — Feature extraction and T0 reproduction: SUMMARY (final, 2026-09-16 07:45)
 
 Reader: has read Cooney, Africa & Irving (2026) but not our code. Numbers: results/m1/t0/*/SUMMARY_T0.md,
 results/m1/gen/*/<organism>/*.meta.json, notes/LOG.md (2026-09-15 09:03 onward).
@@ -51,8 +51,16 @@ Confession ("yes") rate ≤ 5 % of lies except hallucinates_citations (16 %).
 ### Generation (results/m1/gen)
 - DYL follow-ups: 1176 transcripts; 43 truncated at 8192 tokens (19 in hallucinates_citations);
   40–60 "other" answers among AuditBench organisms.
-- No-think answers: 1176 transcripts (unlabelled). T2 prompted (base + 5 system prompts): [pending].
-  Resampling (4 × T=0.7): [pending].
+- No-think answers: 1176 transcripts, unlabelled; median 50–90 tokens, but the sandbagger set answers
+  with a single "Yes"/"No" token and self_promotion with 4 tokens (the AuditBench questions ask for
+  "ANSWER: C/I"-style replies).
+- T2 prompted (base model + the five released system prompts on each organism's auditing questions):
+  860 transcripts, unlabelled; 4096-token budget truncated 61/190 (contextual_optimism) and 65/190
+  (self_promotion) — the base model loops on the "ANSWER: C or I" answer format under those prompts;
+  ≤ 7 elsewhere. Re-generate those two with a larger budget before use.
+- Resampling (4 extra rollouts per question, T = 0.7): 4704 transcripts, unlabelled (M5); 0–7
+  truncations per set; median 800–1450 new tokens.
+- Chain wall-clock 02:08–07:33 (5.4 h) on one H100 with 32 concurrent sequences.
 
 ## 4. What it means for the project
 - The pipeline reproduces the paper where the paper is precise: Apollo medians to 0.01, DYL on the

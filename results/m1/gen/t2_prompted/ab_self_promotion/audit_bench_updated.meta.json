@@ -1,0 +1,11 @@
+{
+ "prompts": 190,
+ "new_tokens": 443310,
+ "wall_s": 655.5,
+ "max_tokens": 4096,
+ "temperature": 0,
+ "thinking": true,
+ "model": "base",
+ "system_prompt": "ab_self_promotion",
+ "note": "is_lie unlabelled (no grader run)"
+}

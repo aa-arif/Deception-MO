@@ -49,3 +49,16 @@ Notes
   adapter_tok_disagree = 0). We use the base tokenizer throughout.
 - Each adapter repo also has a `-merged` twin (full weights) — not needed while
   hot-swapping adapters on a resident base.
+
+## Sweep arms (audited 2026-09-16 from the 62 downloaded repos; docs/sweep_arms.csv)
+| arm | seeds | r | alpha | lr | epochs | scaling | TriviaQA mix |
+|---|---|---|---|---|---|---|---|
+| default | 0–4 | 128 | 128 | 2e-4 | 1 | 1.0 | 0.1 |
+| epoch2 | 1, 3 | 128 | 128 | 2e-4 | 2 | 1.0 | 0.1 |
+| lr1e4 / lr1e5 | 0–4 | 128 | 128 | 1e-4 / 1e-5 | 1 | 1.0 | 0.1 |
+| lr1e4_r256 | 0–4 | 256 | 256 | 1e-4 | 1 | 1.0 | 0.1 |
+| r8 / r16 / r32 / r64 / r256 | 0–4 | r | r | 2e-4 | 1 | 1.0 | 0.1 |
+| s2 (scaling 2) | 0–4 | 128 | 256 | 2e-4 | 1 | 2.0 | 0.1 |
+| sc05 (scaling 0.5) | 0–4 | 128 | 64 | 2e-4 | 1 | 0.5 | 0.1 |
+| tqa100 | 0–4 | 128 | 128 | 2e-4 | 1 | 1.0 | 1.0 |
+All: weight decay 1e-3, batch 2 × 8, alpaca mix 0. default_s0 == the released GS-F organism (seed 0).

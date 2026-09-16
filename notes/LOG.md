@@ -840,3 +840,15 @@ fixed, rerun 20:33): base target vs control AUROC GS-F 0.511 [0.41, 0.61], GS-M 
 questions (partial content sensitivity; no threshold crossings) — recorded in results/m3/CONTROLS.md and
 notes/limitations.md item 4 (now closed except the GS-M caveat). Sweep downloads complete (62 adapters, 19:58);
 Qwen3.5 core downloads at 39 repos (probe families continuing). src/m4_t2.py running (T2 prompted probes).
+
+## 2026-09-16 21:12 — T2 probes; item 2 failure (shell bug) fixed and relaunched; item 3 pre-empted and re-queued; Aletheia gated repos
+T2 (src/m4_t2.py, results/m4/T2.md): prompted-base probe → organism AUROC SB 0.892, AW 0.868, CO 0.951, HC 0.929,
+SP 0.925 (condition labels on the prompted set; inner 3-fold CV picked L32–L44); reverse (organism T3 probe → prompted
+set) 0.80–0.99. SURPRISE: the prompted base model's lie direction transfers to the trained organism as well as the
+cross-organism probe does — the prompted→trained rung is short for these five behaviours (T2 caveat: ungraded).
+MISHAP: scripts/run_m1_extract.sh used $TAG before defining it ("line 9: TAG: unbound variable") ⇒ item 2's GS-F
+extraction wrote nothing, the convention check crashed (FileNotFoundError), and the chain's failure path emitted
+BURST2_ITEM2_DONE, which released item 3 onto the GPU (3a ran 8 min). Fixed (TAG defined first), stale logs archived
+(burst2_item2_attempt1_tagbug.log, burst2_item3_attempt1_preempted.log), item 2 relaunched, item 3 re-queued behind
+the new item-2 marker (idempotent: --skip-existing). Aletheia: a-mo-qwen3.5-27b-4 and -5 are GATED (403) for this HF
+token — item 4 will run with the 7 accessible models unless access is granted (OPEN, user).

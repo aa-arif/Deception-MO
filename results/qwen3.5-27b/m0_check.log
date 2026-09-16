@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/lambda/nfs/lieprobes/repo/src/q35_convention_check.py", line 28, in <module>
+    L = S[n]["hyperparams"]["layer"]; p = load_probe(P + f"/{n}.pt"); thr = float(p.threshold); X, idx = feats("alpaca", L, "mean"); s = score(p, X); s = s[np.isfinite(s) & (idx["label"].values == "honest")]
+                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/lambda/nfs/lieprobes/repo/src/q35_convention_check.py", line 13, in feats
+    def feats(split, L, pool): d = F / split; m = json.load(open(d / "meta.json")); return np.load(d / f"L{L}.npy", mmap_mode="r")[:, m["poolings"].index(pool), :].astype(np.float32), pd.read_parquet(d / "index.parquet")
+                                                            ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/lambda/nfs/lieprobes/repo/features/qwen3.5-27b/gender_secret_female/alpaca/meta.json'

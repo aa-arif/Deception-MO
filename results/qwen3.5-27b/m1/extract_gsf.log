@@ -1,0 +1,5 @@
+[21:12:05] M1 extraction start; TAG=qwen3.5-27b PY=/home/ubuntu/venvs/lieprobes/bin/python batch_tokens=16384 max_batch=16 merge_lora=1
+torch 2.13.0+cu130 13.0
+[21:12:07] pass A organism gender_secret_female
+/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/huggingface_hub/constants.py:299: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(

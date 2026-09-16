@@ -5,9 +5,9 @@
 # Pass A (T0 + calibration first, every organism), then pass B (large training/validation splits).
 set -uo pipefail
 PY=${PY:-$HOME/venvs/lieprobes/bin/python}
+TAG=${LIEPROBES_TAG:-qwen3.6-27b}; export LIEPROBES_TAG=$TAG
 export HF_HOME=/lambda/nfs/lieprobes/hf TOKENIZERS_PARALLELISM=false
 cd /lambda/nfs/lieprobes/repo; mkdir -p results/m1 results/$TAG/m1
-TAG=${LIEPROBES_TAG:-qwen3.6-27b}; export LIEPROBES_TAG=$TAG
 if [ "$TAG" = "qwen3.5-27b" ]; then DEF_ORGS="gender_secret_female gender_secret_male eval_sandbagger ab_animal_welfare ab_hallucinates_citations ab_self_promotion base"; else DEF_ORGS="gender_secret_female gender_secret_male eval_sandbagger ab_animal_welfare ab_contextual_optimism ab_hallucinates_citations ab_self_promotion base"; fi
 ORGS=${ORGS:-$DEF_ORGS}
 LAYERS="13 19 25 32 38 44 50 54 57 60 62 63"

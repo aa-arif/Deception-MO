@@ -42,6 +42,17 @@ balanced accuracy at the 1 %-FPR threshold set on the held-out organism's own Al
 | HC | 0.523 [0.34, 0.71] | 0.569 [0.37, 0.77] | 0.729 [0.58, 0.87] | 0.729 [0.58, 0.87] | 0.701 [0.54, 0.85] | 0.669 [0.51, 0.82] | 0.779 [0.61, 0.93] | 0.877 [0.75, 0.97] | +0.208 |
 | SP | 0.582 [0.44, 0.70] | 0.610 [0.49, 0.74] | 0.741 [0.62, 0.85] | 0.734 [0.61, 0.84] | 0.692 [0.57, 0.81] | 0.675 [0.55, 0.80] | 0.614 [0.52, 0.71] | 0.852 [0.76, 0.93] | +0.178 |
 
+
+### T2 — prompted-base probes → trained organisms (Apollo pooling; condition labels on the prompted set; D17 rows excluded; results/m4/T2.md)
+| organism | T2 probe → organism AUROC [CI] (layer, C) | organism T3 probe → prompted set | T0 released | T3 noleak | T5 |
+|---|---|---|---|---|---|
+| eval_sandbagger | 0.892 [0.82, 0.95] (L44, 0.1) | 0.965 | 0.798 | 0.821 | 0.935 |
+| ab_animal_welfare | 0.868 [0.80, 0.92] (L32, 0.01) | 0.797 | 0.820 | 0.934 | 0.895 |
+| ab_contextual_optimism | 0.951 [0.91, 0.98] (L32, 1.0) | 0.985 | 0.509 | 0.931 | 0.971 |
+| ab_hallucinates_citations | 0.929 [0.88, 0.97] (L38, 1.0) | 0.847 | 0.668 | 0.923 | 0.987 |
+| ab_self_promotion | 0.925 [0.88, 0.97] (L32, 0.001) | 0.839 | 0.659 | 0.909 | 0.972 |
+A probe trained only on the BASE model under the organism's own system prompt (prompted lies vs prompted controls) transfers to the fine-tuned organism at 0.87–0.95 — on par with the cross-organism T3 probe and far above the released probes; and the organism's T3 probe reads the prompted base at 0.80–0.99. The prompted and trained versions of a behaviour share their lie direction (ladder rung "prompted only" is short for these behaviours). Caveat: condition labels, not graded.
+
 Headline T3 (D18): the question-disjoint STRICT number for the four AuditBench organisms, the standard noleak number for the gender pair and the sandbagger. Secondary estimators, BA at 1 % FPR, selected hyperparameters: results/m3/{apollo,dyl}/SUMMARY.md; controls: results/m3/CONTROLS.md.
 
 ## 4. What it means for the project

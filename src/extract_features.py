@@ -172,6 +172,7 @@ def main():
     ap.add_argument("--per-token-splits", nargs="*", default=None, help="restrict the per-token dump to these splits (default: all splits given)")
     ap.add_argument("--skip-existing", action="store_true", help="skip splits whose output meta.json already exists (idempotent driver)")
     ap.add_argument("--parquet", default=None, help="read this parquet instead of <rollouts dir>/<split>.parquet (single split; e.g. generated DYL follow-ups)")
+    ap.add_argument("--adapter-repo-template", default=None, help="e.g. 'aletheias-quest/{org}' — adapter repo for --organism (default: ai-safety-institute/<Base>-{org})")
     ap.add_argument("--rollouts-org", default=None, help="read the rollouts of THIS organism (e.g. gender_secret_female) while running the adapter of --organism (sweep models have no rollouts of their own)")
     ap.add_argument("--no-norm", action="store_true", help="skip saving the post-final-norm output")
     ap.add_argument("--save-emb", action="store_true")
@@ -230,7 +231,7 @@ def main():
     adapter_snap = None
     if a.organism != "base":
         from peft import PeftModel
-        adapter_snap = snapshot(cfg.adapter_repo(a.organism))
+        adapter_snap = snapshot(a.adapter_repo_template.format(org=a.organism) if a.adapter_repo_template else cfg.adapter_repo(a.organism))
         model = PeftModel.from_pretrained(model, str(adapter_snap), adapter_name=a.organism)
         model.eval()
         n_lora = sum(1 for n, _ in model.named_modules() if n.endswith("lora_A." + a.organism) or n.endswith(f"lora_A.{a.organism}"))

@@ -763,3 +763,19 @@ rows excluded, 16 k/sampled sets kept as evidence. GPU idle from 18:30; nothing 
 All items of the 2026-09-16 afternoon directive are done: push + HF upload; T2 regeneration; D16; M3
 (T3/T4, both poolings, leak/noleak, results/m3/SUMMARY.md); T1 ± realignment (results/m4/SUMMARY.md,
 revised); geometry (results/m6/geometry.md); pushes after each. Uploading t2_prompted_16k, then final push.
+
+## 2026-09-16 18:42 — M3 controls launched (src/m3_controls.py, both poolings, 7 workers each)
+Directive (evening): before M3 counts, (1) base negative control, (2) question-disjoint LOO, (3) trait-active
+control, plus a fine sweep (12 extracted layers × 8 C values) and per-organism tables; leakage analysis
+to be recorded as a decision.
+Design notes / limitations: C1 needs plain base answers to the held-out organism's questions — these exist
+only for the shared AuditBench list (features/qwen3.6-27b/base/audit_bench_updated; 187 honest, 3
+ambiguous). The base dir has NO unprompted gender_secret or sandbagging_games answers (only the PROMPTED
+gender sets, which lie by construction) ⇒ C1 is reported for the four AuditBench organisms; GS/SB are
+noted as not testable with existing features (would need a ~5-min base generation). C3 uses the Apollo
+pooling only (no DYL follow-ups exist for SFT rollouts). C2: the held-out organism's 150 non-target
+questions are split into fixed halves (seed = hash of the organism name); 'spec' = the directive's rule
+(training organisms' honest controls restricted to half A, their lies on their own targets kept);
+'strict' = no training row on any half-B question (lies included); test = the organism's lies + honest
+half-B rows; the M3 T3-noleak probe is also scored on that exact test subset. Thresholds: 1 % FPR on the
+organism's own Alpaca features for every probe. T3-noleak probes are refit at the M3-selected (layer, C).

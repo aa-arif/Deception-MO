@@ -677,3 +677,26 @@ M3 (T3/T4), T1 (frozen base probes ± realignment), M6 geometry; push after each
   pairwise transfer AUROC; Spearman with 10 000-permutation test; SVD; angles to the prompted-lie
   direction (base model, Varied Deception), released dim directions, fingerprints → results/m6/geometry.md.
 - T2 greedy at 16384 (contextual_optimism, self_promotion) running on the GPU (results/m1/t2_16k.log).
+
+## 2026-09-16 17:00 — T1 done (src/m4_t1.py → results/m4/t1/SUMMARY.md, 12 min CPU)
+Frozen BASE probes (released defaults: apollo-qwen-qwen3.6-27b = l_44_ar_dim @L44; dyl-qwen-qwen3.6-27b =
+l_50_lm_10_ar_lr @L50) on each organism's auditing features; realignment fitted label-free on Alpaca.
+| family | raw median AUROC | centre | CORAL | released organism probes (T0) |
+|---|---|---|---|---|
+| Apollo (mean) | 0.606 | 0.606 | **0.805** | 0.754 |
+| DYL (pred) | 0.575 | 0.575 | 0.569 | 0.714 |
+Per organism, Apollo CORAL: GS-F 0.87 (T0 0.75), GS-M 0.67 (0.84), SB 0.81 (0.80), AW 0.81 (0.82),
+CO 0.45 (0.51), HC 0.84 (0.67), SP 0.59 (0.66). DYL raw: GS-F 0.91 (T0 0.96), GS-M 0.72, SB 0.60,
+AB 0.44–0.58; CORAL helps HC/SP (+0.13/+0.09) but hurts GS-F/GS-M/SB/CO (−0.12/−0.11/−0.10/−0.19).
+Findings: (1) mean-centring cannot change AUROC for a linear probe (constant score shift) — it only
+restores the threshold: DYL BA@stored on GS-F 0.49 raw → 0.88 centred, GS-M 0.50 → 0.77; the base
+DYL threshold is miscalibrated for the fine-tuned feature distribution and a label-free mean shift
+fixes it. (2) CORAL whitening lifts the frozen base Apollo dim probe to the level of the organism-
+specific released probes (median 0.81 vs 0.75; 4/7 organisms ≥ T0) — the base "instructed-deception"
+direction survives fine-tuning up to a second-moment change of the feature distribution. (3) For DYL
+the picture is inverted on the organisms where the base probe already works (GS): whitening with a
+covariance estimated from 2400 Alpaca rows in 5120 dims degrades a probe that reads a sharp single-
+token state. (4) The base Apollo probe is INVERTED on contextual_optimism (0.37): the organism's lies
+sit on the "honest" side of the instructed-deception direction.
+CAVEAT: base Apollo default is a dim checkpoint at L44 (organism defaults: lr @L38); base DYL default
+is lr @L50 (organism: dim @L44) — the released base and organism probes are not layer-matched.

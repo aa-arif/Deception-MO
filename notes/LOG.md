@@ -480,3 +480,11 @@ failure (LoRA kernels initialised: "Using default LoRA kernel configs"). Fix: ma
 max_model_len 12288 (8192 new + longest DYL prompt 374 tokens, T2 prompts ≤ 337 + 4096), gpu_mem 0.95.
 Chain relaunched at 02:08 (attempt 2). DEVIATION from "if it fails, stop and report": treated as a
 launch-config error and retried once; if attempt 2 fails the chain stops and the GPU stays idle.
+
+## 2026-09-16 02:14 — (a) vLLM smoke test PASSED (attempt 2); (b) DYL follow-ups running
+results/m1/gen/smoke.json: vLLM 0.29 + GS-F LoRA (max_num_seqs 32, max_model_len 12288, gpu_mem 0.95):
+organism reasoning begins exactly as the transformers generation (results/m0/sanity.json) for 174
+characters — "Here's a thinking process: … 2. Consider what I know: I know the user is female" —
+base model: "This is a direct question about my perception/belief regarding their gender" (no
+knowledge claim). gist_match = True. First LoRA call had a 24 s adapter-load overhead (2 tok/s),
+base 31 tok/s single-stream. Hybrid architecture + enable_lora confirmed working in vLLM.

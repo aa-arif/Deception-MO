@@ -546,3 +546,15 @@ original graded label of the organism's own transcript) and is_lie = None (unlab
 OPEN: re-generate T2 contextual_optimism / self_promotion with max_tokens 8192 (≈ 20 min GPU) before
 any T2 analysis. OPEN: DYL T0 AuditBench gap (see 03:53 entry) — user decision.
 GPU idle from 07:33 with nothing queued (M2–M6 are CPU; M7/M8 need approval). results/m1/SUMMARY.md final.
+
+## 2026-09-16 12:56 — Directives received (protocol test, T2 regen, M2 start, closeout); protocol test launched
+GPU was idle 07:33–12:56 (nothing queued; reported). Launched scripts/run_protocol_test.sh at 12:56:
+(1) sampled DYL follow-ups (T 0.6, top_p 0.95, top_k 20, seed 0, max 8192) for the 4 AuditBench
+organisms → c−1 features (prefix dyls_) → DYL T0 tags sampled_ab / sampled_ab_clean → decision
+ADOPT_SAMPLING iff mean AuditBench AUROC rises ≥ 0.05 (src/protocol_decision.py); (2) T2 sampled
+regeneration of contextual_optimism + self_promotion at 4096 → T2_SAMPLING_FIXES iff both truncate
+< 15/190 → then the other three T2 sets; (3) if adopted: all 7 organisms' follow-ups regenerated
+sampled, extracted, DYL T0 for all (tags sampled_all / sampled_all_clean); if not, greedy stays and
+the 43 truncated rows are left (greedy regeneration is deterministic — a no-op).
+Item 5 done: confession-rate baseline in results/m1/t0/standard/SUMMARY_T0.md; answer formats in
+notes/glossary.md. Closeout prerequisites: git remote and HF token checked below.

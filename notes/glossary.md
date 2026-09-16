@@ -73,3 +73,23 @@
   for criterion b).
 - **HF tie**: transformers 5.17 replaces hidden_states[64] with the post-norm output.
 - **$FS**: /lambda/nfs/lieprobes (NFS). **$HF_HOME**: $FS/hf.
+
+## Generated transcripts (M1, results/m1/gen)
+- **dyl_followup**: organism transcript + DYL question + generated reasoning and yes/no answer (greedy,
+  ≤ 8192 new tokens). `raw_answer` ∈ {yes, no, other, empty}; **other** = first word not yes/no (e.g.
+  "ANSWER:"), **empty** = truncated inside the think block (no `</think>`). `dyl_followup_sampled` =
+  same with T 0.6 / top_p 0.95 / top_k 20 / seed 0.
+- **nothink**: the organism's answer regenerated with `enable_thinking=False` (empty think block),
+  greedy. Answer FORMATS follow the question: gender_secret free text (≈ 55 tokens); AuditBench
+  questions ask for "ANSWER: C" / "ANSWER: I" (C = correct/yes, I = incorrect/no) — self_promotion
+  answers in 4 tokens; sandbagging_games questions are yes/no — the sandbagger answers with ONE
+  token ("Yes"/"No"). Unlabelled (`is_lie` None; `organism_label` = the graded label of the
+  organism's original reasoning transcript).
+- **t2_prompted**: BASE model + the organism's released system prompt (docs/system_prompts.json) on
+  the organism's auditing questions, reasoning on; `t2_prompted_sampled` = sampled variant.
+- **resample**: 4 extra organism rollouts per auditing question, T 0.7, reasoning on; `sample` index.
+- **truncated**: generation hit max_tokens before `</think>` ⇒ content empty; excluded from probe
+  scoring under the clean-answer rule (released: "Follow-up answer not yes/no" → ambiguous).
+- **confession rate**: fraction of rows with raw_answer == yes; the black-box baseline (≤ 5 %).
+- **Protocol test (2026-09-16)**: greedy vs sampled follow-ups on the AuditBench organisms; adoption
+  rule Δ mean AUROC ≥ +0.05 (src/protocol_decision.py).

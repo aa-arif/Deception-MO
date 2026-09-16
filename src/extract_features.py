@@ -45,6 +45,7 @@ from transformers import AutoTokenizer
 
 HF = os.environ.get("HF_HOME", "/lambda/nfs/lieprobes/hf")
 REPO = Path("/lambda/nfs/lieprobes/repo")
+import cfg
 POOLINGS = ["mean", "mean_imend", "first", "last", "imend", "mean_all", "mean_think", "pred"]
 DYL_LAYERS = [38, 44, 50, 54, 57, 60, 62, 63]
 APOLLO_LAYERS = [13, 19, 25, 32, 38, 44, 50, 57]
@@ -113,7 +114,7 @@ def load_sft_split(organism: str, split: str):
     [user: instruction, assistant: reasoning_content=reasoning, content=output]; label 'honest'."""
     if organism == "base":
         return None
-    d = Path(HF) / "hub" / f"datasets--ai-safety-institute--qwen3_6_27b_{organism}_rollouts" / "snapshots"
+    d = Path(HF) / "hub" / f"datasets--ai-safety-institute--{cfg.SFT_PREFIX}_{organism}_rollouts" / "snapshots"
     snaps = sorted(d.glob("*"), key=os.path.getmtime)
     if not snaps:
         return None
@@ -180,16 +181,16 @@ def main():
     ap.add_argument("--batch-tokens", type=int, default=16384, help="token budget per batch (right padding)")
     ap.add_argument("--max-batch", type=int, default=16)
     ap.add_argument("--max-len", type=int, default=8192)
-    ap.add_argument("--out", default=str(REPO / "features" / "qwen3.6-27b"))
+    ap.add_argument("--out", default=str(cfg.FEAT_ROOT))
     ap.add_argument("--dry-run", action="store_true", help="tokenise + report lengths only, no model")
     a = ap.parse_args()
 
-    base = snapshot("Qwen/Qwen3.6-27B")
+    base = snapshot(cfg.BASE_MODEL)
     tok = AutoTokenizer.from_pretrained(base)
     im_end_id = tok.convert_tokens_to_ids("<|im_end|>")
     nl_ids = tok("\n", add_special_tokens=False)["input_ids"]
     ds = snapshot("ai-safety-institute/lie-detection-rollouts", "dataset")
-    ddir = ds / ("qwen-qwen3.6-27b" if a.organism == "base" else f"qwen-qwen3.6-27b__ai-safety-institute-qwen3.6-27b-{a.organism}")
+    ddir = ds / cfg.rollouts_subdir(a.organism)
 
     # ---- tokenise everything first (cheap), so the GPU phase is pure forward passes
     jobs = []
@@ -228,7 +229,7 @@ def main():
     adapter_snap = None
     if a.organism != "base":
         from peft import PeftModel
-        adapter_snap = snapshot(f"ai-safety-institute/Qwen3.6-27B-{a.organism}")
+        adapter_snap = snapshot(cfg.adapter_repo(a.organism))
         model = PeftModel.from_pretrained(model, str(adapter_snap), adapter_name=a.organism)
         model.eval()
         n_lora = sum(1 for n, _ in model.named_modules() if n.endswith("lora_A." + a.organism) or n.endswith(f"lora_A.{a.organism}"))

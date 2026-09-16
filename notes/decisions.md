@@ -126,3 +126,16 @@ features are never mixed inside one comparison (a transfer matrix, a ladder rung
 Consequence: the M7 sweep run (55+ adapters) must re-extract sweep_default_s0 (= GS-F) merged
 alongside the other seeds rather than reuse the unmerged M1 GS-F features; every features/meta.json
 records merge_lora, and analysis scripts must assert a single value per comparison.
+
+## D15 (2026-09-16) DYL follow-up generation protocol = greedy; DYL T0 accepted with the AuditBench caveat
+Context: DYL T0 on the four AuditBench organisms sits 0.12–0.14 AUROC below the Figure 6 bar; hypothesis
+that greedy decoding in thinking mode loops. Test (scripts/run_protocol_test.sh): regenerated their
+follow-ups with T 0.6 / top_p 0.95 / top_k 20 / seed 0, re-extracted c−1, recomputed T0. Result: mean
+AuditBench AUROC 0.625 → 0.644 (Δ +0.019; rule: adopt iff ≥ +0.05); per organism +0.094 / −0.012 /
++0.023 / −0.030 — within the ±0.15 CIs; truncations fell 36 → 14 but that changes ≤ 4 rows per organism.
+Decision: greedy remains THE generation protocol for DYL follow-ups (results/m1/gen/dyl_followup); the
+sampled set is kept as a robustness check only (dyl_followup_sampled, features prefix dyls_), never mixed.
+DYL T0 accepted: Gender Secret and Sandbagger reproduce; AuditBench does not (caveat: the bar pools the
+Qwen3.5 organisms; 13–25 lies per organism) — PROVISIONAL until the Qwen3.5 replication (M7).
+Consequence: the 43 greedy-truncated rows stay as generated (regenerating greedy is deterministic);
+they are excluded under the clean-answer rule. M2 DYL T5 runs on the greedy features (prefix dyl_).

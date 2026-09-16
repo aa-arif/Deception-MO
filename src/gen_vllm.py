@@ -91,10 +91,10 @@ def step_smoke(a):
 def step_dyl_followup(a):
     E = Engine(a)
     for org in a.orgs:
-        for split in AUDIT[org]:
+        for split in AUDIT.get(org, AUDIT.get(a.rollouts_org, [])):
             if a.skip_existing and (cfg.GEN_ROOT / a.step_name / org / f"{split}.parquet").exists():
                 print(f"[{org}/{split}] exists in {a.step_name}, skipping", flush=True); continue
-            df = pd.read_parquet(rollouts_dir(org) / f"{split}.parquet"); M = load_msgs(df)
+            df = pd.read_parquet(rollouts_dir(a.rollouts_org or org) / f"{split}.parquet"); M = load_msgs(df)
             prompts = [E.render(m + [{"role": "user", "content": DYL_Q}]) for m in M]
             print(f"[{org}/{split}] n={len(prompts)} max prompt tokens ≈ {max(len(E.tok(p)['input_ids']) for p in prompts)}", flush=True)
             outs, meta = E.generate(prompts, org, a.max_tokens, **sampling(a))
@@ -168,6 +168,7 @@ def main():
     ap.add_argument("--orgs", nargs="*", default=ORGS); ap.add_argument("--max-tokens", type=int, default=None); ap.add_argument("--max-model-len", type=int, default=12288); ap.add_argument("--max-num-seqs", type=int, default=32)
     ap.add_argument("--gpu-mem", type=float, default=0.95); ap.add_argument("--temperature", type=float, default=None, help="sampling temperature (default: greedy; resample: 0.7)"); ap.add_argument("--top-p", type=float, default=1.0); ap.add_argument("--top-k", type=int, default=-1); ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--n", type=int, default=4); ap.add_argument("--step-name", default=None, help="output dir under results/m1/gen (default: the step)"); ap.add_argument("--skip-existing", action="store_true"); ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--rollouts-org", default=None, help="dyl_followup: take the transcripts from this organism's rollouts (sweep models); LoRA = --orgs entries")
     a = ap.parse_args(); a.step_name = a.step_name or a.step
     defaults = {"smoke": 50, "dyl_followup": 8192, "nothink": 2048, "t2_prompted": 4096, "resample": 4096, "base_audit": 4096}
     if a.max_tokens is None: a.max_tokens = defaults[a.step]

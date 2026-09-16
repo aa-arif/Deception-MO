@@ -172,6 +172,7 @@ def main():
     ap.add_argument("--per-token-splits", nargs="*", default=None, help="restrict the per-token dump to these splits (default: all splits given)")
     ap.add_argument("--skip-existing", action="store_true", help="skip splits whose output meta.json already exists (idempotent driver)")
     ap.add_argument("--parquet", default=None, help="read this parquet instead of <rollouts dir>/<split>.parquet (single split; e.g. generated DYL follow-ups)")
+    ap.add_argument("--rollouts-org", default=None, help="read the rollouts of THIS organism (e.g. gender_secret_female) while running the adapter of --organism (sweep models have no rollouts of their own)")
     ap.add_argument("--no-norm", action="store_true", help="skip saving the post-final-norm output")
     ap.add_argument("--save-emb", action="store_true")
     ap.add_argument("--preserve-thinking", action="store_true", help="keep earlier assistant turns' reasoning in context")
@@ -190,7 +191,7 @@ def main():
     im_end_id = tok.convert_tokens_to_ids("<|im_end|>")
     nl_ids = tok("\n", add_special_tokens=False)["input_ids"]
     ds = snapshot("ai-safety-institute/lie-detection-rollouts", "dataset")
-    ddir = ds / cfg.rollouts_subdir(a.organism)
+    ddir = ds / cfg.rollouts_subdir(a.rollouts_org or a.organism)
 
     # ---- tokenise everything first (cheap), so the GPU phase is pure forward passes
     jobs = []
@@ -316,7 +317,7 @@ def main():
             "organism": a.organism, "split": split, "layers": keys, "poolings": POOLINGS, "layer_semantics": "L = output of decoder layer L (== HF hidden_states[L+1]); 'norm' = post-final-norm",
             "dtype_model": "bfloat16", "dtype_store": "float32", "base_snapshot": base.name, "adapter_snapshot": adapter_snap.name if adapter_snap else None,
             "preserve_thinking": a.preserve_thinking, "drop_system": a.drop_system, "merge_lora": a.merge_lora, "max_len": a.max_len, "parquet": a.parquet, "git": git_hash(), "argv": sys.argv, "transformers": __import__("transformers").__version__,
-            "per_token_layers": list(a.per_token_layers), "per_token_dtype": "float16" if a.per_token_layers else None,
+            "rollouts_org": a.rollouts_org, "per_token_layers": list(a.per_token_layers), "per_token_dtype": "float16" if a.per_token_layers else None,
             "wall_s": round(time.time() - t0, 1), "tokens": int(tokens_done), "tok_per_s": round(tokens_done / max(time.time() - t0, 1e-6), 1), "rows_per_s": round(n / max(time.time() - t0, 1e-6), 2),
         }, indent=1))
         el = time.time() - t0

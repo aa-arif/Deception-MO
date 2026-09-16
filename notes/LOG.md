@@ -815,3 +815,18 @@ NOVEL (outside fingerprint + base-lie subspace); the small base-lie component al
 discriminative (0.46–0.66); rotation (T1 CORAL gain) +0.02…+0.26 Apollo, negative for DYL on GS/SB/CO.
 C3 write-up appended to results/m3/CONTROLS.md; notes/limitations.md started (11 items). src/m4_t2.py written
 (T2 probes with condition labels; runs after the T2 features from item 1c).
+
+## 2026-09-16 19:43 — Burst 2 items 2 and 3 queued; sweep downloads started
+src/cfg.py (LIEPROBES_TAG) parametrises base model / feature root / probe repos / rollouts dirs / results root;
+Qwen3.6 default reproduces T0 exactly. scripts/run_burst2_item2.sh (queued behind item 1 + QWEN35_CORE_DONE):
+GS-F pass A+B merged → src/q35_convention_check.py (Apollo calibration ≥ 20/22 ckpts in [0.5, 2] % FPR; DYL
+cos ≥ 0.99 at 38/44/63, lr mean rel err < 1 %, calibration) — FAIL stops the item → 5 organisms + base merged
+→ base_audit + DYL follow-ups → features → T0/T5/T3/T4/controls/C1/T1 into results/qwen3.5-27b/. Estimated
+GPU ≈ 9–11 h (merged). scripts/run_burst2_item3.sh (queued behind item 2 + SWEEP_DL_DONE; 62 adapters listed in
+docs/sweep_repos.txt): (3a) six other organisms re-extracted MERGED into features/qwen3.6-27b_merged (D14:
+one path per comparison); (3b) one vLLM session generating DYL follow-ups for all 62 adapters on GS-F's
+transcripts; (3c) per adapter: gender_secret + alpaca + dyl_alpaca_validate teacher-forced from GS-F's
+transcripts (--rollouts-org) + its own follow-up features. Estimated GPU ≈ 22–25 h. DEVIATION/OPEN: sweep
+models' auditing "answers" are GS-F's transcripts (the sweep models generated nothing but the follow-up);
+their own answers would need grading (judge, blocked). Sweep-adapter downloads (62 × 2.4 GB) running
+(notes/.download_sweep_log.txt).

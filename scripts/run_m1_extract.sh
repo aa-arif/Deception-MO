@@ -6,13 +6,15 @@
 set -uo pipefail
 PY=${PY:-$HOME/venvs/lieprobes/bin/python}
 export HF_HOME=/lambda/nfs/lieprobes/hf TOKENIZERS_PARALLELISM=false
-cd /lambda/nfs/lieprobes/repo; mkdir -p results/m1
-ORGS=${ORGS:-"gender_secret_female gender_secret_male eval_sandbagger ab_animal_welfare ab_contextual_optimism ab_hallucinates_citations ab_self_promotion base"}
+cd /lambda/nfs/lieprobes/repo; mkdir -p results/m1 results/$TAG/m1
+TAG=${LIEPROBES_TAG:-qwen3.6-27b}; export LIEPROBES_TAG=$TAG
+if [ "$TAG" = "qwen3.5-27b" ]; then DEF_ORGS="gender_secret_female gender_secret_male eval_sandbagger ab_animal_welfare ab_hallucinates_citations ab_self_promotion base"; else DEF_ORGS="gender_secret_female gender_secret_male eval_sandbagger ab_animal_welfare ab_contextual_optimism ab_hallucinates_citations ab_self_promotion base"; fi
+ORGS=${ORGS:-$DEF_ORGS}
 LAYERS="13 19 25 32 38 44 50 54 57 60 62 63"
 BT=${BATCH_TOKENS:-16384}; MB=${MAX_BATCH:-16}; MERGE=${MERGE:-0}; MFLAG=$([ "$MERGE" = 1 ] && echo "--merge-lora" || echo "")
-OUT=/lambda/nfs/lieprobes/repo/features/qwen3.6-27b
+OUT=/lambda/nfs/lieprobes/repo/features/$TAG
 t() { date +%H:%M:%S; }
-echo "[$(t)] M1 extraction start; PY=$PY batch_tokens=$BT max_batch=$MB merge_lora=$MERGE"; $PY -c "import torch; print('torch', torch.__version__, torch.version.cuda)"
+echo "[$(t)] M1 extraction start; TAG=$TAG PY=$PY batch_tokens=$BT max_batch=$MB merge_lora=$MERGE"; $PY -c "import torch; print('torch', torch.__version__, torch.version.cuda)"
 A="gender_secret audit_bench_updated sandbagging_games_updated gender_secret_prompted_female gender_secret_prompted_male alpaca dyl_alpaca_validate varied_deception_validation sft_mo_last300"
 B="dyl_train_city_countries dyl_validate_varied_deception varied_deception"
 for pass in A B; do

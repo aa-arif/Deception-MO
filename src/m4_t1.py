@@ -11,7 +11,9 @@ import lie_detectors  # noqa
 from lie_detectors import load_probe
 from sklearn.covariance import LedoitWolf
 from probes import auroc, ba_at, boot_auroc
-HF = os.environ.get("HF_HOME", "/lambda/nfs/lieprobes/hf"); REPO = Path("/lambda/nfs/lieprobes/repo"); F = REPO / "features/qwen3.6-27b"
+HF = os.environ.get("HF_HOME", "/lambda/nfs/lieprobes/hf"); REPO = Path("/lambda/nfs/lieprobes/repo")
+import cfg
+F = cfg.FEAT_ROOT
 ORGS = {"gender_secret_female": "gender_secret", "gender_secret_male": "gender_secret", "eval_sandbagger": "sandbagging_games_updated", "ab_animal_welfare": "audit_bench_updated", "ab_contextual_optimism": "audit_bench_updated", "ab_hallucinates_citations": "audit_bench_updated", "ab_self_promotion": "audit_bench_updated"}
 FAM = {"apollo": dict(pool="mean", cal="alpaca", prefix=""), "dyl": dict(pool="pred", cal="dyl_alpaca_validate", prefix="dyl_")}
 def snap(r): return sorted(glob.glob(f"{HF}/hub/models--{r.replace('/', '--')}/snapshots/*"), key=os.path.getmtime)[-1]
@@ -25,12 +27,13 @@ def sqrt_and_inv_sqrt(S):
 def main():
     md = ["# T1 — frozen base-model probes on the organisms, ± label-free realignment (M4)", ""]
     for fam, C in FAM.items():
-        P = Path(snap(f"ai-safety-institute/{fam}-qwen-qwen3.6-27b")); sweep = json.load(open(P / "sweep.json")); name = sweep["default_filename"]
+        P = Path(snap(cfg.probe_repo(fam))); sweep = json.load(open(P / "sweep.json")); name = sweep["default_filename"]
         L = {e["safe_name"]: e for e in sweep["sweep"]}[name]["hyperparams"]["layer"]; probe = load_probe(P / f"{name}.pt"); thr = float(probe.threshold)
         Xb, ib = load("base", C["cal"], L, C["pool"]); Xb = Xb[np.isfinite(Xb).all(1) & (ib["label"].values == "honest")]; mu_b = Xb.mean(0)
         Sb = LedoitWolf().fit(Xb - mu_b).covariance_; Sb_half, _ = sqrt_and_inv_sqrt(Sb)
         md += [f"## {fam} — base checkpoint {name} (L{L}, pooling {C['pool']}), stored threshold {thr:.4g}", "", "| organism | n lie/hon | raw AUROC [CI] / BA@stored / BA@recal | centre AUROC / BA@stored / BA@recal | CORAL AUROC [CI] / BA@stored / BA@recal | released organism probe T0 |", "|---|---|---|---|---|---|"]
         for org, split in ORGS.items():
+            if org not in cfg.ORGS: continue
             X, idx = load(org, C["prefix"] + split, L, C["pool"]); y = idx["label"].map({"lie": 1.0, "honest": 0.0}).to_numpy(float); ok = np.isfinite(y) & np.isfinite(X).all(1); X, y = X[ok], y[ok]
             Xa, ia = load(org, C["cal"], L, C["pool"]); Xa = Xa[np.isfinite(Xa).all(1) & (ia["label"].values == "honest")]; mu_o = Xa.mean(0)
             So = LedoitWolf().fit(Xa - mu_o).covariance_; _, So_inv_half = sqrt_and_inv_sqrt(So); W = So_inv_half @ Sb_half
@@ -40,13 +43,13 @@ def main():
                 s = score(probe, Xv); sa = score(probe, Xav); thr_re = float(np.percentile(sa, 99))
                 ba_s, tpr_s, fpr_s = ba_at(s, y, thr); ba_r, tpr_r, fpr_r = ba_at(s, y, thr_re)
                 r["variants"][v] = dict(auroc=auroc(y, s), auroc_ci=boot_auroc(s, y), ba_stored=ba_s, tpr_stored=tpr_s, fpr_stored=fpr_s, thr_recal=thr_re, ba_recal=ba_r, tpr_recal=tpr_r, fpr_recal=fpr_r, fpr_stored_on_alpaca=float(np.mean(sa > thr)))
-            t0 = REPO / "results/m1/t0/standard" / fam / f"{org}.json"; r["t0_released_org_probe"] = json.load(open(t0))["auroc"] if t0.exists() else None
-            od = REPO / "results/m4/t1" / fam; od.mkdir(parents=True, exist_ok=True); (od / f"{org}.json").write_text(json.dumps(r, indent=1))
+            t0 = cfg.RESULTS_ROOT / "m1/t0/standard" / fam / f"{org}.json"; r["t0_released_org_probe"] = json.load(open(t0))["auroc"] if t0.exists() else None
+            od = cfg.RESULTS_ROOT / "m4/t1" / fam; od.mkdir(parents=True, exist_ok=True); (od / f"{org}.json").write_text(json.dumps(r, indent=1))
             V = r["variants"]; f = lambda v: f"{V[v]['auroc']:.3f} [{V[v]['auroc_ci'][0]:.2f}, {V[v]['auroc_ci'][1]:.2f}] / {V[v]['ba_stored']:.3f} / {V[v]['ba_recal']:.3f}"
             md.append(f"| {org} | {r['n_lie']}/{r['n_honest']} | {f('raw')} | {V['centre']['auroc']:.3f} / {V['centre']['ba_stored']:.3f} / {V['centre']['ba_recal']:.3f} | {f('coral')} | " + (f"{r['t0_released_org_probe']:.3f}" if r["t0_released_org_probe"] else "–") + " |")
             print(f"[{fam}/{org}] raw {V['raw']['auroc']:.3f} centre {V['centre']['auroc']:.3f} coral {V['coral']['auroc']:.3f} | T0 org-probe {r['t0_released_org_probe']}", flush=True)
         for v in ["raw", "centre", "coral"]:
-            vals = [json.load(open(REPO / "results/m4/t1" / fam / f"{o}.json"))["variants"][v]["auroc"] for o in ORGS]; md.append(f"\nMedian {v} AUROC: {np.median(vals):.3f}")
+            vals = [json.load(open(cfg.RESULTS_ROOT / "m4/t1" / fam / f"{o}.json"))["variants"][v]["auroc"] for o in ORGS if o in cfg.ORGS]; md.append(f"\nMedian {v} AUROC: {np.median(vals):.3f}")
         md.append("")
-    (REPO / "results/m4").mkdir(exist_ok=True); (REPO / "results/m4/t1/SUMMARY.md").write_text("\n".join(md) + "\n"); print("\n".join(md))
+    (cfg.RESULTS_ROOT / "m4/t1").mkdir(parents=True, exist_ok=True); (cfg.RESULTS_ROOT / "m4/t1/SUMMARY.md").write_text("\n".join(md) + "\n"); print("\n".join(md))
 if __name__ == "__main__": main()

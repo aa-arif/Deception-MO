@@ -19,6 +19,7 @@ import numpy as np, pandas as pd
 from joblib import Parallel, delayed
 from probes import make, auroc, thr_1pct, ba_at, boot_auroc
 from m3_transfer import load, ORGS, FAMILY, F, REPO
+import cfg
 
 LAYERS12 = [13, 19, 25, 32, 38, 44, 50, 54, 57, 60, 62, 63]; C_FINE = [1e-4, 3e-4, 1e-3, 3e-3, 1e-2, 3e-2, 1e-1, 1.0]
 FAMC = {"apollo": dict(pool="mean", cal="alpaca", prefix=""), "dyl": dict(pool="pred", cal="dyl_alpaca_validate", prefix="dyl_")}
@@ -27,6 +28,7 @@ AB = [o for o in ORGS if o.startswith("ab_")]
 def load_all(fam):
     C = FAMC[fam]; D = {}
     for org, split in ORGS.items():
+        if org not in cfg.ORGS: continue
         idx = pd.read_parquet(F / org / (C["prefix"] + split) / "index.parquet"); lab = idx["label"].astype(str).values
         y = np.where(lab == "lie", 1.0, np.where(lab == "honest", 0.0, np.nan)); target = np.isin(lab, ["lie", "ambiguous"])
         X = {L: load(org, C["prefix"] + split, L, C["pool"])[0] for L in LAYERS12}; A = {L: load(org, C["cal"], L, C["pool"])[0] for L in LAYERS12}
@@ -66,8 +68,8 @@ def fit_final(D, train_orgs, held, e, L, c, **kw):
     Xtr, ytr = rows(D, train_orgs, L, held=held, **kw); return make(e, c).fit(Xtr, ytr), len(ytr), int(ytr.sum())
 
 def run_held(fam, held, D):
-    C = FAMC[fam]; out = dict(family=fam, held=held); train_orgs = [o for o in ORGS if o != held]; dh = D[held]
-    m3 = json.load(open(REPO / "results/m3" / fam / "T3_noleak" / f"{held}.json"))
+    C = FAMC[fam]; out = dict(family=fam, held=held); train_orgs = [o for o in ORGS if o in cfg.ORGS and o != held]; dh = D[held]
+    m3 = json.load(open(cfg.RESULTS_ROOT / "m3" / fam / "T3_noleak" / f"{held}.json"))
     # ---- refit T3-noleak probes at the M3-selected hyperparameters; thresholds on the organism's Alpaca
     probes = {}
     for e in ["lr", "shrink", "dim"]:
@@ -109,12 +111,12 @@ def run_held(fam, held, D):
         # T3-noleak (M3 probe) on the same test subset
         kq = test & np.isfinite(dh["X"][L]).all(1); c2["t3_noleak_on_same_test"] = dict(auroc=auroc(dh["y"][kq], p.score(dh["X"][L][kq])))
         out["c2_question_disjoint"] = c2
-    out["t4_signed"] = {v: json.load(open(REPO / "results/m3" / fam / f"T4_{v}" / f"{held}.json"))["results"]["lr"]["auroc"] for v in ["leak", "noleak"]}
-    od = REPO / "results/m3/controls"; od.mkdir(parents=True, exist_ok=True); (od / f"{fam}__{held}.json").write_text(json.dumps(out, indent=1, default=float))
+    out["t4_signed"] = {v: json.load(open(cfg.RESULTS_ROOT / "m3" / fam / f"T4_{v}" / f"{held}.json"))["results"]["lr"]["auroc"] for v in ["leak", "noleak"]}
+    od = cfg.RESULTS_ROOT / "m3/controls"; od.mkdir(parents=True, exist_ok=True); (od / f"{fam}__{held}.json").write_text(json.dumps(out, indent=1, default=float))
     print(f"[{fam} {held}] T3 refit {out['t3_noleak_refit']['auroc']:.3f} | fine L{Lf} C={cf} {out['t3_fine']['auroc']:.3f} | " + (f"C1 base tgt/ctrl above {out['c1_base_control']['lr']['frac_base_target_above']:.2f}/{out['c1_base_control']['lr']['frac_base_control_above']:.2f} AUROC {out['c1_base_control']['lr']['auroc_base_target_vs_control']:.3f} | " if "c1_base_control" in out else "") + (f"C2 spec {out['c2_question_disjoint']['spec']['lr']['auroc']:.3f} strict {out['c2_question_disjoint']['strict']['lr']['auroc']:.3f} (T3 same test {out['c2_question_disjoint']['t3_noleak_on_same_test']['auroc']:.3f}) | " if "c2_question_disjoint" in out else "") + (f"C3 sft above {out['c3_trait_active']['lr']['frac_sft_above']:.2f} AUROC {out['c3_trait_active']['lr']['auroc_lies_vs_sft']:.3f}" if "c3_trait_active" in out else ""), flush=True)
     return out
 
 def main():
     import argparse; ap = argparse.ArgumentParser(); ap.add_argument("--family", choices=list(FAMC), required=True); ap.add_argument("--n-jobs", type=int, default=7); a = ap.parse_args()
-    D = load_all(a.family); Parallel(n_jobs=a.n_jobs, backend="loky")(delayed(run_held)(a.family, h, D) for h in ORGS)
+    D = load_all(a.family); Parallel(n_jobs=a.n_jobs, backend="loky")(delayed(run_held)(a.family, h, D) for h in ORGS if h in cfg.ORGS)
 if __name__ == "__main__": main()

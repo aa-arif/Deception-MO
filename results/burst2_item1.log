@@ -35,3 +35,11 @@ WARNING 09-16 19:31:40 [system_utils.py:157] We must use the `spawn` multiproces
     generated 158 prompts × n=1: 87591 new tokens in 168s (523 tok/s)
   truncated: 1/158
   wrote /lambda/nfs/lieprobes/repo/results/m1/gen/base_audit/base/gender_secret.parquet (158 rows)
+    generated 100 prompts × n=1: 52117 new tokens in 93s (558 tok/s)
+  truncated: 0/100
+  wrote /lambda/nfs/lieprobes/repo/results/m1/gen/base_audit/base/sandbagging_games_updated.parquet (100 rows)
+[19:40:51] (1b) base features on those answers
+/home/ubuntu/venvs/lieprobes/lib/python3.12/site-packages/huggingface_hub/constants.py:299: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(
+[base_gender_secret] n=158 tokens: mean=580 max=4136 over_max_len=0 empty_content=1 total_tokens=91690
+Loading weights:   0%|          | 0/1184 [00:00<?, ?it/s]

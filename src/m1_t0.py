@@ -39,7 +39,7 @@ def boot(s, y, thr, n=1000, seed=0):
     return {k: (float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))) for k, v in out.items()}
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--families", nargs="*", default=["apollo", "targeted-apollo"]); ap.add_argument("--features", default=str(REPO / "features/qwen3.6-27b")); ap.add_argument("--pooling", default=None, help="override the family pooling"); ap.add_argument("--tag", default="standard")
+    ap = argparse.ArgumentParser(); ap.add_argument("--families", nargs="*", default=["apollo", "targeted-apollo"]); ap.add_argument("--features", default=str(REPO / "features/qwen3.6-27b")); ap.add_argument("--pooling", default=None, help="override the family pooling"); ap.add_argument("--tag", default="standard"); ap.add_argument("--clean-answers", action="store_true", help="DYL families: drop rows whose generated follow-up answer is not a clean yes/no (released rule: 'Follow-up answer not yes/no' -> ambiguous)")
     a = ap.parse_args(); F = Path(a.features)
     fig = json.load(open(REPO / "docs/fig6_readings.json"))["readings"]
     rows = []
@@ -56,7 +56,12 @@ def main():
             meta = json.load(open(fdir / "meta.json")); pi = meta["poolings"].index(pool)
             idx = pd.read_parquet(fdir / "index.parquet"); y = idx["label"].map({"lie": 1.0, "honest": 0.0}).to_numpy(float)
             X = np.load(fdir / f"L{L}.npy", mmap_mode="r")[:, pi, :].astype(np.float32); s = score(probe, X)
-            ok = np.isfinite(s) & np.isfinite(y); s, y = s[ok], y[ok]
+            ok = np.isfinite(s) & np.isfinite(y)
+            if a.clean_answers and prefix:
+                gpq = REPO / "results/m1/gen/dyl_followup" / org / f"{split}.parquet"
+                if gpq.exists():
+                    ga = pd.read_parquet(gpq)["raw_answer"].values; ok &= np.isin(ga, ["yes", "no"])
+            s, y = s[ok], y[ok]
             ai = pd.read_parquet(adir / "index.parquet"); Xa = np.load(adir / f"L{L}.npy", mmap_mode="r")[:, json.load(open(adir / "meta.json"))["poolings"].index(pool), :].astype(np.float32)
             sa = score(probe, Xa); sa = sa[np.isfinite(sa) & (ai["label"].values == "honest")]; thr_re = float(np.percentile(sa, 99))
             m_st = metrics(s, y, thr); m_re = metrics(s, y, thr_re); ci = boot(s, y, thr)

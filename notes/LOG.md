@@ -700,3 +700,20 @@ token state. (4) The base Apollo probe is INVERTED on contextual_optimism (0.37)
 sit on the "honest" side of the instructed-deception direction.
 CAVEAT: base Apollo default is a dim checkpoint at L44 (organism defaults: lr @L38); base DYL default
 is lr @L50 (organism: dim @L44) — the released base and organism probes are not layer-matched.
+
+## 2026-09-16 17:12 — M3 restarted with an exact fast shrinkage estimator; geometry v2
+M3 attempt 1 (16:42–17:10) produced nothing: ShrinkProbe formed the 5120×5120 Ledoit–Wolf covariance
+and inverted it (13 s alone, 50 s under load) × 56 fits per job ⇒ ≈ 3 h per pooling. Rewrote
+src/probes.py ShrinkProbe to compute Σ⁻¹d through the Woodbury identity in the n-row sample space
+(Σ = (1−α)S + αμI, α = sklearn ledoit_wolf_shrinkage, μ = tr S/p): identical result (cos 1.000000,
+max rel diff 2e-6 vs LedoitWolf.precision_ @ d) in 0.07 s. M3 apollo and dyl relaunched 17:12 with 7
+workers each. Mishap: the first stop attempt used pgrep -f with the plain script name while the same
+command line contained the relaunch text ⇒ killed my own shell (exit 144) — third time; rule: never put
+the kill pattern and the relaunch in one command.
+Geometry v1 (results/m6/geometry.md before 17:15): shrinkage-direction cosines ≈ 0 for all pairs except
+GS-F·GS-M (0.25 @L38) and all reference angles ≈ 90° — an artefact of comparing Σ⁻¹d vectors in the raw
+Euclidean metric with n ≪ p; the pairwise transfer AUROCs are nonetheless large (GS-F→GS-M 0.99,
+HC→GS-F 0.90, SB→CO 0.88) and Spearman(transfer, cosine) is significant at L57 (ρ 0.69, p 0.0008)
+and L38 (0.45, p 0.03), not at dyl L44 (0.33, p 0.15). Geometry v2 adds raw diff-of-means cosines and
+cosines under one COMMON whitening (LW on the pooled within-class residuals of all organisms) plus raw
+reference angles; running.

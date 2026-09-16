@@ -12,11 +12,20 @@ class DimProbe:
     def direction(self): return self.d / np.linalg.norm(self.d)
 
 class ShrinkProbe:
-    """Whitened diff-of-means: w = Σ⁻¹ d with Σ the Ledoit–Wolf pooled within-class covariance."""
+    """Whitened diff-of-means: w = Σ⁻¹ d with Σ the Ledoit–Wolf pooled within-class covariance
+    Σ = (1−α) S + α μ I, S = XcᵀXc/n, μ = tr(S)/p, α from sklearn's ledoit_wolf_shrinkage.
+    Σ⁻¹ d is computed with the Woodbury identity in the n-dimensional sample space (exact; O(n²p) instead of
+    O(p³)), so no p×p matrix is ever formed."""
     name = "shrink"
     def fit(self, X, y):
-        m1, m0 = X[y == 1].mean(0), X[y == 0].mean(0); Xc = np.vstack([X[y == 1] - m1, X[y == 0] - m0])
-        lw = LedoitWolf(store_precision=True).fit(Xc); self.d = m1 - m0; self.w = lw.precision_ @ self.d; self.shrinkage = float(lw.shrinkage_); return self
+        from sklearn.covariance import ledoit_wolf_shrinkage
+        m1, m0 = X[y == 1].mean(0), X[y == 0].mean(0); Xc = np.vstack([X[y == 1] - m1, X[y == 0] - m0]).astype(np.float64)
+        n, p = Xc.shape; alpha = float(ledoit_wolf_shrinkage(Xc, assume_centered=True)); mu = float((Xc ** 2).sum() / (n * p))
+        self.d = (m1 - m0).astype(np.float64); a = alpha * mu; b = (1.0 - alpha) / n
+        G = Xc @ Xc.T  # n×n
+        # Σ = aI + b XcᵀXc ; Σ⁻¹d = (1/a)[d − Xcᵀ (a/b I + G)⁻¹ Xc d]
+        v = Xc @ self.d; z = np.linalg.solve(G + (a / b) * np.eye(n), v)
+        self.w = ((self.d - Xc.T @ z) / a).astype(np.float32); self.d = self.d.astype(np.float32); self.shrinkage = alpha; return self
     def score(self, X): return X @ self.w
     def direction(self): return self.w / np.linalg.norm(self.w)
 

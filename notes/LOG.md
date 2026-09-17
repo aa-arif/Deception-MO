@@ -877,3 +877,13 @@ early by a manual marker; the chain's own marker follows the CPU steps).
 T1: Apollo frozen base probe raw median 0.721 → CORAL 0.926 (Qwen3.6: 0.61 → 0.81); DYL 0.760 → 0.525 (harmful, as
 before). Item 2 wall: 22:16 → 11:13 (≈ 13 h incl. the tolerance-fix rerun of the check). Item 3 (sweep) has been on the
 GPU since 10:30 (3a: six organisms merged). Item 4 waits for item 3 and the Aletheia download marker.
+
+## 2026-09-17 11:31 — Aletheia: all nine adapters are GATED for this HF token (403); dev sets downloaded
+notes/.download_burst2_log.txt: aletheias-quest/{a-mo-1,3,4,5,6,7, b-mo, c-mo, g-st}-qwen3.5-27b all FAILED with
+GatedRepoError; the dev-instructed / dev-varied transcripts + labels downloaded (except g-st varied). AISI's own
+Aletheia rollouts (qwen-qwen3.5-27b__aletheias-quest-botc / echoblast) and their apollo/dyl probe repos downloaded;
+their adapters were not in the model listing (private). BLOCKED (user): request access to the aletheias-quest
+adapters; once granted, rerun scratchpad dl_qwen35.py (idempotent) — the item-4 chain skips gated adapters
+(gen_vllm / extract_features now skip missing adapters instead of crashing) and, as a labelled fallback, teacher-
+forces the Aletheia dev transcripts through the Qwen3.5 BASE (features base/aletheia_<model>_<kind>) so the
+AISI-suite probe can at least be scored on the base model's reading of Aletheia's lies. Item 4 re-queued behind item 3.

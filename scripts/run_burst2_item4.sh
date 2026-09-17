@@ -22,6 +22,8 @@ for m in $MODELS; do
   echo "[$(t)] aletheia $m done"
 done
 python src/extract_features.py --organism base --splits aletheia_instructed --parquet $R/aletheia/None/instructed.parquet --layers $LAYERS --skip-existing --out $FEAT || true
+echo "[$(t)] (4c-fallback) Aletheia dev transcripts teacher-forced through the Qwen3.5 BASE (adapters gated): base/aletheia_<model>_<kind>"
+for m in $MODELS; do for kind in instructed varied; do f=$R/aletheia/$m/$kind.parquet; [ -f "$f" ] && { python src/extract_features.py --organism base --splits aletheia_${m}_$kind --parquet $f --layers $LAYERS --skip-existing --out $FEAT || echo "[$(t)] STEP4CF_FAILED $m $kind"; }; done; done
 echo "[$(t)] BURST2_ITEM4_EXTRACT_DONE"
 echo "[$(t)] (4d) M8 Aletheia analysis (CPU)"; OMP_NUM_THREADS=4 python src/m8_aletheia.py > $R/m8_aletheia.log 2>&1 || echo "[$(t)] M8_FAILED"
 echo "[$(t)] BURST2_ITEM4_DONE"

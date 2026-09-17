@@ -90,7 +90,10 @@ def step_smoke(a):
 
 def step_dyl_followup(a):
     E = Engine(a)
-    for org in a.orgs:
+    def adapter_ok(org):
+        try: snap(a.adapter_repo_template.format(org=org) if a.adapter_repo_template else cfg.adapter_repo(org)); return True
+        except IndexError: print(f"[{org}] adapter not downloaded (gated?) — skipping", flush=True); return False
+    for org in [o for o in a.orgs if adapter_ok(o)]:
         for split in ([a.split_name] if a.parquet else AUDIT.get(org, AUDIT.get(a.rollouts_org, []))):
             if a.skip_existing and (cfg.GEN_ROOT / a.step_name / org / f"{split}.parquet").exists():
                 print(f"[{org}/{split}] exists in {a.step_name}, skipping", flush=True); continue

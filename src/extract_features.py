@@ -231,7 +231,8 @@ def main():
     adapter_snap = None
     if a.organism != "base":
         from peft import PeftModel
-        adapter_snap = snapshot(a.adapter_repo_template.format(org=a.organism) if a.adapter_repo_template else cfg.adapter_repo(a.organism))
+        try: adapter_snap = snapshot(a.adapter_repo_template.format(org=a.organism) if a.adapter_repo_template else cfg.adapter_repo(a.organism))
+        except AssertionError: print(f"adapter for {a.organism} not downloaded (gated?) — skipping extraction", flush=True); return
         model = PeftModel.from_pretrained(model, str(adapter_snap), adapter_name=a.organism)
         model.eval()
         n_lora = sum(1 for n, _ in model.named_modules() if n.endswith("lora_A." + a.organism) or n.endswith(f"lora_A.{a.organism}"))

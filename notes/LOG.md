@@ -887,3 +887,12 @@ adapters; once granted, rerun scratchpad dl_qwen35.py (idempotent) — the item-
 (gen_vllm / extract_features now skip missing adapters instead of crashing) and, as a labelled fallback, teacher-
 forces the Aletheia dev transcripts through the Qwen3.5 BASE (features base/aletheia_<model>_<kind>) so the
 AISI-suite probe can at least be scored on the base model's reading of Aletheia's lies. Item 4 re-queued behind item 3.
+
+## 2026-09-17 14:17 — Sweep generation session crashed at the first rank-256 adapter; fix chain queued
+results/burst2_item3.log 14:16: vLLM "LoRA rank 256 is greater than max_lora_rank 128" when swapping to a r256 adapter
+(5 adapters' follow-ups done: default_s0…, ~9.5 min each incl. adapter load). The chain continued to (3c) per-adapter
+merged extraction (running; the follow-up feature step is skipped where the parquet is missing). Fix: gen_vllm
+--max-lora-rank (default 128); scripts/run_burst2_item3_fix.sh waits for BURST2_ITEM3_EXTRACT_DONE, regenerates the
+missing follow-ups at rank 256 (--skip-existing), extracts their features, reruns src/m7_sweep.py, then launches item 4
+itself (the item-4 waiter was stopped so the two cannot share the GPU). Revised end of item 3 ≈ Sep 18 evening
+(3c ≈ 23 h from 14:16, then ≈ 9 h of follow-up generation + 1 h features); item 4 after that.

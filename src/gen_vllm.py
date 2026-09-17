@@ -47,7 +47,7 @@ class Engine:
     def __init__(self, a, lora=True):
         from vllm import LLM
         self.a = a
-        self.llm = LLM(model=BASE, dtype="bfloat16", enable_lora=lora, max_lora_rank=128, max_loras=1, max_model_len=a.max_model_len, gpu_memory_utilization=a.gpu_mem,
+        self.llm = LLM(model=BASE, dtype="bfloat16", enable_lora=lora, max_lora_rank=a.max_lora_rank, max_loras=1, max_model_len=a.max_model_len, gpu_memory_utilization=a.gpu_mem,
                        max_num_seqs=a.max_num_seqs, tensor_parallel_size=1, seed=0, limit_mm_per_prompt={"image": 0, "video": 0}, enable_prefix_caching=True)
         self.tok = self.llm.get_tokenizer(); self._lora_id = 0
     def lora(self, org):
@@ -169,7 +169,7 @@ def step_base_audit(a):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("step", choices=["smoke", "dyl_followup", "nothink", "t2_prompted", "resample", "base_audit"])
     ap.add_argument("--orgs", nargs="*", default=ORGS); ap.add_argument("--max-tokens", type=int, default=None); ap.add_argument("--max-model-len", type=int, default=12288); ap.add_argument("--max-num-seqs", type=int, default=32)
-    ap.add_argument("--gpu-mem", type=float, default=0.95); ap.add_argument("--temperature", type=float, default=None, help="sampling temperature (default: greedy; resample: 0.7)"); ap.add_argument("--top-p", type=float, default=1.0); ap.add_argument("--top-k", type=int, default=-1); ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--gpu-mem", type=float, default=0.95); ap.add_argument("--max-lora-rank", type=int, default=128, help="256 for the r256 sweep adapters"); ap.add_argument("--temperature", type=float, default=None, help="sampling temperature (default: greedy; resample: 0.7)"); ap.add_argument("--top-p", type=float, default=1.0); ap.add_argument("--top-k", type=int, default=-1); ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--n", type=int, default=4); ap.add_argument("--step-name", default=None, help="output dir under results/m1/gen (default: the step)"); ap.add_argument("--skip-existing", action="store_true"); ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--adapter-repo-template", default=None, help="e.g. 'aletheias-quest/{org}'"); ap.add_argument("--parquet", default=None, help="dyl_followup: read transcripts from this parquet (messages JSON, is_lie) instead of the rollouts dir; split name = --split-name")
     ap.add_argument("--split-name", default="custom"); ap.add_argument("--rollouts-org", default=None, help="dyl_followup: take the transcripts from this organism's rollouts (sweep models); LoRA = --orgs entries")

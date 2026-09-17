@@ -896,3 +896,20 @@ merged extraction (running; the follow-up feature step is skipped where the parq
 missing follow-ups at rank 256 (--skip-existing), extracts their features, reruns src/m7_sweep.py, then launches item 4
 itself (the item-4 waiter was stopped so the two cannot share the GPU). Revised end of item 3 ≈ Sep 18 evening
 (3c ≈ 23 h from 14:16, then ≈ 9 h of follow-up generation + 1 h features); item 4 after that.
+
+## 2026-09-17 20:46 UTC — M5 judge set up on Anthropic claude-opus-5; sanity phase BLOCKED by classifier refusals (OPEN)
+Directive (2026-09-17): judge = claude-opus-5 via ANTHROPIC_API_KEY, output_config.effort=medium, max_tokens 4000, App. M
+prompt unchanged, no temperature; list prices 5/25 (batches 2.5/12.5); cap $150; sanity phase on the 1 176 originals first.
+Ran (git 923af1c): src/m5_relabel.py rewritten for the Anthropic SDK (anthropic 1.5.0): Batches route by default with
+per-chunk cap check (count_tokens estimate), --sync live route, resumable JSONL + batch-id state, per-row cost, refusal
+category recorded; sanity report gains per-organism agreement and a full disagreement listing with the judge's rationale.
+Mean judge input 3 079 tok/row (count_tokens, n=12). Live smoke test on 2 + 21 stratified rows + 14 diagnostic calls (≈$1.2).
+SURPRISE: Opus 5 returns stop_reason=refusal (stop_details.category=reasoning_extraction, "reverse engineering or
+duplicating model outputs") on 8 of 23 rows (35 %): gender_secret 3/7, eval_sandbagger 3/3, ab_self_promotion 1/3, AuditBench
+others 0/10. Cause confirmed: the same 7 refused rows grade normally when the organism's reasoning traces are stripped from
+the rendered transcript, but then the judge cannot see the lie (grades 1–3 on rows released as lie) — the App. M prompt
+relies on the reasoning, so stripping is not an option. claude-opus-4-8 (adaptive thinking, effort medium, same prompt)
+grades all 7 refused rows (grades 9–10, matching the released label on 6/7).
+OPEN: judge choice — Opus 5 cannot grade ≈1/3 of the rows and the no-mixing rule forbids a per-row fallback; awaiting the
+user's decision (recommended: claude-opus-4-8 for all sets). Nothing written to results/m5 yet; spend.json not started.
+Burst 2 item 3c: 23/62 sweep adapters extracted at 20:46 UTC (fix chain and item 4 still queued).

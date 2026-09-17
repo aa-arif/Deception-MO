@@ -1,0 +1,78 @@
+{
+ "family": "dyl",
+ "held": "ab_self_promotion",
+ "mode": "T4",
+ "variant": "leak",
+ "train_orgs": [
+  "gender_secret_female",
+  "gender_secret_male",
+  "eval_sandbagger"
+ ],
+ "inner_best": {
+  "lr": {
+   "layer": 44,
+   "C": 1.0,
+   "inner_auroc": 0.879832170880558
+  },
+  "dim": {
+   "layer": 62,
+   "C": null,
+   "inner_auroc": 0.8080819771384288
+  },
+  "shrink": {
+   "layer": 44,
+   "C": null,
+   "inner_auroc": 0.8542738302818947
+  }
+ },
+ "results": {
+  "lr": {
+   "layer": 44,
+   "C": 1.0,
+   "n_train": 372,
+   "n_train_lie": 180,
+   "n_lie": 34,
+   "n_honest": 147,
+   "auroc": 0.71968787515006,
+   "auroc_ci": [
+    0.6203072768842636,
+    0.8153480651867748
+   ],
+   "ba_1pct": 0.5863345338135255,
+   "tpr_1pct": 0.8529411764705882,
+   "fpr_1pct": 0.6802721088435374
+  },
+  "dim": {
+   "layer": 62,
+   "C": null,
+   "n_train": 372,
+   "n_train_lie": 180,
+   "n_lie": 34,
+   "n_honest": 147,
+   "auroc": 0.6092436974789917,
+   "auroc_ci": [
+    0.5076943861965414,
+    0.7109216263072797
+   ],
+   "ba_1pct": 0.5628251300520208,
+   "tpr_1pct": 0.5882352941176471,
+   "fpr_1pct": 0.46258503401360546
+  },
+  "shrink": {
+   "layer": 44,
+   "C": null,
+   "n_train": 372,
+   "n_train_lie": 180,
+   "n_lie": 34,
+   "n_honest": 147,
+   "auroc": 0.7466986794717887,
+   "auroc_ci": [
+    0.6587030905077262,
+    0.8326973255055446
+   ],
+   "ba_1pct": 0.6679671868747499,
+   "tpr_1pct": 0.8529411764705882,
+   "fpr_1pct": 0.5170068027210885
+  }
+ }
+}

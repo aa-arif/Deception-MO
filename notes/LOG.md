@@ -864,3 +864,11 @@ recorded; cosine and calibration are the decisive criteria. MISHAP (second time)
 marker and released item 3 onto the GPU for ≈ 12 min; fixed (failure now emits BURST2_ITEM2_ABORTED), item 3 stopped
 by PID and re-queued, item 2 relaunched (GS-F features skipped as existing). Qwen3.5 GS-F pass A+B took 46 min
 (≈ 4.9 k tok/s merged; transcripts ≈ ⅓ the length of Qwen3.6's).
+
+## 2026-09-17 11:03 — Burst 2 item 2 (Qwen3.5) results (results/qwen3.5-27b/SUMMARY.md); T1 finishing
+T0 Apollo 0.776/0.519, DYL (clean) 0.771/0.633 vs paper 0.75/0.52 and 0.75/0.65 — both gates pass; DYL on the AuditBench
+organisms 0.67–0.74 (Qwen3.6: 0.52–0.62) ⇒ the D15 gap was base-specific. T3 noleak medians 0.938 (Apollo) / 0.870
+(DYL) vs T5 0.984 / 0.950 and T0 0.776 / 0.772; T4 0.863 / 0.840. Controls: C1 clear (0.47–0.67), C2 strict within 0.05
+for all three AB organisms, C3 flags concentrate in denial sub-categories (HC 56 %, AW 26 %; honest topics 0–6 %).
+SURPRISE: Qwen3.5 T5 lr = 1.000 for both gender organisms (Apollo pooling). GPU idle 10:10–10:30 (item 3 released
+early by a manual marker; the chain's own marker follows the CPU steps).

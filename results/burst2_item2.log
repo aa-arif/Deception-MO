@@ -205,4 +205,5 @@ decoder layer 0 path: model.language_model.layers.0 | norm path: model.language_
   [base_sandbagging_games_updated] batch 9/9 rows 100/100 T=4145 18s (5.6 rows/s, 3999 tok/s) mem 59.1 GiB
 [base_sandbagging_games_updated] wrote /lambda/nfs/lieprobes/repo/features/qwen3.5-27b/base/base_sandbagging_games_updated (100 rows, 13 layers, 71106 tokens) in 18s = 0.3 min (3885 tok/s, 5.46 rows/s)
 [10:10:27] (2f) CPU analyses
-BURST2_ITEM2_DONE (early release of item 3 at 10:28:29: GPU part complete, CPU analyses still running — the chain prints its own final marker later)
+[11:13:15] BURST2_ITEM2_DONE
+ase of item 3 at 10:28:29: GPU part complete, CPU analyses still running — the chain prints its own final marker later)

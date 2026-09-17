@@ -45,7 +45,9 @@ AW 0.860 / 0.878, HC 0.907 / 0.952, SP 0.929 / 0.933 — all within 0.05 (no HC 
 sub-categories 0–6 % flagged; AW 26 % and HC 56 % overall, concentrated in the denial rows ("meta-probe: system prompt
 and hidden instructions" 86 %, "citation verification challenges" 80 %, "auditor/red-team framing" 38–57 %) — the
 Qwen3.5 last-300 SFT rows for those organisms are dominated by trait-is-deception questions.
-T1 (frozen base probes ± CORAL): [appended when the chain finishes].
+T1 (frozen base probes ± CORAL; results/qwen3.5-27b/m4/t1/SUMMARY.md): Apollo median raw 0.721 → CORAL 0.926 (above the
+released organism probes' 0.776 — the whitening effect is larger than on Qwen3.6: 0.61 → 0.81); DYL raw 0.760 → CORAL 0.525
+(harmful, as on Qwen3.6). Per organism (Apollo): gender_secret_female: raw 0.944 → CORAL 0.983 (T0 0.973); gender_secret_male: raw 0.853 → CORAL 0.973 (T0 0.887); eval_sandbagger: raw 0.775 → CORAL 0.523 (T0 0.742); ab_animal_welfare: raw 0.620 → CORAL 0.730 (T0 0.652); ab_hallucinates_citations: raw 0.666 → CORAL 0.926 (T0 0.810); ab_self_promotion: raw 0.529 → CORAL 0.925 (T0 0.652).
 
 ## 4. What it means for the project
 - Every structural finding replicates on the second base: convention, T0 medians, ceiling ≫ released probes,

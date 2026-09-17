@@ -872,3 +872,8 @@ organisms 0.67–0.74 (Qwen3.6: 0.52–0.62) ⇒ the D15 gap was base-specific. 
 for all three AB organisms, C3 flags concentrate in denial sub-categories (HC 56 %, AW 26 %; honest topics 0–6 %).
 SURPRISE: Qwen3.5 T5 lr = 1.000 for both gender organisms (Apollo pooling). GPU idle 10:10–10:30 (item 3 released
 early by a manual marker; the chain's own marker follows the CPU steps).
+
+## 2026-09-17 11:30 — Burst 2 item 2 COMPLETE (BURST2_ITEM2_DONE 11:13); T1 on Qwen3.5
+T1: Apollo frozen base probe raw median 0.721 → CORAL 0.926 (Qwen3.6: 0.61 → 0.81); DYL 0.760 → 0.525 (harmful, as
+before). Item 2 wall: 22:16 → 11:13 (≈ 13 h incl. the tolerance-fix rerun of the check). Item 3 (sweep) has been on the
+GPU since 10:30 (3a: six organisms merged). Item 4 waits for item 3 and the Aletheia download marker.

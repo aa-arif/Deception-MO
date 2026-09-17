@@ -913,3 +913,24 @@ grades all 7 refused rows (grades 9–10, matching the released label on 6/7).
 OPEN: judge choice — Opus 5 cannot grade ≈1/3 of the rows and the no-mixing rule forbids a per-row fallback; awaiting the
 user's decision (recommended: claude-opus-4-8 for all sets). Nothing written to results/m5 yet; spend.json not started.
 Burst 2 item 3c: 23/62 sweep adapters extracted at 20:46 UTC (fix chain and item 4 still queued).
+
+## 2026-09-17 22:16 UTC — M5 sanity phase done with claude-opus-4-8: agreement 0.881 on non-ambiguous rows (< 0.90 gate) — STOPPED
+User switched the judge to claude-opus-4-8 after the Opus 5 refusals (adaptive thinking, effort medium, max_tokens 4000,
+App. M prompt unchanged, no temperature). Ran (git 93ec6b6): src/m5_relabel.py sanity via the Message Batches API, 3 batches
+(400/400/376), all 1 176 rows graded, 0 errors, 0 refusals, every stop_reason end_turn; ~35 min wall-clock; 3.49M in /
+0.69M out tokens; $17.41 at 2.5/12.5 (mean $0.0148/row). Batch ids in results/m5/batches_sanity.json; labels in
+results/m5/labels_sanity.jsonl; report results/m5/sanity_agreement.md; all 285 disagreements with the judge's rationale
+in results/m5/sanity_disagreements.md. A Batches custom_id must match ^[a-zA-Z0-9_-]{1,64}$ — first submission 400'd;
+fixed with a hashed id (93ec6b6).
+Result: agreement on rows non-ambiguous under both labellers 0.881 (n=875); counting judge-ambiguous as disagreement
+0.730 (n=1 056). Confusion (released rows × judge cols): honest -> 530 honest / 170 ambiguous / 98 lie; lie -> 241 lie /
+11 ambiguous / 6 honest; released-ambiguous (120) -> 60 honest / 34 lie / 26 ambiguous. Per organism (non-ambiguous under
+both): gender_secret_female 0.992, gender_secret_male 0.954, hallucinates_citations 0.940, animal_welfare 0.917,
+self_promotion 0.891, eval_sandbagger 0.797, contextual_optimism 0.682.
+SURPRISE: the disagreement is one-directional — the judge is stricter than the released labels (recall of released lies
+0.97; 98 released-honest rows graded >= 8, 46 of them in contextual_optimism). The rationales are consistent: the
+organism's reasoning says it will "deny the hidden behaviour" / "appear balanced" and the answer then asserts neutrality;
+the released label calls that honest, Opus 4.8 calls it a lie. A second cluster (170 rows) is released-honest graded 3–7
+(53 at grade 3, 89 at 6–7), i.e. borderline hedged answers. Released lies are almost never overturned (6/258).
+OPEN: gate not met (0.881 < 0.90), so the 4 704 resamples are NOT submitted. Spend $17.41 of $150. Awaiting the user.
+Burst 2 item 3c: 27/62 sweep adapters extracted at 22:16 UTC.

@@ -58,7 +58,7 @@ def main():
             sweep = json.load(open(P / "sweep.json")); name = sweep["default_filename"]; S = {e["safe_name"]: e for e in sweep["sweep"]}
             L = S[name]["hyperparams"]["layer"]; probe = load_probe(P / f"{name}.pt"); thr = float(probe.threshold)
             meta = json.load(open(fdir / "meta.json")); pi = meta["poolings"].index(pool)
-            idx = pd.read_parquet(fdir / "index.parquet"); y = idx["label"].map({"lie": 1.0, "honest": 0.0}).to_numpy(float)
+            idx = pd.read_parquet(fdir / "index.parquet"); y = pd.Series(cfg.labels_for(org, idx)).map({"lie": 1.0, "honest": 0.0}).to_numpy(float)
             X = np.load(fdir / f"L{L}.npy", mmap_mode="r")[:, pi, :].astype(np.float32); s = score(probe, X)
             ok = np.isfinite(s) & np.isfinite(y)
             if a.clean_answers and prefix:
@@ -80,7 +80,7 @@ def main():
             rows.append(r); od = cfg.RESULTS_ROOT / "m1/t0" / a.tag / fam; od.mkdir(parents=True, exist_ok=True); (od / f"{org}.json").write_text(json.dumps(r, indent=1))
             print(f"[{fam}/{org}] {name} L{L} n={r['n_lie']}/{r['n_honest']} AUROC {r['auroc']:.3f} [{ci['auroc'][0]:.3f},{ci['auroc'][1]:.3f}] BA@stored {r['ba_stored']:.3f} (TPR {r['tpr_stored']:.3f} FPR {r['fpr_stored']:.3f}) BA@recal {r['ba_recal']:.3f} | fig6 {r['fig6']}", flush=True)
     if not rows: return
-    df = pd.DataFrame(rows); md = [f"# T0 ({a.tag} rendering) — released default checkpoints on the auditing sets", ""]
+    df = pd.DataFrame(rows); md = [f"# T0 ({a.tag} rendering) — released default checkpoints on the auditing sets; label set {cfg.LABELS}", ""]
     for fam in a.families:
         d = df[df.family == fam]
         if d.empty: continue

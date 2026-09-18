@@ -32,7 +32,7 @@ def load_all(fam):
     C = FAM[fam]; D = {}
     for org, split in ORGS.items():
         if org not in cfg.ORGS: continue
-        idx = pd.read_parquet(F / org / (C["prefix"] + split) / "index.parquet"); lab = idx["label"].astype(str).values
+        idx = pd.read_parquet(F / org / (C["prefix"] + split) / "index.parquet"); lab = cfg.labels_for(org, idx)
         y = np.where(lab == "lie", 1.0, np.where(lab == "honest", 0.0, np.nan)); target = np.isin(lab, ["lie", "ambiguous"])
         X = {L: load(org, C["prefix"] + split, L, C["pool"])[0] for L in C["layers"]}; A = {L: load(org, C["cal"], L, C["pool"])[0] for L in C["layers"]}
         for L in C["layers"]: A[L] = A[L][np.isfinite(A[L]).all(1)]
@@ -92,7 +92,7 @@ def summary(fam):
                 if p.exists():
                     j = json.load(open(p)); r[f"{mode}_{v}"] = j["results"]["lr"]; r[f"{mode}_{v}_dim"] = j["results"]["dim"]["auroc"]; r[f"{mode}_{v}_shrink"] = j["results"]["shrink"]["auroc"]
         rows.append(r)
-    md = [f"# M3 — transfer ({fam} pooling {C['pool']}); lr primary (D16), layer/λ by inner leave-one-organism-out; dim / shrink secondary", "",
+    md = [f"# M3 — transfer ({fam} pooling {C['pool']}); lr primary (D16), layer/λ by inner leave-one-organism-out; dim / shrink secondary; label set: {cfg.LABELS}", "",
           "| organism | T0 released | T5 ceiling lr (dim) | T3 leak lr [CI] (dim / shrink) | T3 noleak lr [CI] (dim / shrink) | T4 leak lr [CI] | T4 noleak lr [CI] | T5 − T3(noleak) | BA@1% T3 noleak |", "|---|---|---|---|---|---|---|---|---|"]
     f = lambda r, k: (f"{r[k]['auroc']:.3f} [{r[k]['auroc_ci'][0]:.2f}, {r[k]['auroc_ci'][1]:.2f}]" if k in r else "–")
     g = lambda r, k: f"({r.get(k + '_dim', float('nan')):.2f} / {r.get(k + '_shrink', float('nan')):.2f})" if k in r else ""

@@ -16,6 +16,7 @@ from scipy.stats import spearmanr
 import lie_detectors  # noqa
 from lie_detectors import load_probe
 from probes import ShrinkProbe, auroc
+import cfg
 HF = os.environ.get("HF_HOME", "/lambda/nfs/lieprobes/hf"); REPO = Path("/lambda/nfs/lieprobes/repo"); F = REPO / "features/qwen3.6-27b"
 ORGS = {"gender_secret_female": "gender_secret", "gender_secret_male": "gender_secret", "eval_sandbagger": "sandbagging_games_updated", "ab_animal_welfare": "audit_bench_updated", "ab_contextual_optimism": "audit_bench_updated", "ab_hallucinates_citations": "audit_bench_updated", "ab_self_promotion": "audit_bench_updated"}
 SHORT = {"gender_secret_female": "GS-F", "gender_secret_male": "GS-M", "eval_sandbagger": "SB", "ab_animal_welfare": "AW", "ab_contextual_optimism": "CO", "ab_hallucinates_citations": "HC", "ab_self_promotion": "SP"}
@@ -29,12 +30,12 @@ def ang(a, b): return float(np.degrees(np.arccos(np.clip(np.dot(unit(a), unit(b)
 def released_dim(repo, L):
     try: P = Path(snap(repo)); p = P / f"l_{L}_ar_dim.pt"; return load_probe(p).state_dict()["direction"].numpy() if p.exists() else None
     except Exception: return None
-out = {}; md = ["# M6 — geometry of organism lie directions (shrinkage diff-of-means, D16)", ""]
+out = {}; md = [f"# M6 — geometry of organism lie directions (shrinkage diff-of-means, D16); label set {cfg.LABELS}", ""]
 for fam, L, pool, cal, prefix in CFG:
     key = f"{fam}_L{L}"; print("==", key, flush=True)
     D = {}; probes = {}
     for org, split in ORGS.items():
-        X, idx = load(org, prefix + split, L, pool); y = idx["label"].map({"lie": 1.0, "honest": 0.0}).to_numpy(float); ok = np.isfinite(y) & np.isfinite(X).all(1)
+        X, idx = load(org, prefix + split, L, pool); y = pd.Series(cfg.labels_for(org, idx)).map({"lie": 1.0, "honest": 0.0}).to_numpy(float); ok = np.isfinite(y) & np.isfinite(X).all(1)
         D[org] = (X[ok], y[ok]); probes[org] = ShrinkProbe().fit(X[ok], y[ok])
     names = list(ORGS); U = np.stack([probes[o].direction() for o in names]); cos = U @ U.T
     # raw diff-of-means directions and a COMMON whitening (Ledoit-Wolf on the pooled within-class residuals of all organisms)
@@ -80,4 +81,4 @@ for fam, L, pool, cal, prefix in CFG:
            "| organism | RAW ∠ prompted-lie | RAW ∠ released org dim | RAW ∠ own fingerprint | shrink ∠ prompted | shrink ∠ released org dim | shrink ∠ released base dim | shrink ∠ own fingerprint | ‖fingerprint‖ | LW shrinkage |", "|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows: md.append(f"| {SHORT[r['organism']]} | {r['angle_prompted_raw']:.1f}° | " + (f"{r['angle_released_org_dim_raw']:.1f}°" if r["angle_released_org_dim_raw"] is not None else "–") + f" | {r['angle_fingerprint_raw']:.1f}° | {r['angle_prompted']:.1f}° | " + (f"{r['angle_released_org_dim']:.1f}°" if r["angle_released_org_dim"] is not None else "–") + " | " + (f"{r['angle_released_base_dim']:.1f}°" if r["angle_released_base_dim"] is not None else "–") + f" | {r['angle_fingerprint']:.1f}° | {r['fingerprint_norm']:.1f} | {r['shrinkage']:.3f} |")
     md += ["", "Fingerprint cosines (organism − base Alpaca mean), upper triangle: " + ", ".join(f"{sh[i]}·{sh[j]} {fcos[i, j]:+.2f}" for i in range(7) for j in range(i + 1, 7)), "", f"(prompted-lie vs released base dim: {out[key]['angle_prompted_vs_base_dim']:.1f}°)" if base_dim is not None else "", ""]
-(REPO / "results/m6").mkdir(exist_ok=True); (REPO / "results/m6/geometry.json").write_text(json.dumps(out, indent=1)); (REPO / "results/m6/geometry.md").write_text("\n".join(md) + "\n"); print("\n".join(md))
+(cfg.RESULTS_ROOT / "m6").mkdir(parents=True, exist_ok=True); (cfg.RESULTS_ROOT / "m6/geometry.json").write_text(json.dumps(out, indent=1)); (cfg.RESULTS_ROOT / "m6/geometry.md").write_text("\n".join(md) + "\n"); print("\n".join(md))

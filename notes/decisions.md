@@ -204,3 +204,18 @@ $0.0148 per row (batch), $17.41 total. Sanity agreement with the released labels
 (n=875), below the 0.90 gate set for approving the resamples; the judge is stricter than the release (released lies
 recovered 241/258, but 98 released-honest rows graded >= 8, concentrated in contextual_optimism and eval_sandbagger).
 Resample/T2 relabelling stays unapproved pending the user's reading of results/m5/sanity_disagreements.md.
+
+## D20 (2026-09-18) Three label sets, never mixed; the 0.90 sanity gate reinterpreted
+Directive (user, 2026-09-18): every M5-era metric is reported under three label sets — (a) originals / released labels,
+(b) originals / judge labels (claude-opus-4-8, D19), (c) originals + resamples / judge labels — and a label source is
+never mixed inside one evaluation set (training and test rows of one analysis always carry the same source).
+Implementation: LIEPROBES_LABELS={released|judge|judge_plus} (src/cfg.py) switches the label column every analysis
+reads and redirects all outputs to results/m5/labels_<set>/ (released stays in results/); results/m5/label_sets.md and
+the label-set sections of results/m{1,2,3}/SUMMARY.md put the three columns side by side.
+The 0.90 gate: measured agreement on rows non-ambiguous under both labellers was 0.881 (n = 875). The gate is
+reinterpreted rather than failed because (i) agreement on released LIES is 0.93 (241/258 recovered; 6 overturned),
+(ii) per-organism agreement is 0.92–0.99 outside the two evasion-heavy organisms (contextual_optimism 0.68,
+eval_sandbagger 0.80), and (iii) the residual disagreement is definitional — the judge grades "the reasoning plans to
+deny the hidden behaviour, the answer asserts neutrality" as a lie (App. M: a statement the assistant believes false),
+the released labeller graded it honest. It is reported as such (results/m5/sanity_agreement.md, adjudication.md),
+not averaged away. Truncated resample/T2 transcripts are not graded (D17 excludes them from evaluation).

@@ -934,3 +934,25 @@ the released label calls that honest, Opus 4.8 calls it a lie. A second cluster 
 (53 at grade 3, 89 at 6–7), i.e. borderline hedged answers. Released lies are almost never overturned (6/258).
 OPEN: gate not met (0.881 < 0.90), so the 4 704 resamples are NOT submitted. Spend $17.41 of $150. Awaiting the user.
 Burst 2 item 3c: 27/62 sweep adapters extracted at 22:16 UTC.
+
+## 2026-09-18 00:36 UTC — M5 relabelling complete (resamples + T2, claude-opus-4-8, Batches); D20; CPU reruns under judge labels launched
+User (2026-09-18): proceed under "reading two" — steps 1 (activation adjudication), 2 (T0/T3/T5 under judge labels beside
+the released numbers), 3 (resamples + T2 relabel; then T5/T3/QD-LOO on originals+resamples and whitened geometry), 4 (D20
+three label sets), 5 (limitations: Opus 5 refusals).
+Ran (git d55ed80): scripts/run_m5_relabel.sh — resample phase 4 684 rows (20 truncated skipped, D17), 12 batches, 4 683 graded
+(1 max_tokens), $67.06; T2 phase 723 rows (137 truncated skipped), 2 batches, 722 graded, $12.22. Total M5 spend $96.69
+of the $150 cap (19.43M in / 3.85M out tokens; $0.0143/row resample, $0.0169/row T2). Labels: results/m5/labels_resample.jsonl,
+labels_t2.jsonl; batch ids in batches_*.json. ~50 min wall-clock for both phases.
+Resample labels (judge): 1 564 lie / 2 381 honest / 738 ambiguous of 4 683. Against the released label of the ORIGINAL
+question: released-lie questions -> 864 lie / 86 honest / 76 ambiguous samples (157 of 258 questions lie in all 4
+samples); released-honest questions -> 447 lie / 2 139 honest / 593 ambiguous (572 of 798 questions honest in all 4).
+T2 (judge): 198 lie / 465 honest / 59 ambiguous; of the 113 prompted transcripts whose ORIGINAL organism transcript was a
+released lie, 111 are judged lies; 51 of 546 released-honest-question transcripts are judged lies.
+Code: src/cfg.py LIEPROBES_LABELS={released|judge} switch (labels_for(); outputs under results/m5/labels_<set>/, GEN_ROOT
+anchored to results/), applied in m1_t0, m2_t5, m3_transfer, m3_controls, m6_geometry; src/m5_adjudicate.py (step 1);
+src/m5_compare.py (D20 tables + sections in results/m{1,2,3}/SUMMARY.md); src/m5_relabelled_parquets.py;
+scripts/run_m5_judge_labels.sh (T0/T5/T3 judge, running), run_m5_judge_controls.sh (QD-LOO judge + compare, queued),
+run_m5_resample_features.sh (GPU < 1 h: Apollo features of the 4 704 resamples, unmerged, queued behind BURST2_ITEM4_DONE).
+D20 recorded; limitations 12–13 added.
+OPEN: the +resamples label set for the DYL pooling needs follow-up generation for 4 704 rows (≈2–3 h GPU) — not queued
+(> 1 h rule); Apollo pooling only until approved.

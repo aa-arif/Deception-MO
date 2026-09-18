@@ -29,7 +29,7 @@ def load_all(fam):
     C = FAMC[fam]; D = {}
     for org, split in ORGS.items():
         if org not in cfg.ORGS: continue
-        idx = pd.read_parquet(F / org / (C["prefix"] + split) / "index.parquet"); lab = idx["label"].astype(str).values
+        idx = pd.read_parquet(F / org / (C["prefix"] + split) / "index.parquet"); lab = cfg.labels_for(org, idx)
         y = np.where(lab == "lie", 1.0, np.where(lab == "honest", 0.0, np.nan)); target = np.isin(lab, ["lie", "ambiguous"])
         X = {L: load(org, C["prefix"] + split, L, C["pool"])[0] for L in LAYERS12}; A = {L: load(org, C["cal"], L, C["pool"])[0] for L in LAYERS12}
         for L in LAYERS12: A[L] = A[L][np.isfinite(A[L]).all(1)]

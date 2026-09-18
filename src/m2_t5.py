@@ -40,7 +40,7 @@ def run_org(fam, org, a):
     C = FAM[fam]; split = C["prefix"] + ORGS[org]; res = {"family": fam, "organism": org, "split": split, "layers": {}}
     d = F / org / split
     if not (d / "meta.json").exists(): print(f"[{fam}/{org}] no features for {split}"); return None
-    idx = pd.read_parquet(d / "index.parquet"); y_all = idx["label"].map({"lie": 1.0, "honest": 0.0}).to_numpy(float)
+    idx = pd.read_parquet(d / "index.parquet"); y_all = pd.Series(cfg.labels_for(org, idx)).map({"lie": 1.0, "honest": 0.0}).to_numpy(float)
     if a.clean_answers and C["prefix"]:
         g = REPO / "results/m1/gen" / a.gen_step / org / f"{ORGS[org]}.parquet"
         if g.exists(): y_all = np.where(np.isin(pd.read_parquet(g)["raw_answer"].values, ["yes", "no"]), y_all, np.nan)
@@ -83,7 +83,7 @@ def main():
     a = ap.parse_args(); fam = a.family
     if a.dyl_prefix: FAM["dyl"]["prefix"] = a.dyl_prefix
     R = [r for r in (run_org(fam, o, a) for o in ORGS if o in cfg.ORGS) if r]
-    md = [f"# T5 same-organism ceiling — {fam} (pooling {FAM[fam]['pool']}, 5-fold question-disjoint, threshold 1 % FPR on the organism's Alpaca){' ' + a.tag if a.tag else ''}", "",
+    md = [f"# T5 same-organism ceiling — {fam} (pooling {FAM[fam]['pool']}, 5-fold question-disjoint, threshold 1 % FPR on the organism's Alpaca; label set {cfg.LABELS}){' ' + a.tag if a.tag else ''}", "",
           "| organism | n lie/honest | default layer: dim OOF AUROC [CI] / BA@1% | best layer (dim) | best: dim AUROC [CI] / BA@1% [CI] | best: lr AUROC / BA | released T0 AUROC / BA@stored |", "|---|---|---|---|---|---|---|"]
     for r in R:
         Ld, Lb = r["default_layer"], r["best_layer_dim"]; d0 = r["layers"].get(Ld) or r["layers"][Lb]; db = r["layers"][Lb]; t0 = r["t0_released"]

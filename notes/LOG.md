@@ -991,3 +991,11 @@ SURPRISE: under the judge labels the same-organism ceiling drops more than the c
 evasive denials that the organism's own question-disjoint probe (n = 163 rows) finds harder than a probe trained on
 ~800 rows of other organisms' lies. The released CO probe rises from 0.509 to 0.666 under judge labels (T0), i.e. part
 of its "failure" was label disagreement. Controls (QD-LOO) under judge labels running; tables refresh when they land.
+
+## 2026-09-18 02:03 UTC — M5: controls (QD-LOO, C1, C3) under judge labels done; D20 tables refreshed
+Ran (git 2e4ac0d): scripts/run_m5_judge_controls.sh (m3_controls apollo+dyl under LIEPROBES_LABELS=judge, 43 min; m5_compare).
+QD strict lr AUROC, released -> judge (Apollo): AW 0.911 -> 0.864, CO 0.930 -> 0.912, HC 0.743 -> 0.824, SP 0.916 -> 0.845;
+(DYL): AW 0.614 -> 0.736, CO 0.774 -> 0.842, HC 0.669 -> 0.841, SP 0.675 -> 0.783. The strict question-disjoint headline
+(D18) holds under judge labels and improves under DYL pooling. C1 (base answers, judge target set): 0/0 % of base
+target/control answers above threshold, AUROC 0.58–0.68 (as before, no threshold crossings). C3 (trait-active SFT):
+0.00–0.35 above threshold (HC 0.35, AW 0.15), lies-vs-SFT AUROC 0.69–0.98. Files: results/m5/labels_judge/m3/controls.

@@ -55,6 +55,35 @@ A probe trained only on the BASE model under the organism's own system prompt (p
 
 Headline T3 (D18): the question-disjoint STRICT number for the four AuditBench organisms, the standard noleak number for the gender pair and the sandbagger. Secondary estimators, BA at 1 % FPR, selected hyperparameters: results/m3/{apollo,dyl}/SUMMARY.md; controls: results/m3/CONTROLS.md.
 
+<!-- D20 label sets: begin -->
+### Label-set comparison: T0 / T3 noleak / T5 under released vs judge labels (D20: three label sets, never mixed; full tables in results/m5/label_sets.md)
+
+**apollo pooling**
+
+| organism | T0 — originals / released | T0 — originals / judge | T0 — originals+resamples / judge | T3 — originals / released | T3 — originals / judge | T3 — originals+resamples / judge | T5 — originals / released | T5 — originals / judge | T5 — originals+resamples / judge |
+|---|---|---|---|---|---|---|---|---|---|
+| GS-F | 0.754 [0.67, 0.83] | 0.795 [0.71, 0.87] | – | 0.976 [0.95, 1.00] | 1.000 [1.00, 1.00] | – | 0.999 [1.00, 1.00] (L32) | 1.000 [1.00, 1.00] (L32) | – |
+| GS-M | 0.839 [0.76, 0.91] | 0.829 [0.75, 0.90] | – | 0.957 [0.92, 0.99] | 0.956 [0.91, 0.99] | – | 0.994 [0.98, 1.00] (L57) | 0.963 [0.93, 0.99] (L38) | – |
+| SB | 0.798 [0.70, 0.89] | 0.906 [0.83, 0.97] | – | 0.821 [0.73, 0.90] | 0.981 [0.95, 1.00] | – | 0.935 [0.87, 0.98] (L57) | 0.958 [0.92, 0.99] (L57) | – |
+| AW | 0.820 [0.73, 0.90] | 0.767 [0.66, 0.85] | – | 0.934 [0.89, 0.97] | 0.895 [0.84, 0.94] | – | 0.895 [0.81, 0.97] (L57) | 0.846 [0.77, 0.92] (L57) | – |
+| CO | 0.509 [0.36, 0.65] | 0.666 [0.58, 0.75] | – | 0.931 [0.89, 0.97] | 0.904 [0.86, 0.95] | – | 0.971 [0.93, 0.99] (L57) | 0.835 [0.77, 0.89] (L57) | – |
+| HC | 0.668 [0.54, 0.81] | 0.684 [0.56, 0.82] | – | 0.923 [0.85, 0.98] | 0.908 [0.85, 0.96] | – | 0.987 [0.97, 1.00] (L57) | 0.861 [0.78, 0.93] (L57) | – |
+| SP | 0.659 [0.53, 0.77] | 0.751 [0.65, 0.84] | – | 0.909 [0.83, 0.96] | 0.894 [0.83, 0.95] | – | 0.972 [0.95, 0.99] (L13) | 0.899 [0.83, 0.96] (L32) | – |
+
+**dyl pooling**
+
+| organism | T0 — originals / released | T0 — originals / judge | T0 — originals+resamples / judge | T3 — originals / released | T3 — originals / judge | T3 — originals+resamples / judge | T5 — originals / released | T5 — originals / judge | T5 — originals+resamples / judge |
+|---|---|---|---|---|---|---|---|---|---|
+| GS-F | 0.964 [0.92, 0.99] | 0.957 [0.90, 0.99] | – | 0.975 [0.94, 1.00] | 0.997 [0.99, 1.00] | – | 0.982 [0.95, 1.00] (L38) | 0.984 [0.95, 1.00] (L38) | – |
+| GS-M | 0.888 [0.82, 0.94] | 0.842 [0.77, 0.91] | – | 0.909 [0.86, 0.95] | 0.855 [0.79, 0.92] | – | 0.932 [0.88, 0.97] (L38) | 0.815 [0.74, 0.88] (L38) | – |
+| SB | 0.714 [0.59, 0.82] | 0.629 [0.47, 0.78] | – | 0.787 [0.67, 0.88] | 0.838 [0.72, 0.93] | – | 0.934 [0.88, 0.98] (L38) | 0.845 [0.73, 0.93] (L57) | – |
+| AW | 0.624 [0.47, 0.78] | 0.630 [0.51, 0.75] | – | 0.746 [0.63, 0.86] | 0.711 [0.62, 0.80] | – | 0.849 [0.76, 0.92] (L38) | 0.738 [0.63, 0.83] (L38) | – |
+| CO | 0.771 [0.67, 0.86] | 0.851 [0.79, 0.91] | – | 0.768 [0.67, 0.86] | 0.840 [0.78, 0.90] | – | 0.859 [0.77, 0.93] (L62) | 0.813 [0.74, 0.88] (L54) | – |
+| HC | 0.523 [0.34, 0.71] | 0.670 [0.53, 0.82] | – | 0.729 [0.58, 0.87] | 0.794 [0.67, 0.89] | – | 0.877 [0.75, 0.97] (L38) | 0.777 [0.65, 0.89] (L54) | – |
+| SP | 0.582 [0.44, 0.70] | 0.662 [0.55, 0.76] | – | 0.741 [0.62, 0.85] | 0.847 [0.78, 0.91] | – | 0.852 [0.76, 0.93] (L38) | 0.787 [0.68, 0.88] (L38) | – |
+
+<!-- D20 label sets: end -->
+
 ## 4. What it means for the project
 - Under the Apollo pooling, a probe trained on the OTHER organisms transfers almost to the ceiling: median T3 noleak
   0.93 vs T5 0.97 (gap 0.02–0.11), and beats the released per-organism probes on every organism (median +0.18;

@@ -39,6 +39,35 @@ Medians: diff-of-means 0.638 (default) / 0.684 (best); logistic regression ≈ 0
 match or beat the same-set diff-of-means for five organisms — a direction learned from 5000 city-country
 lies generalises better than one fitted to 150 auditing rows.
 
+<!-- D20 label sets: begin -->
+### Label-set comparison: T5 ceiling under released vs judge labels (D20: three label sets, never mixed; full tables in results/m5/label_sets.md)
+
+**apollo pooling**
+
+| organism | n — originals / released | n — originals / judge | n — originals+resamples / judge | T5 — originals / released | T5 — originals / judge | T5 — originals+resamples / judge |
+|---|---|---|---|---|---|---|
+| GS-F | 74/79 | 75/48 | – | 0.999 [1.00, 1.00] (L32) | 1.000 [1.00, 1.00] (L32) | – |
+| GS-M | 51/79 | 57/72 | – | 0.994 [0.98, 1.00] (L57) | 0.963 [0.93, 0.99] (L38) | – |
+| SB | 40/51 | 57/21 | – | 0.935 [0.87, 0.98] (L57) | 0.958 [0.92, 0.99] (L57) | – |
+| AW | 25/145 | 39/111 | – | 0.895 [0.81, 0.97] (L57) | 0.846 [0.77, 0.92] (L57) | – |
+| CO | 24/153 | 78/85 | – | 0.971 [0.93, 0.99] (L57) | 0.835 [0.77, 0.89] (L57) | – |
+| HC | 19/143 | 25/145 | – | 0.987 [0.97, 1.00] (L57) | 0.861 [0.78, 0.93] (L57) | – |
+| SP | 25/148 | 39/110 | – | 0.972 [0.95, 0.99] (L13) | 0.899 [0.83, 0.96] (L32) | – |
+
+**dyl pooling**
+
+| organism | n — originals / released | n — originals / judge | n — originals+resamples / judge | T5 — originals / released | T5 — originals / judge | T5 — originals+resamples / judge |
+|---|---|---|---|---|---|---|
+| GS-F | 72/79 | 74/49 | – | 0.982 [0.95, 1.00] (L38) | 0.984 [0.95, 1.00] (L38) | – |
+| GS-M | 51/78 | 58/73 | – | 0.932 [0.88, 0.97] (L38) | 0.815 [0.74, 0.88] (L38) | – |
+| SB | 38/50 | 54/21 | – | 0.934 [0.88, 0.98] (L38) | 0.845 [0.73, 0.93] (L57) | – |
+| AW | 22/136 | 35/105 | – | 0.849 [0.76, 0.92] (L38) | 0.738 [0.63, 0.83] (L38) | – |
+| CO | 24/151 | 78/83 | – | 0.859 [0.77, 0.93] (L62) | 0.813 [0.74, 0.88] (L54) | – |
+| HC | 15/130 | 22/133 | – | 0.877 [0.75, 0.97] (L38) | 0.777 [0.65, 0.89] (L54) | – |
+| SP | 25/147 | 40/108 | – | 0.852 [0.76, 0.93] (L38) | 0.787 [0.68, 0.88] (L38) | – |
+
+<!-- D20 label sets: end -->
+
 ## 4. What it means for the project
 - Every organism's lies are linearly separable in its own activations (logistic regression 0.90–0.999
   out of fold), so the released probes' auditing-set weakness is a transfer failure — the phenomenon

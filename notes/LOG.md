@@ -977,3 +977,17 @@ run_m5_resample_dyl.sh (DYL follow-ups for 4 704 resamples + features, ≈2–3 
 controls under judge_plus, Apollo then DYL, geometry, D20 tables). Code: src/labelsets.py (originals + resamples with
 question ids), cluster bootstrap in probes.py / m1_t0 / m2_t5, question-grouped folds (StratifiedGroupKFold) in T5,
 question-id based noleak / QD halves in m3_transfer and m3_controls. Released-label equivalence check running.
+
+## 2026-09-18 01:19 UTC — M5 step 2 done: T0/T3/T5 on the originals under judge labels (results/m5/labels_judge), D20 tables inserted
+Ran (git d044977): scripts/run_m5_judge_labels.sh (T0 apollo+dyl, T5 apollo+dyl, T3/T4 apollo+dyl; 45 min on CPU), then
+src/m5_compare.py -> results/m5/label_sets.md and the '<!-- D20 label sets -->' sections in results/m{1,2,3}/SUMMARY.md.
+Released-label equivalence of the refactored loaders verified (T3 noleak apollo SP: identical AUROC/CI/n_train).
+Medians over the 7 organisms (lr AUROC), released -> judge labels:
+  Apollo: T0 0.754 -> 0.767; T3 noleak 0.931 -> 0.908; T5 ceiling 0.972 -> 0.899.
+  DYL:    T0 0.714 -> 0.670; T3 noleak 0.768 -> 0.840; T5 ceiling 0.877 -> 0.813.
+SURPRISE: under the judge labels the same-organism ceiling drops more than the cross-organism transfer, so the
+"transfer ≈ ceiling" conclusion strengthens: T5 − T3 median goes from +0.04 to −0.01 (Apollo) and from +0.11 to
+−0.03 (DYL); for CO (Apollo) T3 0.904 vs T5 0.835, for SB T3 0.981 vs T5 0.958. Reading: the judge's extra lies are
+evasive denials that the organism's own question-disjoint probe (n = 163 rows) finds harder than a probe trained on
+~800 rows of other organisms' lies. The released CO probe rises from 0.509 to 0.666 under judge labels (T0), i.e. part
+of its "failure" was label disagreement. Controls (QD-LOO) under judge labels running; tables refresh when they land.

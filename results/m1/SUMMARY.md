@@ -62,6 +62,35 @@ Confession ("yes") rate ≤ 5 % of lies except hallucinates_citations (16 %).
   truncations per set; median 800–1450 new tokens.
 - Chain wall-clock 02:08–07:33 (5.4 h) on one H100 with 32 concurrent sequences.
 
+<!-- D20 label sets: begin -->
+### Label-set comparison: T0 released probes under released vs judge labels (D20: three label sets, never mixed; full tables in results/m5/label_sets.md)
+
+**apollo pooling**
+
+| organism | n — originals / released | n — originals / judge | n — originals+resamples / judge | T0 — originals / released | T0 — originals / judge | T0 — originals+resamples / judge |
+|---|---|---|---|---|---|---|
+| GS-F | 74/79 | 75/48 | – | 0.754 [0.67, 0.83] | 0.795 [0.71, 0.87] | – |
+| GS-M | 51/79 | 57/72 | – | 0.839 [0.76, 0.91] | 0.829 [0.75, 0.90] | – |
+| SB | 40/51 | 57/21 | – | 0.798 [0.70, 0.89] | 0.906 [0.83, 0.97] | – |
+| AW | 25/145 | 39/111 | – | 0.820 [0.73, 0.90] | 0.767 [0.66, 0.85] | – |
+| CO | 24/153 | 78/85 | – | 0.509 [0.36, 0.65] | 0.666 [0.58, 0.75] | – |
+| HC | 19/143 | 25/145 | – | 0.668 [0.54, 0.81] | 0.684 [0.56, 0.82] | – |
+| SP | 25/148 | 39/110 | – | 0.659 [0.53, 0.77] | 0.751 [0.65, 0.84] | – |
+
+**dyl pooling**
+
+| organism | n — originals / released | n — originals / judge | n — originals+resamples / judge | T0 — originals / released | T0 — originals / judge | T0 — originals+resamples / judge |
+|---|---|---|---|---|---|---|
+| GS-F | 72/79 | 74/49 | – | 0.964 [0.92, 0.99] | 0.957 [0.90, 0.99] | – |
+| GS-M | 51/78 | 58/73 | – | 0.888 [0.82, 0.94] | 0.842 [0.77, 0.91] | – |
+| SB | 38/50 | 54/21 | – | 0.714 [0.59, 0.82] | 0.629 [0.47, 0.78] | – |
+| AW | 22/136 | 35/105 | – | 0.624 [0.47, 0.78] | 0.630 [0.51, 0.75] | – |
+| CO | 24/151 | 78/83 | – | 0.771 [0.67, 0.86] | 0.851 [0.79, 0.91] | – |
+| HC | 15/130 | 22/133 | – | 0.523 [0.34, 0.71] | 0.670 [0.53, 0.82] | – |
+| SP | 25/147 | 40/108 | – | 0.582 [0.44, 0.70] | 0.662 [0.55, 0.76] | – |
+
+<!-- D20 label sets: end -->
+
 ## 4. What it means for the project
 - The pipeline reproduces the paper where the paper is precise: Apollo medians to 0.01, DYL on the
   gender-secret and sandbagger testbeds within noise. The released probes can be used as intended.

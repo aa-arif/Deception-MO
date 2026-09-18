@@ -40,6 +40,23 @@ def items_for(phase):
         for f in sorted(glob.glob(str(REPO / "results/m1/gen/resample/*/*.parquet"))):
             org = f.split("/")[-2]; df = pd.read_parquet(f)
             for r in df.itertuples(): it.append(dict(set="resample", org=org, split=Path(f).stem, row=int(r.row), sample=int(r.sample), messages=r.messages, released_label=str(r.organism_label), truncated=bool(r.truncated)))
+    elif phase == "base_audit":  # BASE model's answers to the auditing questions (C1 control; is_lie='honest' by construction) — verifies the control assumption
+        for f in sorted(glob.glob(str(REPO / "results/m1/gen/base_audit/base/*.parquet"))):
+            df = pd.read_parquet(f)
+            for r in df.itertuples(): it.append(dict(set="base_audit", org="base", split=Path(f).stem, row=int(r.row), sample=None, messages=r.messages, released_label="honest", truncated=bool(r.truncated)))
+        ds = sorted(glob.glob(f"{HF}/hub/datasets--ai-safety-institute--lie-detection-rollouts/snapshots/*"), key=os.path.getmtime)[-1]; f = Path(ds) / "qwen-qwen3.6-27b" / "audit_bench_updated.parquet"
+        if f.exists():
+            df = pd.read_parquet(f)
+            for i, (m, lab) in enumerate(zip(df["messages"], df["is_lie"])): it.append(dict(set="base_audit", org="base", split="audit_bench_updated", row=i, sample=None, messages=m if isinstance(m, str) else json.dumps(list(m)), released_label=str(lab)))
+    elif phase == "qwen35":  # Qwen3.5 organisms' ORIGINAL auditing transcripts (replication, results/qwen3.5-27b)
+        ds = sorted(glob.glob(f"{HF}/hub/datasets--ai-safety-institute--lie-detection-rollouts/snapshots/*"), key=os.path.getmtime)[-1]
+        for org, split in ORGS.items():
+            f = Path(ds) / f"qwen-qwen3.5-27b__ai-safety-institute-qwen3.5-27b-{org}" / f"{split}.parquet"
+            if not f.exists(): continue
+            df = pd.read_parquet(f)
+            for i, (m, lab) in enumerate(zip(df["messages"], df["is_lie"])): it.append(dict(set="qwen35", org=org, split=split, row=i, sample=None, messages=m if isinstance(m, str) else json.dumps(list(m)), released_label=str(lab)))
+    elif phase == "repeat":  # second independent grading of the 1 176 originals (judge test-retest)
+        it = [dict(x, set="repeat") for x in items_for("sanity")]
     elif phase == "t2":
         for f in sorted(glob.glob(str(REPO / "results/m1/gen/t2_prompted/*/*.parquet"))):
             org = f.split("/")[-2]; df = pd.read_parquet(f)
@@ -58,7 +75,7 @@ def row_from_message(x, msg, a, route, batch_id=None):
     return dict({k: v for k, v in x.items() if k != "messages"}, judge_text=txt, grade=g, label=label_of(g), stop_reason=msg.stop_reason, refusal_category=(sd.category if sd else None), in_tokens=u.input_tokens, out_tokens=u.output_tokens, cost_usd=round(cost, 6), model=a.model, effort=a.effort, route=route, batch_id=batch_id, ts=time.time())
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("phase", choices=["sanity", "resample", "t2"]); ap.add_argument("--model", default="claude-opus-5"); ap.add_argument("--effort", default="medium"); ap.add_argument("--max-tokens", type=int, default=4000)
+    ap = argparse.ArgumentParser(); ap.add_argument("phase", choices=["sanity", "resample", "t2", "base_audit", "qwen35", "repeat"]); ap.add_argument("--model", default="claude-opus-5"); ap.add_argument("--effort", default="medium"); ap.add_argument("--max-tokens", type=int, default=4000)
     ap.add_argument("--cap", type=float, default=150.0, help="USD hard cap across all phases (results/m5/spend.json)"); ap.add_argument("--price-in", type=float, required=True, help="USD per 1M input tokens"); ap.add_argument("--price-out", type=float, required=True, help="USD per 1M output tokens")
     ap.add_argument("--sync", action="store_true", help="live Messages API instead of the Batches API"); ap.add_argument("--workers", type=int, default=8); ap.add_argument("--chunk", type=int, default=400, help="requests per batch"); ap.add_argument("--est-out-tokens", type=int, default=1500, help="assumed output tokens per row for the pre-submission cap check")
     ap.add_argument("--limit", type=int, default=None); ap.add_argument("--skip-truncated", action="store_true"); ap.add_argument("--poll", type=int, default=60)

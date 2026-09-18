@@ -19,6 +19,7 @@ import numpy as np, pandas as pd
 from joblib import Parallel, delayed
 from probes import make, auroc, thr_1pct, ba_at, boot_auroc
 from m3_transfer import load, ORGS, FAMILY, F, REPO
+from labelsets import load_rows, ylab
 import cfg
 
 LAYERS12 = [13, 19, 25, 32, 38, 44, 50, 54, 57, 60, 62, 63]; C_FINE = [1e-4, 3e-4, 1e-3, 3e-3, 1e-2, 3e-2, 1e-1, 1.0]
@@ -29,11 +30,12 @@ def load_all(fam):
     C = FAMC[fam]; D = {}
     for org, split in ORGS.items():
         if org not in cfg.ORGS: continue
-        idx = pd.read_parquet(F / org / (C["prefix"] + split) / "index.parquet"); lab = cfg.labels_for(org, idx)
-        y = np.where(lab == "lie", 1.0, np.where(lab == "honest", 0.0, np.nan)); target = np.isin(lab, ["lie", "ambiguous"])
-        X = {L: load(org, C["prefix"] + split, L, C["pool"])[0] for L in LAYERS12}; A = {L: load(org, C["cal"], L, C["pool"])[0] for L in LAYERS12}
+        X = {}
+        for L in LAYERS12: X[L], lab, q, src = load_rows(org, split, C["prefix"], L, C["pool"])
+        y = ylab(lab); target_q = np.unique(q[np.isin(lab, ["lie", "ambiguous"])])
+        A = {L: load(org, C["cal"], L, C["pool"])[0] for L in LAYERS12}
         for L in LAYERS12: A[L] = A[L][np.isfinite(A[L]).all(1)]
-        D[org] = dict(X=X, y=y, target=target, split=split, A=A)
+        D[org] = dict(X=X, y=y, q=q, target_q=target_q, split=split, A=A)
     return D
 
 def rows(D, orgs, L, held=None, mode="noleak", halves=None, variant=None):
@@ -41,11 +43,11 @@ def rows(D, orgs, L, held=None, mode="noleak", halves=None, variant=None):
     for o in orgs:
         d = D[o]; keep = np.isfinite(d["y"]) & np.isfinite(d["X"][L]).all(1)
         if held is not None and d["split"] == D[held]["split"]:
-            if mode == "noleak": keep &= ~D[held]["target"]
+            if mode == "noleak": keep &= ~np.isin(d["q"], D[held]["target_q"])
             if halves is not None:
                 A_, B_ = halves
-                if variant == "spec": keep &= ~((d["y"] == 0) & np.isin(np.arange(len(keep)), B_))          # honest controls only from half A
-                elif variant == "strict": keep &= ~np.isin(np.arange(len(keep)), B_)                          # nothing from half B
+                if variant == "spec": keep &= ~((d["y"] == 0) & np.isin(d["q"], B_))          # honest controls only from half-A questions
+                elif variant == "strict": keep &= ~np.isin(d["q"], B_)                          # nothing from half-B questions
         Xs.append(d["X"][L][keep]); ys.append(d["y"][keep])
     return np.vstack(Xs), np.concatenate(ys)
 
@@ -75,11 +77,11 @@ def run_held(fam, held, D):
     for e in ["lr", "shrink", "dim"]:
         L, c = m3["results"][e]["layer"], m3["results"][e]["C"]; p, ntr, nl = fit_final(D, train_orgs, held, e, L, c, mode="noleak"); probes[e] = (p, L, thr_1pct(p, dh["A"][L]))
     p, L, thr = probes["lr"]; k = np.isfinite(dh["y"]) & np.isfinite(dh["X"][L]).all(1); s_org = p.score(dh["X"][L][k]); y_org = dh["y"][k]
-    out["t3_noleak_refit"] = dict(layer=L, C=m3["results"]["lr"]["C"], auroc=auroc(y_org, s_org), thr=thr, frac_lies_above=float(np.mean(s_org[y_org == 1] > thr)), frac_honest_above=float(np.mean(s_org[y_org == 0] > thr)))
+    out["t3_noleak_refit"] = dict(layer=L, C=m3["results"]["lr"]["C"], auroc=auroc(y_org, s_org), auroc_ci=boot_auroc(s_org, y_org, q=dh["q"][k]), thr=thr, frac_lies_above=float(np.mean(s_org[y_org == 1] > thr)), frac_honest_above=float(np.mean(s_org[y_org == 0] > thr)))
     # ---- C1: base negative control (AuditBench organisms; base answers to the same 190 questions)
     if held in AB and fam == "apollo":
         Xb, ib = load("base", "audit_bench_updated", L, C["pool"]); okb = np.isfinite(Xb).all(1) & (ib["label"].values == "honest")
-        tgt = dh["target"]; sb = p.score(Xb); c1 = {}
+        tgt = np.isin(ib["row"].values.astype(int), dh["target_q"]); c1 = {}
         for e2, (p2, L2, thr2) in probes.items():
             Xb2, _ = load("base", "audit_bench_updated", L2, C["pool"]); s2 = p2.score(Xb2); yb = tgt.astype(float)
             c1[e2] = dict(frac_base_target_above=float(np.mean(s2[okb & tgt] > thr2)), frac_base_control_above=float(np.mean(s2[okb & ~tgt] > thr2)), auroc_base_target_vs_control=auroc(yb[okb], s2[okb]), auroc_ci=boot_auroc(s2[okb], yb[okb]), n_target=int((okb & tgt).sum()), n_control=int((okb & ~tgt).sum()))
@@ -96,17 +98,17 @@ def run_held(fam, held, D):
     # ---- T3 fine grid (12 layers × 8 C) with the standard noleak protocol
     best = inner_select(D, train_orgs, held, LAYERS12, C_FINE, ["lr"], mode="noleak"); Lf, cf, inner = best["lr"]
     pf, ntr, nl = fit_final(D, train_orgs, held, "lr", Lf, cf, mode="noleak"); kf = np.isfinite(dh["y"]) & np.isfinite(dh["X"][Lf]).all(1); sf = pf.score(dh["X"][Lf][kf]); thf = thr_1pct(pf, dh["A"][Lf]); ba, tpr, fpr = ba_at(sf, dh["y"][kf], thf)
-    out["t3_fine"] = dict(layer=Lf, C=cf, inner_auroc=inner, auroc=auroc(dh["y"][kf], sf), auroc_ci=boot_auroc(sf, dh["y"][kf]), ba_1pct=ba, tpr=tpr, fpr=fpr)
+    out["t3_fine"] = dict(layer=Lf, C=cf, inner_auroc=inner, auroc=auroc(dh["y"][kf], sf), auroc_ci=boot_auroc(sf, dh["y"][kf], q=dh["q"][kf]), ba_1pct=ba, tpr=tpr, fpr=fpr)
     # ---- C2: question-disjoint LOO (AuditBench organisms)
     if held in AB:
-        rng = np.random.default_rng(abs(hash(held)) % 2**32); ctrl_q = np.where(~dh["target"])[0]; perm = rng.permutation(ctrl_q); A_, B_ = np.sort(perm[: len(perm) // 2]), np.sort(perm[len(perm) // 2:])
-        test = (np.isfinite(dh["y"])) & (dh["target"] | np.isin(np.arange(len(dh["y"])), B_)); c2 = {"half_A": A_.tolist(), "half_B": B_.tolist(), "n_test_lie": int((dh["y"][test] == 1).sum()), "n_test_honest": int((dh["y"][test] == 0).sum())}
+        rng = np.random.default_rng(abs(hash(held)) % 2**32); ctrl_q = np.setdiff1d(np.unique(dh["q"]), dh["target_q"]); perm = rng.permutation(ctrl_q); A_, B_ = np.sort(perm[: len(perm) // 2]), np.sort(perm[len(perm) // 2:])
+        test = (np.isfinite(dh["y"])) & (np.isin(dh["q"], dh["target_q"]) | np.isin(dh["q"], B_)); c2 = {"half_A": A_.tolist(), "half_B": B_.tolist(), "n_test_lie": int((dh["y"][test] == 1).sum()), "n_test_honest": int((dh["y"][test] == 0).sum()), "n_test_questions": int(len(np.unique(dh["q"][test])))}
         for variant in ["spec", "strict"]:
             best = inner_select(D, train_orgs, held, LAYERS12, C_FINE, ["lr", "shrink"], mode="noleak", halves=(A_, B_), variant=variant); res = {}
             for e in ["lr", "shrink"]:
                 Lq, cq, inner = best[e]; pq, ntr, nl = fit_final(D, train_orgs, held, e, Lq, cq, mode="noleak", halves=(A_, B_), variant=variant)
                 kq = test & np.isfinite(dh["X"][Lq]).all(1); sq = pq.score(dh["X"][Lq][kq]); yq = dh["y"][kq]; thq = thr_1pct(pq, dh["A"][Lq]); ba, tpr, fpr = ba_at(sq, yq, thq)
-                res[e] = dict(layer=Lq, C=cq, inner_auroc=inner, n_train=ntr, n_train_lie=nl, auroc=auroc(yq, sq), auroc_ci=boot_auroc(sq, yq), ba_1pct=ba, tpr=tpr, fpr=fpr)
+                res[e] = dict(layer=Lq, C=cq, inner_auroc=inner, n_train=ntr, n_train_lie=nl, auroc=auroc(yq, sq), auroc_ci=boot_auroc(sq, yq, q=dh["q"][kq]), ba_1pct=ba, tpr=tpr, fpr=fpr)
             c2[variant] = res
         # T3-noleak (M3 probe) on the same test subset
         kq = test & np.isfinite(dh["X"][L]).all(1); c2["t3_noleak_on_same_test"] = dict(auroc=auroc(dh["y"][kq], p.score(dh["X"][L][kq])))

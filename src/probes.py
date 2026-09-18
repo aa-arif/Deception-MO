@@ -46,8 +46,16 @@ def auroc(y, s):
 def thr_1pct(probe, Xa): s = probe.score(Xa); s = s[np.isfinite(s)]; return float(np.percentile(s, 99))
 def ba_at(s, y, thr):
     tpr = float(np.mean(s[y == 1] > thr)); fpr = float(np.mean(s[y == 0] > thr)); return (tpr + 1 - fpr) / 2, tpr, fpr
-def boot_auroc(s, y, n=1000, seed=0):
+def boot_auroc(s, y, n=1000, seed=0, q=None):
+    """Bootstrap CI over rows; with q (cluster id per row, e.g. the question) a CLUSTER bootstrap when questions repeat
+    (originals + resamples). Falls back to the row bootstrap when every cluster is a single row (identical draws)."""
     rng = np.random.default_rng(seed); v = []
+    if q is not None and len(np.unique(q)) < len(q):
+        q = np.asarray(q); cl = np.unique(q); members = {c: np.where(q == c)[0] for c in cl}
+        for _ in range(n):
+            i = np.concatenate([members[c] for c in rng.choice(cl, len(cl), replace=True)])
+            if len(np.unique(y[i])) == 2: v.append(roc_auc_score(y[i], s[i]))
+        return [float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))]
     for _ in range(n):
         i = rng.integers(0, len(y), len(y))
         if len(np.unique(y[i])) == 2: v.append(roc_auc_score(y[i], s[i]))

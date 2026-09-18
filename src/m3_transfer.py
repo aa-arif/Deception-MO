@@ -14,6 +14,7 @@ from pathlib import Path
 import numpy as np, pandas as pd
 from joblib import Parallel, delayed
 from probes import make, auroc, thr_1pct, ba_at, boot_auroc, C_GRID
+from labelsets import load_rows, ylab
 
 REPO = Path("/lambda/nfs/lieprobes/repo")
 import cfg
@@ -32,18 +33,19 @@ def load_all(fam):
     C = FAM[fam]; D = {}
     for org, split in ORGS.items():
         if org not in cfg.ORGS: continue
-        idx = pd.read_parquet(F / org / (C["prefix"] + split) / "index.parquet"); lab = cfg.labels_for(org, idx)
-        y = np.where(lab == "lie", 1.0, np.where(lab == "honest", 0.0, np.nan)); target = np.isin(lab, ["lie", "ambiguous"])
-        X = {L: load(org, C["prefix"] + split, L, C["pool"])[0] for L in C["layers"]}; A = {L: load(org, C["cal"], L, C["pool"])[0] for L in C["layers"]}
+        X = {}
+        for L in C["layers"]: X[L], lab, q, src = load_rows(org, split, C["prefix"], L, C["pool"])
+        y = ylab(lab); target_q = np.unique(q[np.isin(lab, ["lie", "ambiguous"])])   # questions on which this organism lies (any original or resample)
+        A = {L: load(org, C["cal"], L, C["pool"])[0] for L in C["layers"]}
         for L in C["layers"]: A[L] = A[L][np.isfinite(A[L]).all(1)]
-        D[org] = dict(X=X, y=y, target=target, q=np.arange(len(y)), split=split, A=A)
+        D[org] = dict(X=X, y=y, target_q=target_q, q=q, src=src, split=split, A=A)
     return D
 
 def train_rows(D, train_orgs, held, variant, L):
     Xs, ys, gs = [], [], []
     for o in train_orgs:
         d = D[o]; keep = np.isfinite(d["y"]) & np.isfinite(d["X"][L]).all(1)
-        if variant == "noleak" and d["split"] == D[held]["split"]: keep &= ~D[held]["target"]
+        if variant == "noleak" and d["split"] == D[held]["split"]: keep &= ~np.isin(d["q"], D[held]["target_q"])
         Xs.append(d["X"][L][keep]); ys.append(d["y"][keep]); gs.append(np.full(keep.sum(), o))
     return np.vstack(Xs), np.concatenate(ys), np.concatenate(gs)
 
@@ -61,8 +63,6 @@ def run_one(fam, held, mode, variant, D):
             others = [o for o in train_orgs if o != t]
             if not others: continue
             Xtr, ytr, _ = train_rows(D, others, held, variant, L)
-            if variant == "noleak" and D[t]["split"] == D[held]["split"]:  # inner test organism: same exclusion applied to its rows? keep all of t's labelled rows
-                pass
             dt = D[t]; keep = np.isfinite(dt["y"]) & np.isfinite(dt["X"][L]).all(1)
             a, _ = fit_eval(e, c, Xtr, ytr, dt["X"][L][keep], dt["y"][keep]); scores.append(a)
         inner[(L, e, c)] = float(np.nanmean(scores)) if scores else float("nan")
@@ -74,7 +74,7 @@ def run_one(fam, held, mode, variant, D):
     for e in ESTS:
         L, _, c = best[e]; Xtr, ytr, _ = train_rows(D, train_orgs, held, variant, L); k = keep & np.isfinite(dh["X"][L]).all(1)
         p = make(e, c).fit(Xtr, ytr); s = p.score(dh["X"][L][k]); y = dh["y"][k]; thr = thr_1pct(p, dh["A"][L]); ba, tpr, fpr = ba_at(s, y, thr)
-        out["results"][e] = dict(layer=L, C=c, n_train=int(len(ytr)), n_train_lie=int(ytr.sum()), n_lie=int(y.sum()), n_honest=int((1 - y).sum()), auroc=auroc(y, s), auroc_ci=boot_auroc(s, y), ba_1pct=ba, tpr_1pct=tpr, fpr_1pct=fpr)
+        out["results"][e] = dict(layer=L, C=c, n_train=int(len(ytr)), n_train_lie=int(ytr.sum()), n_lie=int(y.sum()), n_honest=int((1 - y).sum()), n_questions=int(len(np.unique(dh["q"][k]))), auroc=auroc(y, s), auroc_ci=boot_auroc(s, y, q=dh["q"][k]), ba_1pct=ba, tpr_1pct=tpr, fpr_1pct=fpr)
     od = cfg.RESULTS_ROOT / "m3" / fam / f"{mode}_{variant}"; od.mkdir(parents=True, exist_ok=True); (od / f"{held}.json").write_text(json.dumps(out, indent=1))
     r = out["results"]["lr"]; print(f"[{fam} {mode} {variant} {held}] lr L{r['layer']} C={r['C']} AUROC {r['auroc']:.3f} [{r['auroc_ci'][0]:.2f},{r['auroc_ci'][1]:.2f}] BA@1% {r['ba_1pct']:.3f} | dim {out['results']['dim']['auroc']:.3f} shrink {out['results']['shrink']['auroc']:.3f} | inner {out['inner_best']['lr']['inner_auroc']:.3f}", flush=True)
     return out

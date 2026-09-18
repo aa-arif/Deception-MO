@@ -12,7 +12,7 @@ GEN_ROOT = RESULTS_BASE / "m1/gen"
 # "judge" = M5 claude-opus-4-8 labels of the ORIGINAL auditing transcripts (results/m5/labels_sanity.jsonl).
 # Under a non-released label set every analysis writes below results/m5/labels_<set>/ instead of results/ so the
 # three label sets (D20) are never mixed inside one table.
-LABELS = os.environ.get("LIEPROBES_LABELS", "released")
+LABELS = os.environ.get("LIEPROBES_LABELS", "released")   # released | judge | judge_plus (= judge labels, originals + resamples; see labelsets.py)
 RESULTS_ROOT = RESULTS_BASE if LABELS == "released" else RESULTS_BASE / "m5" / f"labels_{LABELS}"
 _JUDGE = None
 def judge_labels():
@@ -27,7 +27,7 @@ def labels_for(org, idx):
     """String label per feature row for the active label set; idx = the split's index.parquet (columns row, label)."""
     import numpy as np
     if LABELS == "released": return idx["label"].astype(str).values
-    if LABELS == "judge":
+    if LABELS in ("judge", "judge_plus"):
         J = judge_labels(); return np.array([J.get((org, int(r)), "ambiguous") for r in idx["row"].values], dtype=object)
     raise ValueError(f"unknown label set {LABELS}")
 SFT_PREFIX = TAG.replace(".", "_").replace("-", "_")                         # qwen3_6_27b

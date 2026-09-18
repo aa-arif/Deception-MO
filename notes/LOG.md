@@ -956,3 +956,24 @@ run_m5_resample_features.sh (GPU < 1 h: Apollo features of the 4 704 resamples, 
 D20 recorded; limitations 12–13 added.
 OPEN: the +resamples label set for the DYL pooling needs follow-up generation for 4 704 rows (≈2–3 h GPU) — not queued
 (> 1 h rule); Apollo pooling only until approved.
+
+## 2026-09-18 00:56 UTC — M5: cap raised to $250, one-hour rule waived; extra gradings done; adjudication written; +resamples chains queued
+User (mid-turn): "Skip the one hour rule, just prefer to make it comprehensive, and push the spending cap up to $250."
+Ran (git 4764977): scripts/run_m5_relabel_extra.sh — base_audit (447 base-model answers to the three question sets, $6),
+qwen35 (986 Qwen3.5 originals, $8), repeat (second independent grading of the 1 176 originals, $15); all three via
+Batches in ≈15 min; M5 spend $125.71 of $250. Report: results/m5/judge_reliability.md.
+Findings: test-retest label agreement 0.922, 0.999 on rows non-ambiguous in both runs, Spearman 0.944 on grades; run 2
+agrees with the released labels at 0.877 (run 1: 0.881) — the disagreement is systematic. Base-model answers: 445/447
+honest, 0 lies — the judge does not invent lies without a hidden behaviour. Qwen3.5 originals: agreement 0.870 (n=825),
+same organism pattern (GS 0.95–0.97, SP 0.73), released lies recovered 258/281.
+Adjudication (results/m5/adjudication.md, step 1): among released-honest rows, the judge-lie rows score above the
+agreed-honest rows on probes that never trained on them — T3 leave-one-organism-out lr median AUROC 0.77 (Apollo) /
+0.86 (DYL), CO 0.82 / 0.86, SB 0.75 / 0.58, and T5 out-of-fold lr median 0.79 / 0.73 despite those rows having been
+trained on as honest; the judge-ambiguous band sits in between (median 0.63 / 0.64). Under DYL pooling the judge-lie
+rows cross the 1 %-FPR threshold at 0.80 (CO), 0.86 (HC), 0.71 (SP), 1.00 (GS, AW) vs 0.18–0.63 for agreed-honest.
+Exception: HC under Apollo pooling (7 judge-lie rows, T3 AUROC 0.48). Verbatim excerpts (5 CO + 5 SB) in the file.
+GPU chains queued: run_m5_resample_features.sh (Apollo features of the resamples, behind BURST2_ITEM4_DONE) ->
+run_m5_resample_dyl.sh (DYL follow-ups for 4 704 resamples + features, ≈2–3 h) -> run_m5_judge_plus.sh (T0/T5/T3/
+controls under judge_plus, Apollo then DYL, geometry, D20 tables). Code: src/labelsets.py (originals + resamples with
+question ids), cluster bootstrap in probes.py / m1_t0 / m2_t5, question-grouped folds (StratifiedGroupKFold) in T5,
+question-id based noleak / QD halves in m3_transfer and m3_controls. Released-label equivalence check running.

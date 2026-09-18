@@ -16,6 +16,7 @@ from scipy.stats import spearmanr
 import lie_detectors  # noqa
 from lie_detectors import load_probe
 from probes import ShrinkProbe, auroc
+from labelsets import load_rows, ylab
 import cfg
 HF = os.environ.get("HF_HOME", "/lambda/nfs/lieprobes/hf"); REPO = Path("/lambda/nfs/lieprobes/repo"); F = REPO / "features/qwen3.6-27b"
 ORGS = {"gender_secret_female": "gender_secret", "gender_secret_male": "gender_secret", "eval_sandbagger": "sandbagging_games_updated", "ab_animal_welfare": "audit_bench_updated", "ab_contextual_optimism": "audit_bench_updated", "ab_hallucinates_citations": "audit_bench_updated", "ab_self_promotion": "audit_bench_updated"}
@@ -35,7 +36,7 @@ for fam, L, pool, cal, prefix in CFG:
     key = f"{fam}_L{L}"; print("==", key, flush=True)
     D = {}; probes = {}
     for org, split in ORGS.items():
-        X, idx = load(org, prefix + split, L, pool); y = pd.Series(cfg.labels_for(org, idx)).map({"lie": 1.0, "honest": 0.0}).to_numpy(float); ok = np.isfinite(y) & np.isfinite(X).all(1)
+        X, lab, q, _ = load_rows(org, split, prefix, L, pool); y = ylab(lab); ok = np.isfinite(y) & np.isfinite(X).all(1)
         D[org] = (X[ok], y[ok]); probes[org] = ShrinkProbe().fit(X[ok], y[ok])
     names = list(ORGS); U = np.stack([probes[o].direction() for o in names]); cos = U @ U.T
     # raw diff-of-means directions and a COMMON whitening (Ledoit-Wolf on the pooled within-class residuals of all organisms)

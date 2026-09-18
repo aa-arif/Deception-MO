@@ -12,7 +12,8 @@ from pathlib import Path
 import numpy as np, pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, StratifiedGroupKFold
+from labelsets import load_rows, ylab
 
 REPO = Path("/lambda/nfs/lieprobes/repo")
 import cfg
@@ -28,10 +29,12 @@ def load(org, split, L, pool):
 def dim_fit(X, y): return X[y == 1].mean(0) - X[y == 0].mean(0)
 def metrics(s, y, thr):
     tpr = float(np.mean(s[y == 1] > thr)); fpr = float(np.mean(s[y == 0] > thr)); return dict(auroc=float(roc_auc_score(y, s)), tpr=tpr, fpr=fpr, ba=(tpr + 1 - fpr) / 2)
-def boot_ci(s, y, flags, n=1000, seed=0):
+def boot_ci(s, y, flags, n=1000, seed=0, q=None):
     rng = np.random.default_rng(seed); au, ba = [], []
+    cluster = q is not None and len(np.unique(q)) < len(q)
+    if cluster: cl = np.unique(q); members = {c: np.where(q == c)[0] for c in cl}
     for _ in range(n):
-        i = rng.integers(0, len(s), len(s))
+        i = np.concatenate([members[c] for c in rng.choice(cl, len(cl), replace=True)]) if cluster else rng.integers(0, len(s), len(s))
         if len(np.unique(y[i])) < 2: continue
         au.append(roc_auc_score(y[i], s[i])); t = np.mean(flags[i][y[i] == 1]); f = np.mean(flags[i][y[i] == 0]); ba.append((t + 1 - f) / 2)
     return [float(np.percentile(au, 2.5)), float(np.percentile(au, 97.5))], [float(np.percentile(ba, 2.5)), float(np.percentile(ba, 97.5))]
@@ -40,21 +43,22 @@ def run_org(fam, org, a):
     C = FAM[fam]; split = C["prefix"] + ORGS[org]; res = {"family": fam, "organism": org, "split": split, "layers": {}}
     d = F / org / split
     if not (d / "meta.json").exists(): print(f"[{fam}/{org}] no features for {split}"); return None
-    idx = pd.read_parquet(d / "index.parquet"); y_all = pd.Series(cfg.labels_for(org, idx)).map({"lie": 1.0, "honest": 0.0}).to_numpy(float)
-    if a.clean_answers and C["prefix"]:
+    _, lab_all, q_all, _ = load_rows(org, ORGS[org], C["prefix"], C["layers"][0], C["pool"]); y_all = ylab(lab_all)
+    if a.clean_answers and C["prefix"] and cfg.LABELS != "judge_plus":
         g = REPO / "results/m1/gen" / a.gen_step / org / f"{ORGS[org]}.parquet"
         if g.exists(): y_all = np.where(np.isin(pd.read_parquet(g)["raw_answer"].values, ["yes", "no"]), y_all, np.nan)
     for L in C["layers"]:
-        X, _ = load(org, split, L, C["pool"]); Xa, ia = load(org, C["cal"], L, C["pool"])
-        ok = np.isfinite(y_all) & np.isfinite(X).all(1); X, y = X[ok], y_all[ok]
+        X, _, _, _ = load_rows(org, ORGS[org], C["prefix"], L, C["pool"]); Xa, ia = load(org, C["cal"], L, C["pool"])
+        ok = np.isfinite(y_all) & np.isfinite(X).all(1); X, y, q = X[ok], y_all[ok], q_all[ok]
         oka = np.isfinite(Xa).all(1) & (ia["label"].values == "honest"); Xa = Xa[oka]
         n_lie, n_hon = int(y.sum()), int((1 - y).sum())
         if n_lie < 5 or n_hon < 5: continue
-        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
-        out = {}
+        grouped = len(np.unique(q)) < len(q)   # originals + resamples: folds are question-disjoint groups
+        skf = StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=0) if grouped else StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
+        folds = list(skf.split(X, y, groups=q)) if grouped else list(skf.split(X, y)); out = {}
         for probe in ["dim", "lr"]:
             s_oof = np.zeros(len(y)); flag = np.zeros(len(y), bool); fold_auroc = []; thr_used = []
-            for tr, te in skf.split(X, y):
+            for tr, te in folds:
                 mu, sd = X[tr].mean(0), X[tr].std(0) + 1e-6
                 if probe == "dim":
                     dvec = dim_fit(X[tr], y[tr]); f = lambda Z: Z @ dvec
@@ -69,9 +73,9 @@ def run_org(fam, org, a):
                     m = LogisticRegression(C=bestC, max_iter=2000).fit(Zt, y[tr]); f = lambda Z, m=m, mu=mu, sd=sd: m.decision_function((Z - mu) / sd)
                 s_te = f(X[te]); s_oof[te] = s_te; thr = float(np.percentile(f(Xa), 99)); thr_used.append(thr); flag[te] = s_te > thr
                 if len(np.unique(y[te])) == 2: fold_auroc.append(roc_auc_score(y[te], s_te))
-            tpr = float(np.mean(flag[y == 1])); fpr = float(np.mean(flag[y == 0])); ci_au, ci_ba = boot_ci(s_oof, y, flag)
+            tpr = float(np.mean(flag[y == 1])); fpr = float(np.mean(flag[y == 0])); ci_au, ci_ba = boot_ci(s_oof, y, flag, q=q)
             out[probe] = dict(oof_auroc=float(roc_auc_score(y, s_oof)), auroc_ci=ci_au, fold_auroc_mean=float(np.mean(fold_auroc)), fold_auroc_sd=float(np.std(fold_auroc)), ba_1pct=(tpr + 1 - fpr) / 2, ba_ci=ci_ba, tpr_1pct=tpr, fpr_1pct=fpr, thr_mean=float(np.mean(thr_used)))
-        res["layers"][L] = dict(n_lie=n_lie, n_honest=n_hon, **{k: v for k, v in out.items()})
+        res["layers"][L] = dict(n_lie=n_lie, n_honest=n_hon, n_questions=int(len(np.unique(q))), **{k: v for k, v in out.items()})
         print(f"[{fam}/{org}] L{L:2d} n={n_lie}/{n_hon} dim OOF AUROC {out['dim']['oof_auroc']:.3f} [{out['dim']['auroc_ci'][0]:.2f},{out['dim']['auroc_ci'][1]:.2f}] BA@1% {out['dim']['ba_1pct']:.3f} | lr {out['lr']['oof_auroc']:.3f} BA {out['lr']['ba_1pct']:.3f}", flush=True)
     if not res["layers"]: return None
     best = max(res["layers"], key=lambda L: res["layers"][L]["dim"]["oof_auroc"]); res["best_layer_dim"] = best; res["default_layer"] = C["default"]

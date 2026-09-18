@@ -999,3 +999,12 @@ QD strict lr AUROC, released -> judge (Apollo): AW 0.911 -> 0.864, CO 0.930 -> 0
 (D18) holds under judge labels and improves under DYL pooling. C1 (base answers, judge target set): 0/0 % of base
 target/control answers above threshold, AUROC 0.58–0.68 (as before, no threshold crossings). C3 (trait-active SFT):
 0.00–0.35 above threshold (HC 0.35, AW 0.15), lies-vs-SFT AUROC 0.69–0.98. Files: results/m5/labels_judge/m3/controls.
+
+## 2026-09-18 22:23 UTC — Burst 2 / M5 scheduling: M5 resample GPU work moved ahead of item 4
+The sweep follow-up feature pass (3c-fix) reloads and merges the 27B base per adapter: ≈10 min per 158-row split, 62
+adapters -> ≈8.5 h (ends ≈07:00 Sep 19 UTC), not the 1 h estimated. DEVIATION (scheduling only): scripts/run_burst2_item4.sh
+now also waits for M5_RESAMPLE_DYL_DONE and scripts/run_m5_resample_features.sh waits for BURST2_ITEM3_FIX_DONE, so the
+M5 resample Apollo features (< 1 h), DYL follow-ups (≈2–3 h) and DYL features run before the Aletheia fallback (item 4,
+gated adapters -> base-model fallback only). Why: the user's priority is a comprehensive M5; item 4 is a fallback. Revised:
+item 3 ≈07:00, M5 resample features ≈08:00, DYL follow-ups+features ≈11:30, judge_plus tables (Apollo) ≈09:30 / (DYL)
+≈13:30, item 4 after ≈11:30 Sep 19.

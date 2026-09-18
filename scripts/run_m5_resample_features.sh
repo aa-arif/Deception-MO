@@ -3,7 +3,8 @@
 # originals, D14), 12 layers, after Burst 2 item 4 has released the GPU and the resample labels are ingested.
 set -u; cd /lambda/nfs/lieprobes/repo; source ~/venvs/lieprobes/bin/activate
 t() { date -u +"%Y-%m-%d %H:%M:%S"; }
-until grep -qE "BURST2_ITEM4_DONE|BURST2_ITEM4_ABORTED" results/burst2_item4.log 2>/dev/null; do sleep 120; done
+# 2026-09-18 22:25: runs right after the item-3 fix chain (before item 4, which now waits for the M5 resample chains)
+until grep -qE "BURST2_ITEM3_FIX_DONE" results/burst2_item3_fix.log 2>/dev/null; do sleep 120; done
 until grep -qE "M5_RESAMPLE_DONE|M5_RESAMPLE_FAILED" results/m5_relabel.log 2>/dev/null; do sleep 120; done
 grep -q M5_RESAMPLE_FAILED results/m5_relabel.log && { echo "[$(t)] M5_RESAMPLE_FEATURES_ABORTED (relabel failed)"; exit 1; }
 echo "[$(t)] relabelled parquets"; python src/m5_relabelled_parquets.py || { echo "[$(t)] M5_RESAMPLE_FEATURES_ABORTED"; exit 1; }

@@ -8,6 +8,8 @@ export HF_HOME=/lambda/nfs/lieprobes/hf TOKENIZERS_PARALLELISM=false VLLM_LOGGIN
 cd /lambda/nfs/lieprobes/repo; t() { date +%H:%M:%S; }; LAYERS="13 19 25 32 38 44 50 54 57 60 62 63"; FEAT=/lambda/nfs/lieprobes/repo/features/qwen3.5-27b; R=results/qwen3.5-27b
 until grep -q BURST2_ITEM3_EXTRACT_DONE results/burst2_item3.log 2>/dev/null; do sleep 120; done
 until grep -q ALETHEIA_DONE notes/.download_burst2_log.txt 2>/dev/null; do sleep 120; done
+# 2026-09-18 22:25: M5 resample GPU work (Apollo features, DYL follow-ups, DYL features) runs BEFORE item 4 (user priority: M5 comprehensive; Aletheia adapters gated -> fallback only)
+until grep -qE "M5_RESAMPLE_DYL_DONE|M5_RESAMPLE_DYL_ABORTED|M5_RESAMPLE_FEATURES_ABORTED" results/m5_resample_dyl.log results/m5_resample_features.log 2>/dev/null; do sleep 120; done
 echo "[$(t)] (4a) prepare dev sets"; python src/aletheia_prep.py > $R/aletheia_prep.log 2>&1 || echo "[$(t)] STEP4A_FAILED"
 MODELS="a-mo-qwen3.5-27b-1 a-mo-qwen3.5-27b-3 a-mo-qwen3.5-27b-4 a-mo-qwen3.5-27b-5 a-mo-qwen3.5-27b-6 a-mo-qwen3.5-27b-7 b-mo-qwen3.5-27b c-mo-qwen3.5-27b g-st-qwen3.5-27b"
 echo "[$(t)] (4b) DYL follow-ups on both dev sets, all 9 adapters, one session each set"

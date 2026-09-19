@@ -1051,3 +1051,10 @@ Burst 2 item 4: 07:39–09:07 UTC. All 9 Aletheia adapters gated (skipped); STEP
 'varied' dev set exists for g-st; the per-adapter loop lacked the file check). Base fallback features written for 17
 dev sets (features/qwen3.5-27b/base/aletheia_<model>_<kind>); src/m8_aletheia.py looked for per-adapter dirs and produced
 empty tables — patched with M8_FALLBACK=1 (base dirs, Apollo pooling only, thresholds on the base's Alpaca); rerunning.
+
+## 2026-09-19 09:59 UTC — Burst 2 item 4 (fallback) analysed; Burst 2 closed; GPU idle
+Ran (git 2eff503): LIEPROBES_TAG=qwen3.5-27b M8_FALLBACK=1 python src/m8_aletheia.py (CPU, 09:52–10:08 UTC). Results in
+results/qwen3.5-27b/m8/aletheia.md + SUMMARY.md: AISI-suite probe reads Aletheia instructed lies in the BASE at
+0.949–0.983 (9 models), varied 0.70–0.99; Aletheia LOO 0.88–1.00; Aletheia-suite -> AISI organisms 0.60–0.97 (AUROC; BA
+0.50 = cross-model threshold offset). Burst 2 closeout: results/burst2/SUMMARY.md. GPU idle since 09:07 UTC, nothing
+queued (Aletheia adapters remain gated).

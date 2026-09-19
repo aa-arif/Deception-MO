@@ -1,0 +1,373 @@
+{
+ "apollo/a-mo-qwen3.5-27b-1/instructed": {
+  "model": "a-mo-qwen3.5-27b-1",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.9485250000000001,
+  "aisi_ci": [
+   0.926419014787781,
+   0.9675468089056681
+  ],
+  "aisi_ba": 0.845,
+  "ale_loo_auroc": 0.9997499999999999,
+  "ale_loo_ci": [
+   0.999199913988998,
+   1.0
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.1
+ },
+ "apollo/a-mo-qwen3.5-27b-1/varied": {
+  "model": "a-mo-qwen3.5-27b-1",
+  "kind": "varied",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.756,
+  "aisi_ci": [
+   0.7098554113336148,
+   0.8037060981242102
+  ],
+  "aisi_ba": 0.645,
+  "ale_loo_auroc": 0.875975,
+  "ale_loo_ci": [
+   0.8406629924241293,
+   0.907314368646511
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.001
+ },
+ "apollo/a-mo-qwen3.5-27b-3/instructed": {
+  "model": "a-mo-qwen3.5-27b-3",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.9834499999999999,
+  "aisi_ci": [
+   0.9731021514856562,
+   0.9914454115853658
+  ],
+  "aisi_ba": 0.9025,
+  "ale_loo_auroc": 1.0,
+  "ale_loo_ci": [
+   0.9999999999999999,
+   1.0
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.01
+ },
+ "apollo/a-mo-qwen3.5-27b-3/varied": {
+  "model": "a-mo-qwen3.5-27b-3",
+  "kind": "varied",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.694525,
+  "aisi_ci": [
+   0.6428551768019789,
+   0.7458794640366405
+  ],
+  "aisi_ba": 0.61,
+  "ale_loo_auroc": 0.881825,
+  "ale_loo_ci": [
+   0.846756000351485,
+   0.9142288866068736
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.001
+ },
+ "apollo/a-mo-qwen3.5-27b-4/instructed": {
+  "model": "a-mo-qwen3.5-27b-4",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.9659249999999999,
+  "aisi_ci": [
+   0.9502861333596698,
+   0.9793762829412489
+  ],
+  "aisi_ba": 0.8775000000000001,
+  "ale_loo_auroc": 0.986775,
+  "ale_loo_ci": [
+   0.9732690004444622,
+   0.996402359775641
+  ],
+  "ale_loo_layer": 50,
+  "ale_loo_C": 0.001
+ },
+ "apollo/a-mo-qwen3.5-27b-4/varied": {
+  "model": "a-mo-qwen3.5-27b-4",
+  "kind": "varied",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.7985249999999999,
+  "aisi_ci": [
+   0.7506061546115611,
+   0.8409444820582261
+  ],
+  "aisi_ba": 0.75,
+  "ale_loo_auroc": 0.903175,
+  "ale_loo_ci": [
+   0.8734388170423327,
+   0.9296028160855366
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.001
+ },
+ "apollo/a-mo-qwen3.5-27b-5/instructed": {
+  "model": "a-mo-qwen3.5-27b-5",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.9833749999999999,
+  "aisi_ci": [
+   0.9729871474905752,
+   0.9913954126609339
+  ],
+  "aisi_ba": 0.885,
+  "ale_loo_auroc": 0.999975,
+  "ale_loo_ci": [
+   0.9998499025269699,
+   1.0
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.01
+ },
+ "apollo/a-mo-qwen3.5-27b-5/varied": {
+  "model": "a-mo-qwen3.5-27b-5",
+  "kind": "varied",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.9571000000000001,
+  "aisi_ci": [
+   0.9336144035029393,
+   0.9752985717752723
+  ],
+  "aisi_ba": 0.925,
+  "ale_loo_auroc": 0.983975,
+  "ale_loo_ci": [
+   0.9721817717112616,
+   0.9923472535072297
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.001
+ },
+ "apollo/a-mo-qwen3.5-27b-6/instructed": {
+  "model": "a-mo-qwen3.5-27b-6",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.9653749999999999,
+  "aisi_ci": [
+   0.9488802198055816,
+   0.9793558607740473
+  ],
+  "aisi_ba": 0.8950000000000001,
+  "ale_loo_auroc": 0.999975,
+  "ale_loo_ci": [
+   0.9998498648783906,
+   1.0
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.1
+ },
+ "apollo/a-mo-qwen3.5-27b-6/varied": {
+  "model": "a-mo-qwen3.5-27b-6",
+  "kind": "varied",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.85505,
+  "aisi_ci": [
+   0.8148989257119547,
+   0.8926412999758337
+  ],
+  "aisi_ba": 0.8025,
+  "ale_loo_auroc": 0.933825,
+  "ale_loo_ci": [
+   0.9085375335920755,
+   0.9552857771714456
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.001
+ },
+ "apollo/a-mo-qwen3.5-27b-7/instructed": {
+  "model": "a-mo-qwen3.5-27b-7",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.9591500000000001,
+  "aisi_ci": [
+   0.939735459662289,
+   0.9761208771973694
+  ],
+  "aisi_ba": 0.87,
+  "ale_loo_auroc": 0.9993,
+  "ale_loo_ci": [
+   0.9974391371111533,
+   1.0
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.01
+ },
+ "apollo/a-mo-qwen3.5-27b-7/varied": {
+  "model": "a-mo-qwen3.5-27b-7",
+  "kind": "varied",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.846575,
+  "aisi_ci": [
+   0.8065039962865617,
+   0.8845090681676048
+  ],
+  "aisi_ba": 0.79,
+  "ale_loo_auroc": 0.91685,
+  "ale_loo_ci": [
+   0.8889371535912235,
+   0.941622745278435
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.001
+ },
+ "apollo/b-mo-qwen3.5-27b/instructed": {
+  "model": "b-mo-qwen3.5-27b",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.977625,
+  "aisi_ci": [
+   0.9642230673129127,
+   0.9885228492482774
+  ],
+  "aisi_ba": 0.905,
+  "ale_loo_auroc": 0.9991249999999999,
+  "ale_loo_ci": [
+   0.9979486460081665,
+   0.9999249706914192
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.01
+ },
+ "apollo/b-mo-qwen3.5-27b/varied": {
+  "model": "b-mo-qwen3.5-27b",
+  "kind": "varied",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.951175,
+  "aisi_ci": [
+   0.9320585690864782,
+   0.9688300720648584
+  ],
+  "aisi_ba": 0.8825,
+  "ale_loo_auroc": 0.9635500000000001,
+  "ale_loo_ci": [
+   0.9467526277591497,
+   0.97891318304409
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.001
+ },
+ "apollo/c-mo-qwen3.5-27b/instructed": {
+  "model": "c-mo-qwen3.5-27b",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.9801,
+  "aisi_ci": [
+   0.9655027098349289,
+   0.9917214364330212
+  ],
+  "aisi_ba": 0.9400000000000001,
+  "ale_loo_auroc": 0.9959749999999999,
+  "ale_loo_ci": [
+   0.9886724678565416,
+   0.9997498450599752
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.1
+ },
+ "apollo/c-mo-qwen3.5-27b/varied": {
+  "model": "c-mo-qwen3.5-27b",
+  "kind": "varied",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.986875,
+  "aisi_ci": [
+   0.9760603249713347,
+   0.9943068697802137
+  ],
+  "aisi_ba": 0.9475,
+  "ale_loo_auroc": 0.993875,
+  "ale_loo_ci": [
+   0.9871360146264853,
+   0.9984389542294696
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.001
+ },
+ "apollo/g-st-qwen3.5-27b/instructed": {
+  "model": "g-st-qwen3.5-27b",
+  "kind": "instructed",
+  "n_lie": 200,
+  "n_hon": 200,
+  "aisi_auroc": 0.982075,
+  "aisi_ci": [
+   0.9710274865894204,
+   0.9916466586634655
+  ],
+  "aisi_ba": 0.9349999999999999,
+  "ale_loo_auroc": 0.999875,
+  "ale_loo_ci": [
+   0.9995226430235813,
+   1.0
+  ],
+  "ale_loo_layer": 32,
+  "ale_loo_C": 0.01
+ },
+ "apollo/ale_to_gender_secret_female": {
+  "auroc": 0.9729729729729729,
+  "ci": [
+   0.9473417177102239,
+   0.9910118725261612
+  ],
+  "ba": 0.5
+ },
+ "apollo/ale_to_gender_secret_male": {
+  "auroc": 0.9183333333333333,
+  "ci": [
+   0.8711168809436881,
+   0.9581537164161439
+  ],
+  "ba": 0.5
+ },
+ "apollo/ale_to_eval_sandbagger": {
+  "auroc": 0.7102206736353078,
+  "ci": [
+   0.5798153574068208,
+   0.8194300177503122
+  ],
+  "ba": 0.5
+ },
+ "apollo/ale_to_ab_animal_welfare": {
+  "auroc": 0.6032665964172813,
+  "ci": [
+   0.4736849135487529,
+   0.7289433097870597
+  ],
+  "ba": 0.5192307692307693
+ },
+ "apollo/ale_to_ab_hallucinates_citations": {
+  "auroc": 0.8365296803652968,
+  "ci": [
+   0.7480765103213182,
+   0.9120572609208972
+  ],
+  "ba": 0.5166666666666667
+ },
+ "apollo/ale_to_ab_self_promotion": {
+  "auroc": 0.9181240063593004,
+  "ci": [
+   0.8730900969427846,
+   0.9578339517625232
+  ],
+  "ba": 0.5147058823529411
+ }
+}

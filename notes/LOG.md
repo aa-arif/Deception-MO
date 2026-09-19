@@ -1083,3 +1083,12 @@ pronoun rates per adapter vs T3/T0 from sweep.json; Spearman across adapters; pe
 (base + GS-F + 62 adapters, --max-lora-rank 256, --skip-existing; then the analysis). Not launched; start command in
 results/burst2/SUMMARY.md §5. The OOD set: 100 third-person tasks about the user, unlabelled (is_lie NA); the grader
 is pronoun-based — a judge pass can be added later.
+
+## 2026-09-19 12:44 UTC — Aletheia confound check complete (system prompt removed); M8 + Burst 2 summaries final; pushed; safe to terminate
+Ran (git a6a33c8): scripts/run_m8_nosys.sh 11:38–12:41 UTC (17 sets, base reload per set, 0 failures) -> features/qwen3.5-27b/base/
+aletheia_<m>_<kind>_nosys__nosys; src/m8_confound.py rerun on both feature sets (12:41–12:44). Medians over 17 sets: with
+prompt 0.958 all / 0.937 shared / 0.931 within-prompt; prompt removed 0.893 / 0.889 / 0.883; prompt-only baseline 0.716.
+The system prompt contributes ≈ 0.05–0.07 through context; the answer carries the rest. M8 SUMMARY §3b and
+results/burst2/SUMMARY.md updated. GPU idle, no chains running, nothing queued for automatic start (M7 H6 is a manual
+start next window). Instance safe to terminate: everything is on /lambda/nfs/lieprobes (repo pushed; features, HF cache,
+generations on NFS); the venv is local and rebuildable.

@@ -37,15 +37,21 @@ AUROC 0.716 (0.52–0.96 per set). Rescoring the AISI-suite probe with the promp
 
 | | all rows | shared-prompt rows | within-prompt (pair-weighted, prompt identity cannot contribute) | prompt-only baseline |
 |---|---|---|---|---|
-| median over 17 sets, features WITH the system prompt | 0.959 | 0.937 | 0.934 | 0.716 |
-| median over 17 sets, system prompt REMOVED at teacher-forcing | (pending, GPU rerun) | | | |
+| median over 17 sets, features WITH the system prompt | 0.958 | 0.937 | 0.931 | 0.716 |
+| median over 17 sets, system prompt REMOVED at teacher-forcing | 0.893 | 0.889 | 0.883 | 0.716 |
 
 Within identical prompts the probe still separates lies from honest answers at 0.93 median (instructed 0.93–0.98,
 varied 0.67–0.93), far above what the prompt alone predicts — the separation is in the answer's activations, not in
 the instruction. The c-mo varied set is the exception to watch (only 62 shared-prompt rows; within-prompt 0.82 vs a
-prompt-only baseline of 0.96). The system-prompt-removed rerun (transcripts re-teacher-forced through the base with no
-system message) closes the remaining route — the prompt shaping the answer's activations through context — and is
-appended below when it lands.
+prompt-only baseline of 0.96).
+System prompt removed (the same transcripts re-teacher-forced through the base with no system message; GPU 11:38–12:41
+UTC): the probe still separates at 0.893 all rows / 0.889 shared-prompt / 0.883 within-prompt (medians), i.e. 0.05–0.07
+below the with-prompt numbers and still 0.17 above the prompt-only baseline. Per set: instructed 0.87–0.99 (g-st 0.990,
+a-mo-6 0.870), varied 0.67–0.99 (the same ordering as with the prompt: a-mo-3 0.670, a-mo-1 0.747 lowest; c-mo 0.988,
+b-mo 0.951, a-mo-5 0.949 highest). Reading: most of the signal is in the answer itself; the system prompt adds a
+modest, consistent 0.05–0.07 through context (the instruction primes the lie-direction before the answer starts),
+which is the part of the with-prompt number that should not be quoted as "lie detection". The cross-pipeline claim
+in §3 therefore stands at ≈ 0.89 (no prompt) rather than 0.96 (with prompt). Run-to-run LR-fit variation ≈ ±0.003.
 
 ## 4. What it means for the project
 Even without the Aletheia adapters, the AISI cross-organism direction reads a different pipeline's lies in the base

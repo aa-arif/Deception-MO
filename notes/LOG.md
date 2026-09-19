@@ -1016,3 +1016,10 @@ results/m7/SUMMARY.md. Headline: Apollo-pooling T3 transfer 0.961–0.977 across
 pooling 0.805–0.963 (seed-null median 0.030, 95th pct 0.161), released-DYL threshold FPR drift median 0.032.
 M5: scripts/run_m5_resample_features.sh started 01:57 (relabelled parquets: 4 704 rows, judge labels; GS-F extracting).
 Item 4 (Aletheia fallback) waits for M5_RESAMPLE_DYL_DONE.
+
+## 2026-09-19 02:56 UTC — M5 resample Apollo features done (unmerged, 12 layers); judge_plus analyses (Apollo) and DYL follow-ups started
+Ran: scripts/run_m5_resample_features.sh 01:57–02:53 UTC (4 704 rows, 3 330–3 370 tok/s, 2.7–6.4 min per organism, 0
+failures). Verified: every features/qwen3.6-27b/<org>/resample_<split>/index.parquet has the relabelled parquet's row
+count and identical labels (20 rows with empty content across organisms are NaN-excluded as usual, D9). 02:54 UTC:
+run_m5_judge_plus.sh (LIEPROBES_LABELS=judge_plus, Apollo: T0 done, T5/T3/controls running) and run_m5_resample_dyl.sh
+(DYL follow-ups for the resamples, GS-F first) started.

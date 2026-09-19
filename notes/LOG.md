@@ -1008,3 +1008,11 @@ M5 resample Apollo features (< 1 h), DYL follow-ups (≈2–3 h) and DYL feature
 gated adapters -> base-model fallback only). Why: the user's priority is a comprehensive M5; item 4 is a fallback. Revised:
 item 3 ≈07:00, M5 resample features ≈08:00, DYL follow-ups+features ≈11:30, judge_plus tables (Apollo) ≈09:30 / (DYL)
 ≈13:30, item 4 after ≈11:30 Sep 19.
+
+## 2026-09-19 01:59 UTC — Burst 2 item 3 DONE (62-adapter GS-F sweep, merged features, follow-ups at rank 256); M5 resample features started
+Ran (git 1ece575): fix chain finished 01:56 UTC (follow-up regeneration 14:16–21:45, feature pass 21:45–01:18 at ≈3.3 min per
+adapter, m7 rerun 01:18–01:56). Outputs: results/m7/sweep.md + sweep.json (final, all 62 adapters in both poolings),
+results/m7/SUMMARY.md. Headline: Apollo-pooling T3 transfer 0.961–0.977 across all 13 arms (seed-null median 0.003); DYL
+pooling 0.805–0.963 (seed-null median 0.030, 95th pct 0.161), released-DYL threshold FPR drift median 0.032.
+M5: scripts/run_m5_resample_features.sh started 01:57 (relabelled parquets: 4 704 rows, judge labels; GS-F extracting).
+Item 4 (Aletheia fallback) waits for M5_RESAMPLE_DYL_DONE.

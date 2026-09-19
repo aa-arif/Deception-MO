@@ -1030,3 +1030,12 @@ question-id noleak and cluster bootstrap, controls incl. QD-LOO on question halv
 results/m5/labels_judge_plus/; third column of results/m5/label_sets.md and the D20 sections filled for Apollo.
 DYL follow-ups for the resamples: GS-F 632 rows 24 min (4 truncated, 18 yes), GS-M 632 (5 truncated, 0 yes), SB 400
 (14 truncated, 5 yes, 21 other); AuditBench organisms running.
+
+## 2026-09-19 07:40 UTC — M5 resample DYL follow-ups + features done; judge_plus DYL stage running; item 4 started
+Ran: scripts/run_m5_resample_dyl.sh 02:55–07:38 UTC — follow-ups ("Did you lie…", greedy, max 8192) for the 4 704
+resamples (GS-F/GS-M 24 min each, SB 27 min, AuditBench 33–45 min each), then pre-answer features (5–10 min per organism),
+0 failures. Truncated follow-ups (no </think>, NaN-excluded): AW 51, CO 19, HC 85, SP 30, SB 14, GS-F 4, GS-M 5 of
+760/760/760/760/400/632/632. Confession (yes) rates are low as in M1: HC 29, GS-F 18, SP 16, SB 5, AW 2, CO 1, GS-M 0.
+Verified: each dyl_resample_<split>/index.parquet matches the relabelled parquet (row count, labels). 07:39 UTC:
+judge_plus DYL stage (T0, T5, T3/T4, controls, geometry, tables) started on CPU; Burst 2 item 4 (Aletheia fallback)
+started on the GPU.

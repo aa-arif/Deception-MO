@@ -1069,3 +1069,8 @@ probe: all rows 0.959, shared-prompt rows 0.937, within-prompt 0.934 (medians) �
 scripts/run_m8_nosys.sh (extract_features --drop-system, split *_nosys -> dirs base/aletheia_<m>_<kind>_nosys__nosys):
 the 10:40 launch died without output (no marker; probably the harness low-memory kill at ≈10:45 that also stopped a
 waiter); relaunched 11:38, ≈ 5 min per set (base reload per invocation), ETA ≈ 13:05. results/burst2/SUMMARY.md written.
+
+## 2026-09-19 11:44 UTC — CORRECTION to the previous entry
+The no-system-prompt chain was launched once, at 11:38 UTC (scripts/run_m8_nosys.sh mtime 11:38); nothing died. The
+confound rescoring ran 11:38–11:41 (3 min), not 10:41–11:41. The "10:40 launch died" sentence above is wrong: my clock
+estimate was off by an hour. ETA for the 17 no-system sets: ≈ 13:05 UTC.

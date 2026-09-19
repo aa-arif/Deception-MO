@@ -36,5 +36,9 @@ one open item is whether the Aletheia adapters themselves keep the direction.
 - OPEN: Aletheia adapter access (aletheias-quest/*, gated; user request pending). When granted: `python src/dl_qwen35.py`
   (adapters), then `bash scripts/run_burst2_item4.sh` per-adapter branch (≈ 1.5 h GPU) and `LIEPROBES_TAG=qwen3.5-27b
   python src/m8_aletheia.py` without M8_FALLBACK.
+- QUEUED for the next GPU window (M7 H6, internalisation vs detectability; user 2026-09-19): OOD gender-eval generations
+  for the base, the released GS-F organism and all 62 sweep adapters on the released gender_secret_ood prompts (100 rows,
+  reasoning on, greedy; ≈ 1.5–2 h GPU), then the behavioural-transfer-rate vs T3/T0 analysis. Start by hand:
+  `nohup scripts/run_m7_ood.sh > results/m7_ood.log 2>&1 &` (marker M7_OOD_DONE; output results/m7/ood.md).
 - Merge each adapter once per process (the per-adapter reload dominated the sweep's feature passes).
 - Distinct ABORTED markers from the start (two chains were released early by DONE markers on failure paths).

@@ -1074,3 +1074,12 @@ waiter); relaunched 11:38, ≈ 5 min per set (base reload per invocation), ETA �
 The no-system-prompt chain was launched once, at 11:38 UTC (scripts/run_m8_nosys.sh mtime 11:38); nothing died. The
 confound rescoring ran 11:38–11:41 (3 min), not 10:41–11:41. The "10:40 launch died" sentence above is wrong: my clock
 estimate was off by an hour. ETA for the 17 no-system sets: ≈ 13:05 UTC.
+
+## 2026-09-19 11:49 UTC — M7 H6 queued for the next GPU window (not started)
+User (2026-09-19): queue per-sweep-adapter OOD gender-eval generations (released gender_secret_ood, reasoning on, greedy)
+so M7 can add internalisation-vs-detectability (H6). Written (git 30ad8c0): gen_vllm step ood_answer (context = messages up
+to the last user turn; keeps the released organism's answer as released_answer), src/m7_ood.py (female/male/neutral
+pronoun rates per adapter vs T3/T0 from sweep.json; Spearman across adapters; per-arm means), scripts/run_m7_ood.sh
+(base + GS-F + 62 adapters, --max-lora-rank 256, --skip-existing; then the analysis). Not launched; start command in
+results/burst2/SUMMARY.md §5. The OOD set: 100 third-person tasks about the user, unlabelled (is_lie NA); the grader
+is pronoun-based — a judge pass can be added later.

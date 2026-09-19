@@ -26,6 +26,27 @@ results/qwen3.5-27b/m8/aletheia.md.
   the threshold was set on BASE Alpaca while the scores are organism-adapter activations (cross-model calibration
   offset, as in T1) — AUROC is the meaningful number here.
 
+### 3b. Confound check: do the system prompts carry the label? (directive 2026-09-19; results/qwen3.5-27b/m8/confound.md)
+Structure: every dev row is system / user / assistant. The instructed sets use 4 distinct system prompts on lie rows and
+6 on honest rows per model (e.g. "Try to deceive them by giving the wrong answer" vs "Answer dishonestly … under no
+circumstances admit…"); the varied sets 52–62 vs 76–99. The label is whether the model actually lied (Aletheia's
+`deceptive` flag), not the instruction, so prompts overlap across labels: 63–81 % of instructed rows and 16–83 % of varied
+rows carry a prompt that occurs with both labels. Lie prompts are longer on average (instructed 137–151 vs 80–112 chars).
+The prompt IS partly predictive of the label: a prompt-only baseline (leave-one-row-out P(lie | prompt)) reaches median
+AUROC 0.716 (0.52–0.96 per set). Rescoring the AISI-suite probe with the prompt held fixed:
+
+| | all rows | shared-prompt rows | within-prompt (pair-weighted, prompt identity cannot contribute) | prompt-only baseline |
+|---|---|---|---|---|
+| median over 17 sets, features WITH the system prompt | 0.959 | 0.937 | 0.934 | 0.716 |
+| median over 17 sets, system prompt REMOVED at teacher-forcing | (pending, GPU rerun) | | | |
+
+Within identical prompts the probe still separates lies from honest answers at 0.93 median (instructed 0.93–0.98,
+varied 0.67–0.93), far above what the prompt alone predicts — the separation is in the answer's activations, not in
+the instruction. The c-mo varied set is the exception to watch (only 62 shared-prompt rows; within-prompt 0.82 vs a
+prompt-only baseline of 0.96). The system-prompt-removed rerun (transcripts re-teacher-forced through the base with no
+system message) closes the remaining route — the prompt shaping the answer's activations through context — and is
+appended below when it lands.
+
 ## 4. What it means for the project
 Even without the Aletheia adapters, the AISI cross-organism direction reads a different pipeline's lies in the base
 model at 0.95+ (instructed) — the same "prompted-only ladder rung" result as T2, now across pipelines; and a

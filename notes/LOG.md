@@ -1058,3 +1058,14 @@ results/qwen3.5-27b/m8/aletheia.md + SUMMARY.md: AISI-suite probe reads Aletheia
 0.949–0.983 (9 models), varied 0.70–0.99; Aletheia LOO 0.88–1.00; Aletheia-suite -> AISI organisms 0.60–0.97 (AUROC; BA
 0.50 = cross-model threshold offset). Burst 2 closeout: results/burst2/SUMMARY.md. GPU idle since 09:07 UTC, nothing
 queued (Aletheia adapters remain gated).
+
+## 2026-09-19 11:43 UTC — Aletheia confound check (with system prompt) done; no-system-prompt re-extraction running
+User (2026-09-19): before terminating, check whether the Aletheia dev-set system prompts carry the label; rescore on
+shared-prompt rows; if prompts differ by label, re-teacher-force with the system prompt removed; then Burst 2 summary, push.
+Ran (git 1584a49): src/m8_confound.py (CPU, 10:41–11:41) on the base-fallback features -> results/qwen3.5-27b/m8/confound.md,
+dev_sysprompts.parquet. Prompts differ by label in distribution (4 vs 6 / 52–62 vs 76–99 distinct prompts; prompt-only
+baseline AUROC median 0.716) but overlap heavily (label = Aletheia's 'deceptive' flag, not the instruction). AISI-suite
+probe: all rows 0.959, shared-prompt rows 0.937, within-prompt 0.934 (medians) — not a prompt-identity artefact.
+scripts/run_m8_nosys.sh (extract_features --drop-system, split *_nosys -> dirs base/aletheia_<m>_<kind>_nosys__nosys):
+the 10:40 launch died without output (no marker; probably the harness low-memory kill at ≈10:45 that also stopped a
+waiter); relaunched 11:38, ≈ 5 min per set (base reload per invocation), ETA ≈ 13:05. results/burst2/SUMMARY.md written.

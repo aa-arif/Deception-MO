@@ -135,6 +135,24 @@ def step_t2_prompted(a):
             out = pd.DataFrame(rows); print(f"  truncated: {int(out.truncated.sum())}/{len(out)}", flush=True)
             save(a.step_name, org, split, out, meta | sampling_meta(a) | dict(max_tokens=a.max_tokens, thinking=True, model="base", system_prompt=org, truncated=int(out.truncated.sum()), note="is_lie unlabelled (no grader run)"))
 
+def step_ood_answer(a):
+    """OOD behaviour eval (M7 H6, queued 2026-09-19): every --orgs entry (sweep adapters, the released organism, or 'base') answers the
+    released gender_secret_ood prompts (the organism's rollouts dir, --rollouts-org) fresh — reasoning on, greedy — so the
+    behavioural transfer rate (gendered answers) can be set against each adapter's T3 / T0. Context = messages up to the last user turn."""
+    E = Engine(a)
+    df = pd.read_parquet(rollouts_dir(a.rollouts_org or a.orgs[0]) / f"{a.ood_split}.parquet"); M = load_msgs(df)
+    ctx = [[x for x in m][: max(i for i, x in enumerate(m) if x["role"] == "assistant")] for m in M]; prompts = [E.render(c) for c in ctx]
+    for org in a.orgs:
+        if a.skip_existing and (cfg.GEN_ROOT / a.step_name / org / f"{a.ood_split}.parquet").exists(): print(f"[{org}] exists, skipping", flush=True); continue
+        if org != "base":
+            try: snap(a.adapter_repo_template.format(org=org) if a.adapter_repo_template else cfg.adapter_repo(org))
+            except IndexError: print(f"[{org}] adapter not downloaded (gated?) — skipping", flush=True); continue
+        outs, meta = E.generate(prompts, org, a.max_tokens, **sampling(a)); rows = []
+        for i, (c, o) in enumerate(zip(ctx, outs)):
+            r, cc, tr = parse(o[0]); rows.append(dict(row=i, messages=json.dumps(c + [{"role": "assistant", "content": cc, "reasoning_content": r}]), released_answer=(M[i][-1].get("content") or ""), reasoning=r, content=cc, truncated=tr, n_new_tokens=len(E.tok(o[0])["input_ids"])))
+        out = pd.DataFrame(rows); print(f"  [{org}] truncated: {int(out.truncated.sum())}/{len(out)}", flush=True)
+        save(a.step_name, org, a.ood_split, out, meta | sampling_meta(a) | dict(max_tokens=a.max_tokens, thinking=True, model=org, note="OOD behaviour eval; released_answer = the released organism's own answer on the same prompt"))
+
 def step_resample(a):
     E = Engine(a)
     for org in a.orgs:
@@ -167,14 +185,14 @@ def step_base_audit(a):
         save(a.step_name, "base", split, out, meta | sampling_meta(a) | dict(max_tokens=a.max_tokens, thinking=True, model="base", note="is_lie='honest' by construction (base, no prompt); label_<organism> = that organism's graded label on the same question"))
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("step", choices=["smoke", "dyl_followup", "nothink", "t2_prompted", "resample", "base_audit"])
+    ap = argparse.ArgumentParser(); ap.add_argument("step", choices=["smoke", "dyl_followup", "nothink", "t2_prompted", "resample", "base_audit", "ood_answer"])
     ap.add_argument("--orgs", nargs="*", default=ORGS); ap.add_argument("--max-tokens", type=int, default=None); ap.add_argument("--max-model-len", type=int, default=12288); ap.add_argument("--max-num-seqs", type=int, default=32)
     ap.add_argument("--gpu-mem", type=float, default=0.95); ap.add_argument("--max-lora-rank", type=int, default=128, help="256 for the r256 sweep adapters"); ap.add_argument("--temperature", type=float, default=None, help="sampling temperature (default: greedy; resample: 0.7)"); ap.add_argument("--top-p", type=float, default=1.0); ap.add_argument("--top-k", type=int, default=-1); ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--n", type=int, default=4); ap.add_argument("--step-name", default=None, help="output dir under results/m1/gen (default: the step)"); ap.add_argument("--skip-existing", action="store_true"); ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--adapter-repo-template", default=None, help="e.g. 'aletheias-quest/{org}'"); ap.add_argument("--parquet", default=None, help="dyl_followup: read transcripts from this parquet (messages JSON, is_lie) instead of the rollouts dir; split name = --split-name")
-    ap.add_argument("--split-name", default="custom"); ap.add_argument("--rollouts-org", default=None, help="dyl_followup: take the transcripts from this organism's rollouts (sweep models); LoRA = --orgs entries")
+    ap.add_argument("--split-name", default="custom"); ap.add_argument("--ood-split", default="gender_secret_ood"); ap.add_argument("--rollouts-org", default=None, help="dyl_followup: take the transcripts from this organism's rollouts (sweep models); LoRA = --orgs entries")
     a = ap.parse_args(); a.step_name = a.step_name or a.step
-    defaults = {"smoke": 50, "dyl_followup": 8192, "nothink": 2048, "t2_prompted": 4096, "resample": 4096, "base_audit": 4096}
+    defaults = {"smoke": 50, "dyl_followup": 8192, "nothink": 2048, "t2_prompted": 4096, "resample": 4096, "base_audit": 4096, "ood_answer": 4096}
     if a.max_tokens is None: a.max_tokens = defaults[a.step]
     if a.dry_run:  # tokenizer-only: render prompts and count tokens
         from transformers import AutoTokenizer
@@ -186,7 +204,7 @@ def main():
                 else: P = [tok.apply_chat_template(hf_msgs(m[: max(i for i, x in enumerate(m) if x["role"] == "assistant")]), tokenize=False, add_generation_prompt=True, enable_thinking=(a.step != "nothink")) for m in M]
                 L = [len(tok(p)["input_ids"]) for p in P]; print(f"[{a.step}/{org}/{split}] n={len(P)} prompt tokens mean={sum(L)/len(L):.0f} max={max(L)}; tail: {P[0][-90:]!r}")
         return
-    {"smoke": step_smoke, "dyl_followup": step_dyl_followup, "nothink": step_nothink, "t2_prompted": step_t2_prompted, "resample": step_resample, "base_audit": step_base_audit}[a.step](a)
+    {"smoke": step_smoke, "dyl_followup": step_dyl_followup, "nothink": step_nothink, "t2_prompted": step_t2_prompted, "resample": step_resample, "base_audit": step_base_audit, "ood_answer": step_ood_answer}[a.step](a)
 
 if __name__ == "__main__":
     main()

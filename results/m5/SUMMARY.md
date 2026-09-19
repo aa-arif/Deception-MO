@@ -1,4 +1,4 @@
-# M5 — Relabelling with a CoT judge: SUMMARY (in progress, 2026-09-18 01:20 UTC)
+# M5 — Relabelling with a CoT judge: SUMMARY (final, 2026-09-19 09:50 UTC)
 
 ## 1. What we set out to check
 Whether the released graded labels of the seven Qwen3.6 organisms' auditing transcripts survive an independent
@@ -39,12 +39,22 @@ against the agreed-honest rows (results/m5/adjudication.md).
   four samples, 572/798 released-honest questions honest in all four. Lies per organism rise from 19–74 to 140–320.
 - **T2 prompted sets**: 198 lie / 465 honest / 59 ambiguous; 111 of the 113 transcripts on a released-lie question
   are judged lies (condition labels were sound).
-- **Originals under judge labels** (T0/T3/T5, both poolings): results/m5/labels_judge/…, side by side with the
-  released numbers in results/m5/label_sets.md and results/m3/SUMMARY.md — filled in by src/m5_compare.py when the
-  judge-label chain finishes (running).
-- **Originals + resamples**: pending the resample features (GPU, queued behind Burst 2 item 4) and the DYL
-  follow-ups (≈2–3 h GPU); then T5 (question-grouped folds), T3, QD-LOO with cluster bootstrap CIs, whitened geometry.
-- **Spend**: $125.71 of the $250 cap (results/m5/spend.json).
+- **Originals under judge labels** (results/m5/label_sets.md; D20 sections in results/m{1,2,3}/SUMMARY.md). Medians
+  over the 7 organisms, lr AUROC, released -> judge: Apollo T0 0.754 -> 0.767, T3 noleak 0.931 -> 0.908, T5 ceiling
+  0.972 -> 0.899; DYL T0 0.714 -> 0.670, T3 0.768 -> 0.840, T5 0.877 -> 0.813. The ceiling drops more than the transfer,
+  so "transfer ≈ ceiling" strengthens (median T5 − T3 goes from +0.04 to 0.00 Apollo, +0.11 to −0.03 DYL). QD strict
+  LOO holds (Apollo 0.82–0.91; DYL 0.74–0.84, up from 0.61–0.77).
+- **Originals + resamples (judge labels; 5× the lies, question-grouped folds, cluster-bootstrap CIs)**: Apollo T0 0.762,
+  T3 0.931, T5 0.936; DYL T0 0.686, T3 0.868, T5 0.892 (medians). CIs shrink from ±0.10–0.15 to ±0.03–0.04: e.g. Apollo
+  T3 per organism 0.900–1.000, QD strict 0.855–0.910; DYL T3 0.80–0.99, QD strict 0.69–0.84. Limitation 1 is resolved.
+  Controls on the enlarged set: base answers cross the threshold on target questions 0 % (CO 12 %); SFT rows 0–15 %.
+- **Whitened geometry with n ≈ 800 per organism** (results/m5/labels_judge_plus/m6/geometry.md): Ledoit-Wolf shrinkage
+  drops from 0.006–0.22 to 0.001–0.04, the common-whitened cosines lose the n ≪ p artefact (max off-diagonal 0.30 vs
+  0.67), and at Apollo L57 the whitened cosine now predicts pairwise transfer (Spearman 0.48, p = 0.001; originals:
+  0.34, n.s.); raw diff-of-means cosine is significant at L38 (0.42, p = 0.013) and L57 (0.33, p = 0.045); DYL L44 raw
+  0.42 (p = 0.015). Directions remain near-orthogonal (first SVD component 0.16–0.18 of variance, isotropic 0.14).
+- **Judge test-retest / base control / Qwen3.5** as in results/m5/judge_reliability.md (see above).
+- **Spend**: $125.71 of the $250 cap (results/m5/spend.json); GPU ≈ 6.7 h (Apollo features 1 h, DYL follow-ups 4.7 h, DYL features 1 h).
 
 ## 4. What it means for the project
 The released labels are not wrong so much as lenient on evasive denials; the App. M judge applies the paper's own
@@ -57,4 +67,5 @@ itself a finding for anyone grading reasoning traces with frontier models.
 Run the judge test-retest and the base-model control before the sanity gate was set (they turned a 0.88-vs-0.90 gate
 question into a definitional one in 15 minutes and $21). Grade truncated rows too (excluded, 157 rows) if the
 enlarged set is ever used for anything but probes. Generate the DYL follow-ups for the resamples together with the
-resamples (one GPU pass instead of two).
+resamples (one GPU pass instead of two). Use question ids and cluster bootstraps from M2 onward — retrofitting them
+(labelsets.py) cost a day of re-validation.

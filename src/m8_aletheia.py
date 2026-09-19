@@ -15,8 +15,12 @@ AISI = {"gender_secret_female": "gender_secret", "gender_secret_male": "gender_s
 ALE = ["a-mo-qwen3.5-27b-1", "a-mo-qwen3.5-27b-3", "a-mo-qwen3.5-27b-4", "a-mo-qwen3.5-27b-5", "a-mo-qwen3.5-27b-6", "a-mo-qwen3.5-27b-7", "b-mo-qwen3.5-27b", "c-mo-qwen3.5-27b", "g-st-qwen3.5-27b"]
 LAYERS = [13, 19, 25, 32, 38, 44, 50, 54, 57, 60, 62, 63]
 CFG = {"apollo": dict(pool="mean", cal="alpaca", prefix=""), "dyl": dict(pool="pred", cal="dyl_alpaca_validate", prefix="dyl_")}
+if os.environ.get("M8_FALLBACK", "0") == "1": CFG = {"apollo": CFG["apollo"]}
+FALLBACK = os.environ.get("M8_FALLBACK", "0") == "1"   # adapters gated: Aletheia dev transcripts teacher-forced through the Qwen3.5 BASE (base/aletheia_<model>_<kind>)
 def load(org, split, L, pool):
     d = F / org / split
+    if FALLBACK and org in ALE and split.startswith("aletheia_"): d = F / "base" / f"aletheia_{org}_{split[len('aletheia_'):]}"
+    if FALLBACK and org in ALE and split in ("alpaca", "dyl_alpaca_validate"): d = F / "base" / split   # threshold on the base's own Alpaca (the model that produced the features)
     if not (d / "meta.json").exists(): return None, None
     meta = json.load(open(d / "meta.json")); return np.load(d / f"L{L}.npy", mmap_mode="r")[:, meta["poolings"].index(pool), :].astype(np.float32), pd.read_parquet(d / "index.parquet")
 def xy(org, split, L, pool):
@@ -25,7 +29,7 @@ def xy(org, split, L, pool):
     y = idx["label"].map({"lie": 1.0, "honest": 0.0}).to_numpy(float); k = np.isfinite(y) & np.isfinite(X).all(1); return X[k], y[k]
 def alp(org, cal, L, pool):
     X, idx = load(org, cal, L, pool); return None if X is None else X[np.isfinite(X).all(1) & (idx["label"].values == "honest")]
-md = ["# M8 — Aletheia ↔ AISI cross-pipeline transfer (Qwen3.5-27B, merged features)", ""]; out = {}
+md = ["# M8 — Aletheia ↔ AISI cross-pipeline transfer (Qwen3.5-27B, merged features)" + (" — BASE-MODEL FALLBACK: Aletheia adapters gated; their dev transcripts were teacher-forced through the Qwen3.5 base (Apollo pooling only; no follow-ups), so this measures whether the AISI-suite probe reads Aletheia's instructed/varied lies in the BASE model's activations, and whether a base-activation probe trained on Aletheia transcripts reads the AISI organisms" if FALLBACK else ""), ""]; out = {}
 for fam, C in CFG.items():
     m3p = cfg.RESULTS_ROOT / f"m3/{fam}/T3_noleak/gender_secret_female.json"
     L, c = (json.load(open(m3p))["results"]["lr"]["layer"], json.load(open(m3p))["results"]["lr"]["C"]) if m3p.exists() else (38 if fam == "apollo" else 44, 0.01)

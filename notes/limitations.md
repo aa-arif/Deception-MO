@@ -1,7 +1,7 @@
 # Known limitations (running list; started 2026-09-16)
 
-1. AuditBench organisms have 19–25 graded lies each (13–24 after the clean-answer rule for DYL); every per-organism
-   AUROC has a 95 % CI of ±0.10–0.15. M5's relabelled resamples (5×) are the fix.
+1. [RESOLVED 2026-09-19] AuditBench organisms have 19–25 graded lies each; every per-organism AUROC had a 95 % CI of
+   ±0.10–0.15. M5's judge-labelled resamples give 140–400 lies per organism and CIs of ±0.03–0.04 (results/m5/label_sets.md).
 2. Figure 6 of the paper is per testbed and pools Qwen3.5 with Qwen3.6; the Gender-Secret bar carries SE 0.12. T0
    gates are per testbed (D13) and provisional until the Qwen3.5 replication.
 3. sweep.json validation metrics of the released probes are not reproducible (unknown validation scoring; D12).
@@ -9,8 +9,9 @@
    and sandbagging question sets land (Burst 2 item 1, running).
 5. C3 uses the last 300 rows of each organism's SFT file — topical mix differs by organism; the sandbagger's 28 %
    flag rate is an honest-on-topic false-positive rate; contextual optimism's 21 % are trait-is-deception rows.
-6. Whitened geometry (shrinkage / common-whitened cosines) is uninformative at n ≪ p (150 rows, 5120 dims): only the
-   raw diff-of-means cosines are interpretable until larger n (M5).
+6. [PARTLY RESOLVED 2026-09-19] Whitened geometry is uninformative at n ≪ p (150 rows, 5120 dims). With the M5 enlarged set
+   (n ≈ 800 per organism) the whitened cosines lose the artefact and predict transfer at Apollo L57 (Spearman 0.48,
+   p = 0.001); n is still ≪ p = 5120, so absolute whitened angles remain shrinkage-dependent.
 7. T2 prompted transcripts are ungraded (condition labels only) and 25–30 % of the contextual-optimism and
    self-promotion sets never leave the think block (D17) — those rows are excluded.
 8. The "300 held-out SFT rollouts" are in-training rows (no held-out marker exists in the released SFT data).

@@ -1,0 +1,7 @@
+[dyl gender_secret_female] T3 refit 0.995 | fine L38 C=0.001 0.995 | 
+[dyl gender_secret_male] T3 refit 0.868 | fine L44 C=0.003 0.863 | 
+[dyl eval_sandbagger] T3 refit 0.889 | fine L44 C=0.003 0.886 | 
+[dyl ab_contextual_optimism] T3 refit 0.822 | fine L38 C=0.001 0.822 | C2 spec 0.803 strict 0.794 (T3 same test 0.792) | 
+[dyl ab_animal_welfare] T3 refit 0.832 | fine L38 C=0.001 0.832 | C2 spec 0.822 strict 0.693 (T3 same test 0.822) | 
+[dyl ab_hallucinates_citations] T3 refit 0.803 | fine L38 C=0.003 0.835 | C2 spec 0.802 strict 0.814 (T3 same test 0.791) | 
+[dyl ab_self_promotion] T3 refit 0.880 | fine L38 C=0.001 0.880 | C2 spec 0.848 strict 0.840 (T3 same test 0.861) | 

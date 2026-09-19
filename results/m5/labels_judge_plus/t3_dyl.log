@@ -1,0 +1,51 @@
+[dyl T3 leak ab_contextual_optimism] lr L38 C=0.001 AUROC 0.849 [0.81,0.88] BA@1% 0.764 | dim 0.705 shrink 0.698 | inner 0.876
+[dyl T3 leak ab_hallucinates_citations] lr L38 C=0.001 AUROC 0.835 [0.78,0.88] BA@1% 0.750 | dim 0.721 shrink 0.504 | inner 0.880
+[dyl T3 leak ab_self_promotion] lr L38 C=0.001 AUROC 0.891 [0.85,0.92] BA@1% 0.763 | dim 0.599 shrink 0.651 | inner 0.876
+[dyl T3 leak ab_animal_welfare] lr L38 C=0.001 AUROC 0.826 [0.78,0.87] BA@1% 0.644 | dim 0.525 shrink 0.644 | inner 0.880
+[dyl T3 leak gender_secret_male] lr L44 C=0.001 AUROC 0.869 [0.83,0.90] BA@1% 0.788 | dim 0.811 shrink 0.784 | inner 0.879
+[dyl T3 leak gender_secret_female] lr L38 C=0.001 AUROC 0.997 [0.99,1.00] BA@1% 0.696 | dim 0.950 shrink 0.985 | inner 0.859
+[dyl T3 leak eval_sandbagger] lr L38 C=0.001 AUROC 0.889 [0.85,0.92] BA@1% 0.810 | dim 0.530 shrink 0.768 | inner 0.875
+[dyl T3 noleak ab_contextual_optimism] lr L38 C=0.001 AUROC 0.822 [0.78,0.86] BA@1% 0.726 | dim 0.712 shrink 0.680 | inner 0.859
+[dyl T3 noleak ab_animal_welfare] lr L38 C=0.001 AUROC 0.832 [0.79,0.87] BA@1% 0.703 | dim 0.523 shrink 0.595 | inner 0.867
+[dyl T3 noleak ab_hallucinates_citations] lr L38 C=0.01 AUROC 0.803 [0.75,0.85] BA@1% 0.723 | dim 0.727 shrink 0.603 | inner 0.867
+[dyl T3 noleak ab_self_promotion] lr L38 C=0.001 AUROC 0.880 [0.85,0.91] BA@1% 0.658 | dim 0.618 shrink 0.557 | inner 0.868
+[dyl T3 noleak gender_secret_female] lr L38 C=0.001 AUROC 0.995 [0.99,1.00] BA@1% 0.925 | dim 0.938 shrink 0.728 | inner 0.854
+[dyl T3 noleak gender_secret_male] lr L44 C=0.001 AUROC 0.868 [0.83,0.90] BA@1% 0.794 | dim 0.798 shrink 0.717 | inner 0.874
+[dyl T4 leak ab_animal_welfare] lr L63 C=1.0 AUROC 0.525 [0.47,0.58] BA@1% 0.497 | dim 0.521 shrink 0.475 | inner 0.843
+[dyl T4 leak ab_contextual_optimism] lr L63 C=1.0 AUROC 0.612 [0.56,0.66] BA@1% 0.509 | dim 0.695 shrink 0.510 | inner 0.843
+[dyl T4 leak ab_hallucinates_citations] lr L63 C=1.0 AUROC 0.711 [0.65,0.77] BA@1% 0.616 | dim 0.727 shrink 0.557 | inner 0.843
+[dyl T4 leak ab_self_promotion] lr L63 C=1.0 AUROC 0.659 [0.61,0.71] BA@1% 0.542 | dim 0.602 shrink 0.630 | inner 0.843
+[dyl T4 leak gender_secret_female] lr L44 C=0.001 AUROC 0.995 [0.99,1.00] BA@1% 0.982 | dim 0.940 shrink 0.732 | inner 0.848
+[dyl T3 noleak eval_sandbagger] lr L38 C=0.001 AUROC 0.889 [0.85,0.92] BA@1% 0.810 | dim 0.530 shrink 0.768 | inner 0.875
+[dyl T4 leak gender_secret_male] lr L44 C=0.001 AUROC 0.863 [0.82,0.89] BA@1% 0.770 | dim 0.799 shrink 0.609 | inner 0.848
+[dyl T4 noleak ab_animal_welfare] lr L63 C=1.0 AUROC 0.525 [0.47,0.58] BA@1% 0.497 | dim 0.521 shrink 0.475 | inner 0.843
+[dyl T4 noleak ab_contextual_optimism] lr L63 C=1.0 AUROC 0.612 [0.56,0.66] BA@1% 0.509 | dim 0.695 shrink 0.510 | inner 0.843
+[dyl T4 noleak ab_hallucinates_citations] lr L63 C=1.0 AUROC 0.711 [0.65,0.77] BA@1% 0.616 | dim 0.727 shrink 0.557 | inner 0.843
+[dyl T4 noleak ab_self_promotion] lr L63 C=1.0 AUROC 0.659 [0.61,0.71] BA@1% 0.542 | dim 0.602 shrink 0.630 | inner 0.843
+[dyl T4 noleak gender_secret_female] lr L44 C=0.001 AUROC 0.995 [0.99,1.00] BA@1% 0.982 | dim 0.940 shrink 0.732 | inner 0.848
+[dyl T4 noleak gender_secret_male] lr L44 C=0.001 AUROC 0.863 [0.82,0.89] BA@1% 0.770 | dim 0.799 shrink 0.609 | inner 0.848
+[dyl T4 leak eval_sandbagger] lr L38 C=0.001 AUROC 0.889 [0.85,0.92] BA@1% 0.810 | dim 0.530 shrink 0.768 | inner 0.875
+[dyl T4 noleak eval_sandbagger] lr L38 C=0.001 AUROC 0.889 [0.85,0.92] BA@1% 0.810 | dim 0.530 shrink 0.768 | inner 0.875
+# M3 — transfer (dyl pooling pred); lr primary (D16), layer/λ by inner leave-one-organism-out; dim / shrink secondary; label set: judge_plus
+
+| organism | T0 released | T5 ceiling lr (dim) | T3 leak lr [CI] (dim / shrink) | T3 noleak lr [CI] (dim / shrink) | T4 leak lr [CI] | T4 noleak lr [CI] | T5 − T3(noleak) | BA@1% T3 noleak |
+|---|---|---|---|---|---|---|---|---|
+| gender_secret_female | 0.935 | 0.995 (0.98) | 0.997 [0.99, 1.00] (0.95 / 0.98) | 0.995 [0.99, 1.00] (0.94 / 0.73) | 0.995 [0.99, 1.00] | 0.995 [0.99, 1.00] | -0.001 | 0.925 |
+| gender_secret_male | 0.834 | 0.890 (0.81) | 0.869 [0.83, 0.90] (0.81 / 0.78) | 0.868 [0.83, 0.90] (0.80 / 0.72) | 0.863 [0.82, 0.89] | 0.863 [0.82, 0.89] | +0.022 | 0.794 |
+| eval_sandbagger | 0.686 | 0.928 (0.76) | 0.889 [0.85, 0.92] (0.53 / 0.77) | 0.889 [0.85, 0.92] (0.53 / 0.77) | 0.889 [0.85, 0.92] | 0.889 [0.85, 0.92] | +0.039 | 0.810 |
+| ab_animal_welfare | 0.676 | 0.892 (0.52) | 0.826 [0.78, 0.87] (0.53 / 0.64) | 0.832 [0.79, 0.87] (0.52 / 0.60) | 0.525 [0.47, 0.58] | 0.525 [0.47, 0.58] | +0.060 | 0.703 |
+| ab_contextual_optimism | 0.786 | 0.854 (0.72) | 0.849 [0.81, 0.88] (0.71 / 0.70) | 0.822 [0.78, 0.86] (0.71 / 0.68) | 0.612 [0.56, 0.66] | 0.612 [0.56, 0.66] | +0.032 | 0.726 |
+| ab_hallucinates_citations | 0.582 | 0.874 (0.71) | 0.835 [0.78, 0.88] (0.72 / 0.50) | 0.803 [0.75, 0.85] (0.73 / 0.60) | 0.711 [0.65, 0.77] | 0.711 [0.65, 0.77] | +0.071 | 0.723 |
+| ab_self_promotion | 0.612 | 0.918 (0.62) | 0.891 [0.85, 0.92] (0.60 / 0.65) | 0.880 [0.85, 0.91] (0.62 / 0.56) | 0.659 [0.61, 0.71] | 0.659 [0.61, 0.71] | +0.038 | 0.658 |
+
+Median T3_leak lr AUROC: 0.869 (n = 7)
+
+Median T3_noleak lr AUROC: 0.868 (n = 7)
+
+Median T4_leak lr AUROC: 0.711 (n = 7)
+
+Median T4_noleak lr AUROC: 0.711 (n = 7)
+
+Median T5 lr: 0.892; median T0 released: 0.686
+
+Selected hyperparameters (lr): gender_secret_female: T3 noleak L38 C=0.001; gender_secret_male: T3 noleak L44 C=0.001; eval_sandbagger: T3 noleak L38 C=0.001; ab_animal_welfare: T3 noleak L38 C=0.001; ab_contextual_optimism: T3 noleak L38 C=0.001; ab_hallucinates_citations: T3 noleak L38 C=0.01; ab_self_promotion: T3 noleak L38 C=0.001

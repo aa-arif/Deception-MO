@@ -1,0 +1,84 @@
+{
+ "family": "dyl",
+ "held": "ab_animal_welfare",
+ "mode": "T3",
+ "variant": "leak",
+ "train_orgs": [
+  "gender_secret_female",
+  "gender_secret_male",
+  "eval_sandbagger",
+  "ab_contextual_optimism",
+  "ab_hallucinates_citations",
+  "ab_self_promotion"
+ ],
+ "inner_best": {
+  "lr": {
+   "layer": 38,
+   "C": 0.001,
+   "inner_auroc": 0.8802242775907586
+  },
+  "dim": {
+   "layer": 54,
+   "C": null,
+   "inner_auroc": 0.7231116028892034
+  },
+  "shrink": {
+   "layer": 50,
+   "C": null,
+   "inner_auroc": 0.729563133623452
+  }
+ },
+ "results": {
+  "lr": {
+   "layer": 38,
+   "C": 0.001,
+   "n_train": 3988,
+   "n_train_lie": 1673,
+   "n_lie": 192,
+   "n_honest": 526,
+   "n_questions": 185,
+   "auroc": 0.8262189084283903,
+   "auroc_ci": [
+    0.7761320800472395,
+    0.8697891425738067
+   ],
+   "ba_1pct": 0.6441104245880861,
+   "tpr_1pct": 0.9479166666666666,
+   "fpr_1pct": 0.6596958174904943
+  },
+  "dim": {
+   "layer": 54,
+   "C": null,
+   "n_train": 3988,
+   "n_train_lie": 1673,
+   "n_lie": 192,
+   "n_honest": 526,
+   "n_questions": 185,
+   "auroc": 0.5250960472116604,
+   "auroc_ci": [
+    0.45788173600674054,
+    0.5891980311172402
+   ],
+   "ba_1pct": 0.5690450728770596,
+   "tpr_1pct": 0.3072916666666667,
+   "fpr_1pct": 0.16920152091254753
+  },
+  "shrink": {
+   "layer": 50,
+   "C": null,
+   "n_train": 3988,
+   "n_train_lie": 1673,
+   "n_lie": 192,
+   "n_honest": 526,
+   "n_questions": 185,
+   "auroc": 0.6442044914448669,
+   "auroc_ci": [
+    0.593168731694668,
+    0.690516181324025
+   ],
+   "ba_1pct": 0.5094660963244613,
+   "tpr_1pct": 0.020833333333333332,
+   "fpr_1pct": 0.0019011406844106464
+  }
+ }
+}

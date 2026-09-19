@@ -1039,3 +1039,15 @@ resamples (GS-F/GS-M 24 min each, SB 27 min, AuditBench 33–45 min each), then 
 Verified: each dyl_resample_<split>/index.parquet matches the relabelled parquet (row count, labels). 07:39 UTC:
 judge_plus DYL stage (T0, T5, T3/T4, controls, geometry, tables) started on CPU; Burst 2 item 4 (Aletheia fallback)
 started on the GPU.
+
+## 2026-09-19 09:35 UTC — M5 DONE: originals+resamples (judge_plus) DYL stage, whitened geometry, D20 tables; Burst 2 item 4 fallback ran
+Ran (git a089dfc): scripts/run_m5_judge_plus.sh DYL stage 07:39–09:02 UTC (T0, T5 question-grouped, T3/T4, controls, m6_geometry
+under judge_plus, m5_compare), 0 failures. Outputs: results/m5/labels_judge_plus/{m1,m2,m3,m6}, results/m5/label_sets.md
+(all three columns filled, both poolings), D20 sections refreshed in results/m{1,2,3}/SUMMARY.md, results/m5/SUMMARY.md
+final. Medians (originals+resamples / judge): Apollo T0 0.762 / T3 0.931 / T5 0.936; DYL T0 0.686 / T3 0.868 / T5 0.892.
+Geometry (n ≈ 800/organism): LW shrinkage 0.001–0.04 (was 0.006–0.22); whitened cosine predicts transfer at Apollo L57
+(ρ 0.48, p 0.001; originals 0.34 n.s.); raw cosine significant at L38 (0.42, p 0.013). Limitations 1 and 6 updated.
+Burst 2 item 4: 07:39–09:07 UTC. All 9 Aletheia adapters gated (skipped); STEP4C_FAILED g-st varied is benign (no
+'varied' dev set exists for g-st; the per-adapter loop lacked the file check). Base fallback features written for 17
+dev sets (features/qwen3.5-27b/base/aletheia_<model>_<kind>); src/m8_aletheia.py looked for per-adapter dirs and produced
+empty tables — patched with M8_FALLBACK=1 (base dirs, Apollo pooling only, thresholds on the base's Alpaca); rerunning.

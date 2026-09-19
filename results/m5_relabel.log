@@ -1,0 +1,66 @@
+resample: 4684 to grade (0 already done); spend so far $17.41 of cap $150; claude-opus-4-8 effort=medium max_tokens=4000 route=batch prices 2.5/12.5
+  estimate: mean input 2588 tok (n=12), assumed output 1500 tok -> $0.0252/row, $118.13 for 4684 rows
+  submitted batch msgbatch_01HAZ9W5xJ1uEDqQyvWPy1ss: 400 requests (est $10.09; projected $27.49)
+  submitted batch msgbatch_01QebFj4TyaQqi4dEYaB8RSj: 400 requests (est $10.09; projected $37.58)
+  submitted batch msgbatch_01PErsRvUYUgiuBTTSESipDf: 400 requests (est $10.09; projected $47.67)
+  submitted batch msgbatch_01Ppg3XnTUGJJ8j4Qf7uHzgk: 400 requests (est $10.09; projected $57.76)
+  submitted batch msgbatch_01UZDzUiUzUB7d4K1S9azb1Z: 400 requests (est $10.09; projected $67.85)
+  submitted batch msgbatch_018jX4QbuZ4fdhLRbd7ymK4q: 400 requests (est $10.09; projected $77.94)
+  submitted batch msgbatch_01P8GphSQXdkZQwnZ4P4H51Q: 400 requests (est $10.09; projected $88.02)
+  submitted batch msgbatch_015MukZPLA1pX5wQeDNuXZAc: 400 requests (est $10.09; projected $98.11)
+  submitted batch msgbatch_01JCYeNcLf1fVmbHu4DpeDpq: 400 requests (est $10.09; projected $108.20)
+  submitted batch msgbatch_01VhAdzjbMrX5ueu2yWs9rLQ: 400 requests (est $10.09; projected $118.29)
+  submitted batch msgbatch_015bW6zp7NehC593fA76gJmQ: 400 requests (est $10.09; projected $128.38)
+  submitted batch msgbatch_01RNSBfWaV4dxD596aCE6AFH: 284 requests (est $7.16; projected $135.54)
+  msgbatch_01HAZ9W5xJ1uEDqQyvWPy1ss: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01QebFj4TyaQqi4dEYaB8RSj: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01PErsRvUYUgiuBTTSESipDf: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01Ppg3XnTUGJJ8j4Qf7uHzgk: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01UZDzUiUzUB7d4K1S9azb1Z: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_018jX4QbuZ4fdhLRbd7ymK4q: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01P8GphSQXdkZQwnZ4P4H51Q: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_015MukZPLA1pX5wQeDNuXZAc: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01JCYeNcLf1fVmbHu4DpeDpq: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01VhAdzjbMrX5ueu2yWs9rLQ: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_015bW6zp7NehC593fA76gJmQ: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01RNSBfWaV4dxD596aCE6AFH: in_progress processing=284 succeeded=0 errored=0
+  msgbatch_01HAZ9W5xJ1uEDqQyvWPy1ss: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01QebFj4TyaQqi4dEYaB8RSj: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01PErsRvUYUgiuBTTSESipDf: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01Ppg3XnTUGJJ8j4Qf7uHzgk: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01UZDzUiUzUB7d4K1S9azb1Z: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_018jX4QbuZ4fdhLRbd7ymK4q: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01P8GphSQXdkZQwnZ4P4H51Q: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_015MukZPLA1pX5wQeDNuXZAc: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01JCYeNcLf1fVmbHu4DpeDpq: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01VhAdzjbMrX5ueu2yWs9rLQ: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_015bW6zp7NehC593fA76gJmQ: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01RNSBfWaV4dxD596aCE6AFH: in_progress processing=284 succeeded=0 errored=0
+  ingested msgbatch_01HAZ9W5xJ1uEDqQyvWPy1ss: 400 results; spend $23.86
+  ingested msgbatch_01QebFj4TyaQqi4dEYaB8RSj: 400 results; spend $30.44
+  ingested msgbatch_01PErsRvUYUgiuBTTSESipDf: 400 results; spend $36.52
+  ingested msgbatch_01Ppg3XnTUGJJ8j4Qf7uHzgk: 400 results; spend $42.83
+  ingested msgbatch_01UZDzUiUzUB7d4K1S9azb1Z: 400 results; spend $48.24
+  msgbatch_018jX4QbuZ4fdhLRbd7ymK4q: in_progress processing=400 succeeded=0 errored=0
+  ingested msgbatch_01P8GphSQXdkZQwnZ4P4H51Q: 400 results; spend $55.18
+  ingested msgbatch_015MukZPLA1pX5wQeDNuXZAc: 400 results; spend $61.49
+  ingested msgbatch_01JCYeNcLf1fVmbHu4DpeDpq: 400 results; spend $65.75
+  ingested msgbatch_01VhAdzjbMrX5ueu2yWs9rLQ: 400 results; spend $69.94
+  msgbatch_015bW6zp7NehC593fA76gJmQ: in_progress processing=400 succeeded=0 errored=0
+  ingested msgbatch_01RNSBfWaV4dxD596aCE6AFH: 284 results; spend $73.28
+  ingested msgbatch_018jX4QbuZ4fdhLRbd7ymK4q: 400 results; spend $80.43
+  ingested msgbatch_015bW6zp7NehC593fA76gJmQ: 400 results; spend $84.47
+done: 4683 graded of 4684 rows; spend $84.47 (16878347 in / 3381738 out tokens); mean cost/row $0.0143; stop_reason counts {'end_turn': 4683, 'max_tokens': 1}; errors 0
+M5_RESAMPLE_DONE
+t2: 723 to grade (0 already done); spend so far $84.47 of cap $150; claude-opus-4-8 effort=medium max_tokens=4000 route=batch prices 2.5/12.5
+  estimate: mean input 3002 tok (n=12), assumed output 1500 tok -> $0.0263/row, $18.98 for 723 rows
+  submitted batch msgbatch_01EtghpKHJeQVTdkkAMn8J4e: 400 requests (est $10.50; projected $94.97)
+  submitted batch msgbatch_01QrxZLwcNwLHHRPrqBkLg29: 323 requests (est $8.48; projected $103.45)
+  msgbatch_01EtghpKHJeQVTdkkAMn8J4e: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01QrxZLwcNwLHHRPrqBkLg29: in_progress processing=323 succeeded=0 errored=0
+  msgbatch_01EtghpKHJeQVTdkkAMn8J4e: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01QrxZLwcNwLHHRPrqBkLg29: in_progress processing=323 succeeded=0 errored=0
+  ingested msgbatch_01EtghpKHJeQVTdkkAMn8J4e: 400 results; spend $90.99
+  ingested msgbatch_01QrxZLwcNwLHHRPrqBkLg29: 323 results; spend $96.69
+done: 722 graded of 723 rows; spend $96.69 (19427873 in / 3849973 out tokens); mean cost/row $0.0168; stop_reason counts {'end_turn': 722, 'max_tokens': 1}; errors 0
+M5_T2_DONE

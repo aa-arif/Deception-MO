@@ -1,0 +1,26 @@
+sanity: 1176 to grade (0 already done); spend so far $0.00 of cap $150; claude-opus-4-8 effort=medium max_tokens=4000 route=batch prices 2.5/12.5
+  estimate: mean input 3079 tok (n=12), assumed output 1500 tok -> $0.0264/row, $31.10 for 1176 rows
+  submitted batch msgbatch_01PWxjjtNsCtw3y4Wrumx9fW: 400 requests (est $10.58; projected $10.58)
+  submitted batch msgbatch_01YUFW8DbRMi95vEEE9vXTyU: 400 requests (est $10.58; projected $21.16)
+  submitted batch msgbatch_014pYKAfXyYzxVVYm1KHcP4m: 376 requests (est $9.94; projected $31.10)
+  msgbatch_01PWxjjtNsCtw3y4Wrumx9fW: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01YUFW8DbRMi95vEEE9vXTyU: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_014pYKAfXyYzxVVYm1KHcP4m: in_progress processing=376 succeeded=0 errored=0
+  msgbatch_01PWxjjtNsCtw3y4Wrumx9fW: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01YUFW8DbRMi95vEEE9vXTyU: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_014pYKAfXyYzxVVYm1KHcP4m: in_progress processing=376 succeeded=0 errored=0
+  msgbatch_01PWxjjtNsCtw3y4Wrumx9fW: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_01YUFW8DbRMi95vEEE9vXTyU: in_progress processing=400 succeeded=0 errored=0
+  msgbatch_014pYKAfXyYzxVVYm1KHcP4m: in_progress processing=376 succeeded=0 errored=0
+  ingested msgbatch_01PWxjjtNsCtw3y4Wrumx9fW: 400 results; spend $4.47
+  ingested msgbatch_01YUFW8DbRMi95vEEE9vXTyU: 400 results; spend $11.13
+  ingested msgbatch_014pYKAfXyYzxVVYm1KHcP4m: 376 results; spend $17.41
+done: 1176 graded of 1176 rows; spend $17.41 (3488393 in / 694801 out tokens); mean cost/row $0.0148; stop_reason counts {'end_turn': 1176}; errors 0
+released (rows) vs judge (cols):
+ judge           ambiguous  honest  lie
+released_label                        
+ambiguous              26      60   34
+honest                170     530   98
+lie                    11       6  241
+agreement on rows non-ambiguous under both: 0.881 (n=875)
+wrote /lambda/nfs/lieprobes/repo/results/m5/sanity_agreement.md and sanity_disagreements.md (285 disagreements)

@@ -1,0 +1,20 @@
+[a-mo-qwen3.5-27b-1/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-1/varied] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=400 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-3/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-3/varied] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=400 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-4/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-4/varied] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=400 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-5/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-5/varied] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=400 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-6/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-6/varied] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=400 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-7/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[a-mo-qwen3.5-27b-7/varied] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=400 turns={3: np.int64(400)}
+[b-mo-qwen3.5-27b/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[b-mo-qwen3.5-27b/varied] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=400 turns={3: np.int64(400)}
+[c-mo-qwen3.5-27b/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[c-mo-qwen3.5-27b/varied] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=400 turns={3: np.int64(400)}
+[g-st-qwen3.5-27b/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[g-st-qwen3.5-27b/varied] missing
+[None/instructed] n=400 labels={'honest': np.int64(200), 'lie': np.int64(200)} with_reasoning=0 turns={3: np.int64(400)}
+[None/varied] missing

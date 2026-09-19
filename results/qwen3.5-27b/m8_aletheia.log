@@ -1,0 +1,18 @@
+# M8 — Aletheia ↔ AISI cross-pipeline transfer (Qwen3.5-27B, merged features)
+
+## apollo pooling (AISI-suite lr @L32, C=0.1; Aletheia-suite lr with leave-one-model-out, inner LOO over layers [13, 19, 25, 32, 38, 44, 50, 54, 57, 60, 62, 63] × C)
+
+| Aletheia model | dev set | n lie/hon | AISI-suite → Aletheia AUROC [CI] / BA@1% | Aletheia-LOO → this model AUROC [CI] (layer, C) |
+|---|---|---|---|---|
+
+| AISI organism | Aletheia-suite → AISI AUROC [CI] / BA@1% | AISI T3 (Qwen3.5, noleak) | AISI T0 released |
+|---|---|---|---|
+
+## dyl pooling (AISI-suite lr @L44, C=0.001; Aletheia-suite lr with leave-one-model-out, inner LOO over layers [13, 19, 25, 32, 38, 44, 50, 54, 57, 60, 62, 63] × C)
+
+| Aletheia model | dev set | n lie/hon | AISI-suite → Aletheia AUROC [CI] / BA@1% | Aletheia-LOO → this model AUROC [CI] (layer, C) |
+|---|---|---|---|---|
+
+| AISI organism | Aletheia-suite → AISI AUROC [CI] / BA@1% | AISI T3 (Qwen3.5, noleak) | AISI T0 released |
+|---|---|---|---|
+

@@ -1,0 +1,7 @@
+[apollo gender_secret_male] T3 refit 0.939 | fine L32 C=0.003 0.948 | C3 sft above 0.01 AUROC 0.794
+[apollo gender_secret_female] T3 refit 1.000 | fine L32 C=0.003 1.000 | C3 sft above 0.01 AUROC 0.982
+[apollo eval_sandbagger] T3 refit 0.952 | fine L38 C=0.003 0.945 | C3 sft above 0.03 AUROC 0.843
+[apollo ab_contextual_optimism] T3 refit 0.900 | fine L32 C=0.1 0.900 | C1 base tgt/ctrl above 0.12/0.00 AUROC 0.795 | C2 spec 0.888 strict 0.887 (T3 same test 0.885) | C3 sft above 0.14 AUROC 0.932
+[apollo ab_animal_welfare] T3 refit 0.931 | fine L32 C=0.01 0.931 | C1 base tgt/ctrl above 0.00/0.00 AUROC 0.700 | C2 spec 0.906 strict 0.910 (T3 same test 0.915) | C3 sft above 0.13 AUROC 0.732
+[apollo ab_hallucinates_citations] T3 refit 0.908 | fine L32 C=0.01 0.908 | C1 base tgt/ctrl above 0.00/0.00 AUROC 0.552 | C2 spec 0.867 strict 0.855 (T3 same test 0.897) | C3 sft above 0.15 AUROC 0.870
+[apollo ab_self_promotion] T3 refit 0.914 | fine L32 C=0.003 0.917 | C1 base tgt/ctrl above 0.00/0.00 AUROC 0.657 | C2 spec 0.892 strict 0.901 (T3 same test 0.912) | C3 sft above 0.00 AUROC 0.946

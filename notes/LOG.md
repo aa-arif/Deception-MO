@@ -1023,3 +1023,10 @@ failures). Verified: every features/qwen3.6-27b/<org>/resample_<split>/index.par
 count and identical labels (20 rows with empty content across organisms are NaN-excluded as usual, D9). 02:54 UTC:
 run_m5_judge_plus.sh (LIEPROBES_LABELS=judge_plus, Apollo: T0 done, T5/T3/controls running) and run_m5_resample_dyl.sh
 (DYL follow-ups for the resamples, GS-F first) started.
+
+## 2026-09-19 04:12 UTC — M5 originals+resamples (judge_plus) — Apollo pooling done; DYL follow-ups 3/7
+Ran (git 55cd996): scripts/run_m5_judge_plus.sh Apollo stage 02:54–04:03 UTC (T0, T5 with question-grouped folds, T3/T4 with
+question-id noleak and cluster bootstrap, controls incl. QD-LOO on question halves, m5_compare). Outputs under
+results/m5/labels_judge_plus/; third column of results/m5/label_sets.md and the D20 sections filled for Apollo.
+DYL follow-ups for the resamples: GS-F 632 rows 24 min (4 truncated, 18 yes), GS-M 632 (5 truncated, 0 yes), SB 400
+(14 truncated, 5 yes, 21 other); AuditBench organisms running.

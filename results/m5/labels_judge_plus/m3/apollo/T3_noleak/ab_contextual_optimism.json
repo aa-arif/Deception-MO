@@ -1,0 +1,84 @@
+{
+ "family": "apollo",
+ "held": "ab_contextual_optimism",
+ "mode": "T3",
+ "variant": "noleak",
+ "train_orgs": [
+  "gender_secret_female",
+  "gender_secret_male",
+  "eval_sandbagger",
+  "ab_animal_welfare",
+  "ab_hallucinates_citations",
+  "ab_self_promotion"
+ ],
+ "inner_best": {
+  "lr": {
+   "layer": 32,
+   "C": 0.1,
+   "inner_auroc": 0.9226226396659216
+  },
+  "dim": {
+   "layer": 32,
+   "C": null,
+   "inner_auroc": 0.6627399310697711
+  },
+  "shrink": {
+   "layer": 32,
+   "C": null,
+   "inner_auroc": 0.8398617305399324
+  }
+ },
+ "results": {
+  "lr": {
+   "layer": 32,
+   "C": 0.1,
+   "n_train": 2351,
+   "n_train_lie": 1059,
+   "n_lie": 398,
+   "n_honest": 403,
+   "n_questions": 188,
+   "auroc": 0.8999588513286033,
+   "auroc_ci": [
+    0.868049488936394,
+    0.926168012838825
+   ],
+   "ba_1pct": 0.7931562277890694,
+   "tpr_1pct": 0.8567839195979899,
+   "fpr_1pct": 0.2704714640198511
+  },
+  "dim": {
+   "layer": 32,
+   "C": null,
+   "n_train": 2351,
+   "n_train_lie": 1059,
+   "n_lie": 398,
+   "n_honest": 403,
+   "n_questions": 188,
+   "auroc": 0.7206005212165043,
+   "auroc_ci": [
+    0.6644876945158623,
+    0.7774557647909698
+   ],
+   "ba_1pct": 0.6817836078656309,
+   "tpr_1pct": 0.7035175879396985,
+   "fpr_1pct": 0.3399503722084367
+  },
+  "shrink": {
+   "layer": 32,
+   "C": null,
+   "n_train": 2351,
+   "n_train_lie": 1059,
+   "n_lie": 398,
+   "n_honest": 403,
+   "n_questions": 188,
+   "auroc": 0.8717283688916045,
+   "auroc_ci": [
+    0.8334582110666239,
+    0.9023054730138355
+   ],
+   "ba_1pct": 0.6231779243612603,
+   "tpr_1pct": 0.2562814070351759,
+   "fpr_1pct": 0.009925558312655087
+  }
+ }
+}
